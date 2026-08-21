@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""Build single-file index.html from index.src.html.
+- <!--INLINE_JS path--> becomes an inline <script> with the file's contents.
+- {{A:name}} becomes a data:image/webp;base64 URI for assets/name.webp
+"""
+import base64, pathlib, re
+
+root = pathlib.Path(__file__).parent
+src = (root / "index.src.html").read_text()
+
+def inline_js(m):
+    p = root / m.group(1)
+    return "<script>\n" + p.read_text() + "\n</script>"
+
+src = re.sub(r"<!--INLINE_JS ([\w./-]+)-->", inline_js, src)
+
+def inline_asset(m):
+    p = root / "assets" / (m.group(1) + ".webp")
+    b64 = base64.b64encode(p.read_bytes()).decode()
+    return "data:image/webp;base64," + b64
+
+src = re.sub(r"\{\{A:([\w-]+)\}\}", inline_asset, src)
+
+out = root / "index.html"
+out.write_text(src)
+print(f"built index.html: {out.stat().st_size/1024:.0f} KB")

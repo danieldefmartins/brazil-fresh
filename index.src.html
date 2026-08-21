@@ -1,0 +1,880 @@
+<title>Brazil Fresh</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ============ TOKENS — lively produce palette, single committed look ============ */
+:root{
+  --ink:#0C1F12;          /* deep leaf green-black */
+  --ink-soft:#41523F;
+  --paper:#F7F6EC;        /* warm market-paper white */
+  --paper-dim:#EEEDDF;
+  --ghost:#E0E3CC;        /* lime-tinted ghost type */
+  --mango:#FFA51F;
+  --leaf:#2E9E5B;
+  --leaf-deep:#14532D;
+  --papaya:#FF6B4A;
+  --lime:#A8C838;
+  --ocean:#0A2E4F;
+  --ocean-deep:#071E36;
+  --road:#191C18;
+  --line:#D6D6C2;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',Helvetica,Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;line-height:1.55;
+  overflow-x:hidden;
+}
+::selection{background:var(--mango);color:var(--ink)}
+h1,h2,h3{text-wrap:balance}
+img{max-width:100%}
+.display{
+  font-stretch:125%;font-weight:900;text-transform:uppercase;
+  letter-spacing:-.01em;line-height:.95;
+}
+.mono{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+}
+.btn{
+  display:inline-block;
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  padding:14px 26px;border-radius:999px;text-decoration:none;
+  border:1px solid var(--paper);color:var(--paper);
+  transition:background .2s,color .2s;
+}
+.btn:hover,.btn:focus-visible{background:var(--paper);color:var(--ink)}
+.btn.solid{background:var(--mango);border-color:var(--mango);color:var(--ink)}
+.btn.solid:hover,.btn.solid:focus-visible{background:var(--paper);border-color:var(--paper)}
+.btn.dark{border-color:var(--ink);color:var(--ink)}
+.btn.dark:hover,.btn.dark:focus-visible{background:var(--ink);color:var(--paper)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--mango);outline-offset:3px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:16px}
+
+/* ============ SCENES ============ */
+.scene{position:relative}
+.pin{position:sticky;top:0;height:100svh;overflow:hidden}
+
+/* ============ TICKER + HEADER ============ */
+.ticker{
+  background:var(--leaf-deep);color:#9DC4A8;
+  overflow:hidden;white-space:nowrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  padding:7px 0;
+}
+.ticker-track{display:inline-block;animation:tick 40s linear infinite}
+.ticker b{color:var(--mango);font-weight:500}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+header.site{
+  position:absolute;top:29px;left:0;right:0;z-index:40;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px clamp(18px,4vw,52px);
+}
+.logo{
+  color:var(--paper);text-decoration:none;
+  font-stretch:125%;font-weight:900;font-size:19px;letter-spacing:.02em;text-transform:uppercase;
+}
+.logo em{font-style:normal;color:var(--mango)}
+nav.main{display:flex;flex-direction:column;gap:9px}
+nav.main a{
+  color:#A8BFAB;text-decoration:none;
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+}
+nav.main a:hover{color:var(--paper)}
+@media(max-width:760px){nav.main{display:none}}
+
+/* ============ HERO ============ */
+.hero{position:relative;background:var(--ink);color:var(--paper);min-height:100svh;overflow:hidden}
+#globeCv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-copy{
+  position:relative;z-index:5;
+  padding:clamp(120px,19vh,190px) clamp(18px,4vw,52px) 70px;
+  max-width:820px;
+}
+.hero-copy .mono{color:var(--mango);margin-bottom:18px;display:block}
+.hero h1{font-size:clamp(36px,5.6vw,80px);color:var(--paper)}
+.hero p.lede{margin:26px 0 34px;max-width:44ch;color:#B7C6B4;font-size:15px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.hero-foot{
+  position:absolute;bottom:22px;left:clamp(18px,4vw,52px);right:clamp(18px,4vw,52px);
+  z-index:5;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;color:#6E8570;
+}
+.hero-foot .mono{font-size:10px}
+@media(max-width:760px){.hero-foot{flex-direction:column;align-items:flex-start;gap:6px}}
+
+/* ============ LOAD SCENE (photo composite) ============ */
+#load .pin{background:var(--paper)}
+.scene-label{position:absolute;top:26px;left:clamp(18px,4vw,52px);z-index:8;color:var(--ink-soft)}
+.scene-label b{color:var(--mango);font-weight:500}
+.load-caption{position:absolute;top:16svh;left:clamp(18px,4vw,52px);max-width:420px;z-index:8}
+.load-caption h2{font-size:clamp(26px,3.6vw,46px)}
+.load-caption p{margin-top:14px;color:var(--ink-soft);font-size:14px;max-width:40ch}
+#load .ground{position:absolute;left:0;right:0;bottom:0;height:15svh;background:var(--road)}
+#load .ground::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#0A0E0A}
+.sprite{position:absolute;will-change:transform}
+#ctnImg{width:34vw;left:24vw;bottom:15svh;z-index:4}
+#stackerImg{width:31vw;right:1vw;bottom:15svh;z-index:5}
+#truckImg{width:47vw;left:-52vw;bottom:14.6svh;z-index:3}
+.crate{width:8vw;bottom:15svh;z-index:6}
+#crate1{left:-9vw}#crate2{left:1vw}#crate3{left:11vw}
+@media(max-width:760px){
+  #ctnImg{width:52vw;left:12vw}
+  #stackerImg{width:48vw;right:-6vw}
+  #truckImg{width:74vw;left:-80vw}
+  .crate{width:14vw}
+  .load-caption{top:12svh}
+}
+
+/* ============ SERVICES ============ */
+#services .pin{background:var(--paper);display:flex;flex-direction:column}
+.svc-top{position:relative;height:42svh;overflow:hidden;flex:none}
+.svc-ghost{
+  position:absolute;bottom:-2vw;left:0;white-space:nowrap;
+  font-stretch:125%;font-weight:900;text-transform:uppercase;
+  font-size:clamp(120px,21vw,300px);line-height:.8;color:var(--ghost);
+  will-change:transform;
+}
+.rig{position:absolute;bottom:0;left:0;width:clamp(330px,42vw,600px);will-change:transform}
+.rig img.t{width:100%;display:block}
+.rig img.c{position:absolute;left:27.5%;bottom:30%;width:71%}
+.svc-band{
+  flex:1;background:var(--leaf-deep);color:var(--paper);
+  padding:clamp(22px,4vh,44px) clamp(18px,4vw,52px);
+  display:flex;flex-direction:column;justify-content:space-between;gap:18px;
+}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,44px)}
+.svc .mono{color:var(--lime);display:block;margin-bottom:10px}
+.svc h3{
+  font-stretch:118%;font-weight:800;text-transform:uppercase;
+  font-size:clamp(15px,1.5vw,21px);line-height:1.05;margin-bottom:8px;
+}
+.svc p{font-size:12.5px;color:#A9C2AE;max-width:30ch}
+.svc-cta{text-align:center}
+@media(max-width:860px){
+  .svc-grid{grid-template-columns:repeat(2,1fr);gap:16px}
+  .svc:nth-child(n+5){display:none}
+  .svc-top{height:34svh}
+}
+
+/* ============ ROAD ============ */
+#road .pin{background:var(--paper)}
+#roadSvg{position:absolute;top:0;left:50%;width:max(100vw,900px);will-change:transform}
+.telemetry{position:absolute;top:26px;left:clamp(18px,4vw,52px);z-index:6;color:var(--ink-soft)}
+.telemetry b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.milestone{position:absolute;z-index:6;max-width:330px;visibility:hidden;opacity:0}
+.milestone .mono{color:var(--leaf);display:block;margin-bottom:10px}
+.milestone h3{font-stretch:120%;font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.8vw,38px);line-height:1}
+.milestone p{margin-top:10px;font-size:13px;color:var(--ink-soft);max-width:34ch}
+.ms-1{top:18svh;left:clamp(18px,5vw,70px)}
+.ms-2{top:30svh;left:clamp(18px,5vw,70px)}
+.ms-2 .mono{color:var(--mango)}
+.ms-3{bottom:16svh;right:clamp(18px,5vw,70px);text-align:right}
+@media(max-width:760px){
+  .milestone{max-width:230px;background:rgba(247,246,236,.9);padding:12px 14px;border-left:3px solid var(--mango)}
+  .ms-3{text-align:left}
+}
+
+/* ============ OCEAN ============ */
+#ocean .pin{background:linear-gradient(180deg,#0D3A63 0%,var(--ocean) 45%,var(--ocean-deep) 100%);color:var(--paper)}
+.water{position:absolute;inset:-20%;opacity:.5;pointer-events:none}
+.water.w1{
+  background-image:radial-gradient(3px 2px at 20% 30%,rgba(255,255,255,.35),transparent 60%),
+    radial-gradient(2px 2px at 70% 65%,rgba(255,255,255,.28),transparent 60%),
+    radial-gradient(3px 2px at 45% 85%,rgba(255,255,255,.22),transparent 60%),
+    radial-gradient(2px 1px at 85% 15%,rgba(255,255,255,.3),transparent 60%);
+  background-size:340px 340px;animation:drift1 11s linear infinite;
+}
+.water.w2{
+  background-image:radial-gradient(4px 2px at 30% 70%,rgba(150,200,255,.16),transparent 60%),
+    radial-gradient(3px 2px at 60% 20%,rgba(150,200,255,.14),transparent 60%),
+    radial-gradient(2px 2px at 10% 50%,rgba(150,200,255,.18),transparent 60%);
+  background-size:520px 520px;animation:drift2 17s linear infinite;
+}
+@keyframes drift1{from{transform:translateY(0)}to{transform:translateY(340px)}}
+@keyframes drift2{from{transform:translateY(0)}to{transform:translateY(520px)}}
+.mist{
+  position:absolute;width:60vw;height:34vh;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.15),transparent 70%);
+  filter:blur(30px);pointer-events:none;
+}
+.mist.m1{top:6%;left:-16%;animation:mist1 26s linear infinite}
+.mist.m2{bottom:8%;right:-22%;animation:mist2 34s linear infinite}
+@keyframes mist1{from{transform:translateX(-12vw)}to{transform:translateX(120vw)}}
+@keyframes mist2{from{transform:translateX(20vw)}to{transform:translateX(-130vw)}}
+#shipWrap{
+  position:absolute;left:50%;top:50%;width:clamp(150px,17vw,240px);
+  transform:translate(-50%,-50%);will-change:transform;
+}
+#shipWrap .hull{position:relative;animation:bob 8s ease-in-out infinite}
+#shipWrap img{width:100%;display:block;filter:drop-shadow(0 18px 26px rgba(3,14,26,.55))}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-.35deg)}50%{transform:translateY(7px) rotate(.35deg)}}
+.wake{
+  position:absolute;top:96%;left:50%;width:56%;height:64%;
+  transform:translateX(-50%);pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,.05) 55%,transparent),
+    repeating-linear-gradient(180deg,rgba(255,255,255,.08) 0 8px,transparent 8px 26px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent);
+  filter:blur(5px);opacity:.7;
+  animation:wakeflow 2.6s linear infinite;
+}
+@keyframes wakeflow{from{background-position:0 0,0 0}to{background-position:0 0,0 34px}}
+.sidefoam{position:absolute;top:14%;width:6%;height:74%;filter:blur(6px);opacity:.22;pointer-events:none;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.4) 0 5px,transparent 5px 24px);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent);
+          mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent);
+  animation:wakeflow 3.4s linear infinite;}
+.sidefoam.l{left:-5%}.sidefoam.r{right:-5%}
+.callout{
+  position:absolute;top:30%;left:96%;width:max-content;z-index:7;
+  display:flex;align-items:center;gap:10px;pointer-events:none;
+}
+.callout .dotline{width:74px;border-top:1.5px dashed rgba(247,246,236,.8)}
+.callout .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:rgba(7,30,54,.72);padding:6px 10px;border:1px solid rgba(255,165,31,.6)}
+.callout .lbl b{color:var(--mango);font-weight:500}
+.ocean-head{position:absolute;top:9svh;left:0;right:0;text-align:center;z-index:6;padding:0 18px}
+.ocean-head .mono{color:var(--mango);display:block;margin-bottom:12px}
+.ocean-head h2{font-size:clamp(30px,4.6vw,62px);color:var(--paper);text-shadow:0 2px 34px rgba(4,18,34,.9),0 1px 8px rgba(4,18,34,.6)}
+.sea-card{position:absolute;z-index:6;max-width:250px;visibility:hidden;opacity:0}
+.sea-card .mono{color:var(--mango);display:block;margin-bottom:8px}
+.sea-card h3{font-stretch:118%;font-weight:800;text-transform:uppercase;font-size:16px;line-height:1.1;margin-bottom:6px}
+.sea-card p{font-size:12px;color:#9FB9CE;max-width:28ch}
+.sc-1{top:32svh;left:clamp(14px,7vw,110px)}
+.sc-2{top:32svh;right:clamp(14px,7vw,110px);text-align:right}
+.sc-3{bottom:11svh;left:clamp(14px,7vw,110px)}
+.sc-4{bottom:11svh;right:clamp(14px,7vw,110px);text-align:right}
+@media(max-width:760px){
+  #shipWrap{width:34vw}
+  .sc-2,.sc-4{text-align:left}
+  .sea-card{max-width:160px}
+  .sea-card p{display:none}
+  .callout{display:none}
+}
+#cloudCover{
+  position:absolute;inset:-10% -10% auto;height:130%;z-index:8;pointer-events:none;
+  background:
+    radial-gradient(60vw 30vh at 25% 78%,rgba(255,255,255,.98),transparent 70%),
+    radial-gradient(70vw 34vh at 75% 86%,rgba(255,255,255,.96),transparent 70%),
+    radial-gradient(80vw 40vh at 50% 96%,#fff,transparent 75%);
+  transform:translateY(105%);will-change:transform;
+}
+
+/* ============ SKY ============ */
+#sky .pin{background:linear-gradient(180deg,#F2F6F9 0%,#DAE8F2 55%,#C2D9EB 100%)}
+.cloudfield i{
+  position:absolute;display:block;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,0) 72%);
+  filter:blur(14px);
+}
+.cf1{width:52vw;height:22vh;top:12%;left:-8%;animation:cloudslide 60s linear infinite}
+.cf2{width:44vw;height:19vh;top:38%;right:-6%;animation:cloudslide 80s linear infinite reverse}
+.cf3{width:64vw;height:26vh;bottom:6%;left:14%;animation:cloudslide 95s linear infinite}
+@keyframes cloudslide{from{transform:translateX(-6vw)}to{transform:translateX(6vw)}}
+#planeWrap{
+  position:absolute;left:50%;top:50%;width:clamp(230px,26vw,360px);
+  transform:translate(-50%,-50%);will-change:transform;
+  filter:drop-shadow(0 34px 30px rgba(30,60,90,.22));
+}
+#planeWrap img{width:100%;display:block}
+.sky-copy{position:absolute;left:0;right:0;bottom:8svh;text-align:center;z-index:6;padding:0 18px}
+.sky-copy .mono{color:var(--ink-soft);display:block;margin-bottom:10px}
+.sky-copy h2{font-size:clamp(24px,3.6vw,50px)}
+@media(max-width:760px){#planeWrap{width:44vw}}
+
+/* ============ VOICES ============ */
+#voices{background:var(--paper);padding:clamp(70px,12vh,130px) clamp(18px,4vw,52px)}
+#voices .kicker{color:var(--mango)}
+#voices h2{font-size:clamp(32px,5vw,68px);max-width:14ch}
+#voices h2 span{color:#B3B69B}
+.quotes{margin-top:clamp(36px,6vh,64px);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,44px)}
+.quote{border-top:1px solid var(--line);padding-top:22px}
+.quote p{font-size:14.5px;max-width:38ch}
+.quote footer{margin-top:18px;display:flex;align-items:center;gap:12px}
+.avatar{
+  width:40px;height:40px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:12px;color:var(--paper);
+}
+.quote .who b{display:block;font-size:13px;font-weight:700}
+.quote .who span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+@media(max-width:860px){.quotes{grid-template-columns:1fr}}
+
+/* ============ RANGE ============ */
+#range{background:var(--ink);color:var(--paper);padding:clamp(70px,12vh,130px) 0 clamp(60px,10vh,110px)}
+#range .head{padding:0 clamp(18px,4vw,52px);display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+#range .kicker{color:var(--lime)}
+#range h2{font-size:clamp(32px,5vw,68px);color:var(--paper)}
+#range .head p{max-width:36ch;color:#9EB6A0;font-size:13.5px}
+.range-marquee{
+  margin-top:clamp(30px,5vh,54px);border-top:1px solid #1C3323;border-bottom:1px solid #1C3323;
+  overflow:hidden;white-space:nowrap;padding:12px 0;color:#6E8570;
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+}
+.range-marquee div{display:inline-block;animation:tick 30s linear infinite}
+.range-marquee b{color:var(--mango);font-weight:500}
+.range-grid{
+  margin-top:clamp(34px,6vh,60px);padding:0 clamp(18px,4vw,52px);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,28px);
+}
+.crate-card{border:1px solid #1F3A28;padding:16px 16px 20px;background:#112819}
+.crate-photo{height:130px;display:flex;align-items:flex-end;justify-content:center}
+.crate-photo img{max-height:100%;width:auto;max-width:100%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4))}
+.crate-card h3{margin-top:16px;font-stretch:118%;font-weight:800;text-transform:uppercase;font-size:16px}
+.crate-card .var{font-size:12px;color:#9EB6A0;margin-top:3px}
+.crate-card .season{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime)}
+@media(max-width:960px){.range-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ============ CTA + FOOTER ============ */
+#cta{
+  background:var(--mango);color:var(--ink);
+  padding:clamp(60px,11vh,110px) clamp(18px,4vw,52px);
+  display:flex;justify-content:space-between;align-items:center;gap:28px;flex-wrap:wrap;
+}
+#cta h2{font-size:clamp(28px,4.6vw,62px);max-width:17ch}
+footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top:clamp(48px,8vh,80px)}
+.foot-grid{padding:0 clamp(18px,4vw,52px);display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:clamp(22px,3vw,44px)}
+.foot-grid .tag{max-width:24ch;font-size:20px}
+.foot-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
+.foot-col a,.foot-col span{display:block;font-size:13.5px;color:var(--ink);text-decoration:none;margin-bottom:8px}
+.foot-col a:hover{color:var(--mango)}
+.smallprint{
+  margin-top:clamp(36px,6vh,60px);padding:14px clamp(18px,4vw,52px);
+  border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+}
+#markCv{display:block;width:100%;height:24vh;min-height:120px}
+@media(max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+
+@media (prefers-reduced-motion:reduce){
+  .ticker-track,.range-marquee div,#shipWrap .hull,.water,.mist,.cloudfield i,.wake,.sidefoam{animation:none!important}
+}
+</style>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<header class="site">
+  <a class="logo" href="#">Brazil<em>Fresh</em></a>
+  <nav class="main" aria-label="Main">
+    <a href="#services">Services</a>
+    <a href="#range">Produce</a>
+    <a href="#voices">Buyers</a>
+    <a href="#cta">Contact</a>
+  </nav>
+  <a class="btn" href="#cta">Work with us</a>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <canvas id="globeCv"></canvas>
+  <div class="hero-copy">
+    <span class="mono">One exporter · every leg of the journey</span>
+    <h1 class="display">From Brazilian soil to tables worldwide</h1>
+    <p class="lede">Fruits and vegetables sourced direct from certified Brazilian growers — packed at origin, shipped in our cold chain, and delivered fresh to any port in the world by one accountable team.</p>
+    <div class="hero-ctas">
+      <a class="btn solid" href="#cta">Talk with us</a>
+      <a class="btn" href="#services">Our services</a>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <span class="mono">Origin · Brazil — Santos / Itajaí / Pecém / Natal</span>
+    <span class="mono">Scroll to follow the shipment ↓</span>
+  </div>
+</section>
+
+<!-- ================= LOAD ================= -->
+<section class="scene" id="load" style="height:300vh">
+  <div class="pin">
+    <div class="scene-label mono"><b>01 / Origin</b> — São Francisco Valley · packing &amp; loading</div>
+    <div class="load-caption">
+      <h2 class="display">Picked, packed, and sealed at origin</h2>
+      <p>Every reefer is graded, pre-cooled, and loaded within hours of harvest — so the clock starts full.</p>
+    </div>
+    <img class="sprite crate" id="crate1" src="{{A:crate-mango-cut}}" alt="Crate of mangoes">
+    <img class="sprite crate" id="crate2" src="{{A:crate-lime-cut}}" alt="Crate of Tahiti limes">
+    <img class="sprite crate" id="crate3" src="{{A:crate-papaya-cut}}" alt="Crate of papayas">
+    <img class="sprite" id="ctnImg" src="{{A:container-side}}" alt="White refrigerated container">
+    <img class="sprite" id="stackerImg" src="{{A:stacker}}" alt="Reach stacker">
+    <img class="sprite" id="truckImg" src="{{A:truck-side}}" alt="Semi truck with empty container chassis">
+    <div class="ground"></div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="scene" id="services" style="height:260vh">
+  <div class="pin">
+    <div class="svc-top">
+      <div class="svc-ghost" id="svcGhost">SERVICES&nbsp;&nbsp;SERVICES</div>
+      <div class="rig" id="svcRig">
+        <img class="c" src="{{A:container-side}}" alt="">
+        <img class="t" src="{{A:truck-side}}" alt="Brazil Fresh reefer truck">
+      </div>
+    </div>
+    <div class="svc-band">
+      <div class="svc-grid" id="svcGrid">
+        <div class="svc"><span class="mono">01</span><h3>Fresh Sourcing</h3><p>Direct from certified growers in Bahia, Ceará, and the São Francisco Valley — graded and packed at origin.</p></div>
+        <div class="svc"><span class="mono">02</span><h3>Cold Chain</h3><p>Reefer containers held at spec from farm gate to port of discharge — temperature logged end to end.</p></div>
+        <div class="svc"><span class="mono">03</span><h3>Ocean Freight</h3><p>Weekly reefer capacity out of Santos, Itajaí, Pecém, and Natal on every major trade lane.</p></div>
+        <div class="svc"><span class="mono">04</span><h3>Air Freight</h3><p>Same-week delivery for delicate, short-window fruit via São Paulo–GRU and Fortaleza.</p></div>
+        <div class="svc"><span class="mono">05</span><h3>Customs &amp; Phytosanitary</h3><p>Export documents, MAPA phytosanitary certificates, and destination compliance handled in-house.</p></div>
+        <div class="svc"><span class="mono">06</span><h3>Door Delivery</h3><p>From Brazilian soil to your distribution center — one invoice, one accountable team.</p></div>
+      </div>
+      <div class="svc-cta"><a class="btn" href="#cta">Our services</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROAD ================= -->
+<section class="scene" id="road" style="height:420vh">
+  <div class="pin">
+    <div class="telemetry mono">02 / Inland — farm to port · <b><span id="kmh">0</span> km/h</b> · reefer 7.0°C</div>
+    <svg id="roadSvg" viewBox="0 0 1200 3400" aria-hidden="true">
+      <path id="roadPath" d="M600,-100 L600,560 C600,740 900,740 900,920 L900,1480 C900,1660 600,1660 600,1840 L600,2450"
+            fill="none" stroke="#191C18" stroke-width="150"/>
+      <path d="M600,-100 L600,560 C600,740 900,740 900,920 L900,1480 C900,1660 600,1660 600,1840 L600,2450"
+            fill="none" stroke="#F7F6EC" stroke-width="4" stroke-dasharray="44 52" opacity=".5"/>
+      <rect x="0" y="2450" width="1200" height="130" fill="#2A2D2F"/>
+      <rect x="0" y="2450" width="1200" height="10" fill="#FFA51F"/>
+      <rect x="0" y="2580" width="1200" height="820" fill="#0D3A63"/>
+      <text x="600" y="2530" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="22" letter-spacing="6" fill="#9FB9CE">PORT OF SANTOS · BERTH 14</text>
+      <g id="tdTruck">
+        <image href="{{A:truck-top}}" x="-26" y="-90" width="52" height="180"/>
+      </g>
+    </svg>
+    <div class="milestone ms-1">
+      <span class="mono">Milestone · Quality</span>
+      <h3 class="display">Reliability at every kilometer</h3>
+      <p>Graded to export spec within hours of harvest, then pre-cooled before the doors close.</p>
+    </div>
+    <div class="milestone ms-2">
+      <span class="mono">Milestone · Certification</span>
+      <h3 class="display">GLOBALG.A.P. growers</h3>
+      <p>Our partner farms hold the certifications your market requires — audited every season.</p>
+    </div>
+    <div class="milestone ms-3">
+      <span class="mono">Milestone · Visibility</span>
+      <h3 class="display">Tracked door to door</h3>
+      <p>Position and pulp temperature logged from the packhouse to the berth — and shared with you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OCEAN ================= -->
+<section class="scene" id="ocean" style="height:360vh">
+  <div class="pin">
+    <div class="water w1"></div>
+    <div class="water w2"></div>
+    <div class="mist m1"></div>
+    <div class="mist m2"></div>
+    <div class="ocean-head">
+      <span class="mono">03 / Ocean — Santos → the world</span>
+      <h2 class="display">Freshness that crosses oceans</h2>
+    </div>
+    <div id="shipWrap">
+      <div class="hull">
+        <div class="sidefoam l"></div>
+        <div class="sidefoam r"></div>
+        <img src="{{A:ship-top}}" alt="Container ship seen from above, loaded with Brazil Fresh produce containers">
+        <div class="wake"></div>
+        <div class="callout"><span class="dotline"></span><span class="lbl"><b>Your reefer</b> · 7.0°C</span></div>
+      </div>
+    </div>
+    <div class="sea-card sc-1"><span class="mono">A</span><h3>One point of contact</h3><p>One team owns your shipment from packhouse to port of discharge. No vendor chasing.</p></div>
+    <div class="sea-card sc-2"><span class="mono">B</span><h3>Full cold-chain visibility</h3><p>Track position and pulp temperature in real time, with proactive alerts before issues become losses.</p></div>
+    <div class="sea-card sc-3"><span class="mono">C</span><h3>Compliance you can trust</h3><p>Phytosanitary certificates and destination-market rules handled before the vessel sails.</p></div>
+    <div class="sea-card sc-4"><span class="mono">D</span><h3>Transparent pricing</h3><p>FOB or CIF, quoted clearly. No hidden fees between our farms and your dock.</p></div>
+    <div id="cloudCover"></div>
+  </div>
+</section>
+
+<!-- ================= SKY ================= -->
+<section class="scene" id="sky" style="height:260vh">
+  <div class="pin">
+    <div class="cloudfield" aria-hidden="true"><i class="cf1"></i><i class="cf2"></i><i class="cf3"></i></div>
+    <div id="planeWrap"><img src="{{A:plane-top}}" alt="Brazil Fresh cargo plane seen from above"></div>
+    <div class="sky-copy">
+      <span class="mono">04 / Air — when the window is short, we fly</span>
+      <h2 class="display">Delicate fruit, same-week delivery</h2>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VOICES ================= -->
+<section id="voices">
+  <span class="kicker">Buyers · sample voices for layout</span>
+  <h2 class="display">Trusted by importers <span>across the world</span></h2>
+  <div class="quotes">
+    <blockquote class="quote">
+      <p>“The pulp temperature log arrives before I even ask for it. In fifteen years buying Brazilian mango, nobody gave me that visibility.”</p>
+      <footer><span class="avatar" style="background:#2E9E5B">MV</span><span class="who"><b>M. van der Berg</b><span>Fruit importer · Rotterdam</span></span></footer>
+    </blockquote>
+    <blockquote class="quote">
+      <p>“One contact, one invoice, and the limes land in Jebel Ali on the day they said. That is all I ever wanted from an exporter.”</p>
+      <footer><span class="avatar" style="background:#FFA51F;color:#0C1F12">RA</span><span class="who"><b>R. Al-Farsi</b><span>Wholesale distributor · Dubai</span></span></footer>
+    </blockquote>
+    <blockquote class="quote">
+      <p>“Papaya is unforgiving. Their air-freight program got us shelf-ready fruit with days of life to spare — week after week.”</p>
+      <footer><span class="avatar" style="background:#FF6B4A">KT</span><span class="who"><b>K. Tanaka</b><span>Retail chain buyer · Tokyo</span></span></footer>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ================= RANGE ================= -->
+<section id="range">
+  <div class="head">
+    <div>
+      <span class="kicker">What we ship</span>
+      <h2 class="display">The Brazilian range</h2>
+    </div>
+    <p>Grown across Bahia, Ceará, Rio Grande do Norte, and the São Francisco Valley — the widest tropical calendar in the southern hemisphere.</p>
+  </div>
+  <div class="range-marquee" aria-hidden="true"><div id="rangeTrack"></div></div>
+  <div class="range-grid">
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-mango-cut}}" alt="Crate of mangoes"></div>
+      <h3>Mango</h3><div class="var">Tommy · Palmer · Keitt</div><div class="season">Season · Sep–Dec</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-lime-cut}}" alt="Crate of Tahiti limes"></div>
+      <h3>Tahiti Lime</h3><div class="var">Persian lime</div><div class="season">Season · Year-round</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-papaya-cut}}" alt="Crate of papayas"></div>
+      <h3>Papaya</h3><div class="var">Formosa · Golden</div><div class="season">Season · Year-round</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-melon-cut}}" alt="Crate of yellow melons"></div>
+      <h3>Yellow Melon</h3><div class="var">Amarelo · Galia</div><div class="season">Season · Aug–Mar</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-avocado-cut}}" alt="Crate of avocados"></div>
+      <h3>Avocado</h3><div class="var">Hass · Breda</div><div class="season">Season · Mar–Sep</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-ginger-cut}}" alt="Crate of fresh ginger"></div>
+      <h3>Ginger</h3><div class="var">Fresh root</div><div class="season">Season · Jun–Nov</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-sweetpotato-cut}}" alt="Crate of sweet potatoes"></div>
+      <h3>Sweet Potato</h3><div class="var">Beauregard</div><div class="season">Season · Year-round</div>
+    </div>
+    <div class="crate-card">
+      <div class="crate-photo"><img src="{{A:crate-passion-cut}}" alt="Crate of passion fruit"></div>
+      <h3>Passion Fruit</h3><div class="var">Maracujá azedo</div><div class="season">Season · Year-round</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA + FOOTER ================= -->
+<section id="cta">
+  <h2 class="display">Ready to put Brazil on your shelves?</h2>
+  <a class="btn dark" href="mailto:trade@brazilfresh.example">Request a quote</a>
+</section>
+
+<footer class="site">
+  <div class="foot-grid">
+    <div class="foot-col"><p class="tag display">From Brazilian soil. To tables worldwide.</p></div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <a href="#services">Services</a><a href="#range">Produce</a><a href="#voices">Buyers</a><a href="#cta">Contact</a>
+    </div>
+    <div class="foot-col">
+      <h4>Corridors</h4>
+      <span>Europe — Rotterdam · Lisbon</span><span>Middle East — Jebel Ali</span><span>North America — Newark · Miami</span><span>Asia — Shanghai · Tokyo</span>
+    </div>
+    <div class="foot-col">
+      <h4>Origin ports</h4>
+      <span>Santos · Itajaí · Pecém · Natal</span><span>Air — São Paulo GRU · Fortaleza</span>
+      <h4 style="margin-top:18px">Contact</h4>
+      <span>trade@brazilfresh.example</span><span>Mon–Fri · 8:00–18:00 BRT</span>
+    </div>
+  </div>
+  <div class="smallprint">
+    <span>© 2026 Brazil Fresh — draft concept site</span>
+    <span>Fruits &amp; vegetables · wholesale export · Brazil</span>
+  </div>
+  <canvas id="markCv" aria-hidden="true"></canvas>
+</footer>
+
+<!--INLINE_JS vendor/gsap.min.js-->
+<!--INLINE_JS vendor/ScrollTrigger.min.js-->
+<!--INLINE_JS vendor/lenis.min.js-->
+<script>
+'use strict';
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const $=id=>document.getElementById(id);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- GSAP + Lenis (official integration pattern) ---------- */
+gsap.registerPlugin(ScrollTrigger);
+const lenis=new Lenis({lerp:reduced?1:0.115,anchors:true});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+const SCRUB=reduced?true:0.8;
+
+/* ---------- tickers ---------- */
+const tick='NOW LOADING — TAHITI LIMES · SANTOS → ROTTERDAM &nbsp;·&nbsp; <b>MANGO SEASON SEP–NOV</b> &nbsp;·&nbsp; REEFER SET-POINT 7.0°C &nbsp;·&nbsp; PAPAYA AIRLIFT GRU → DXB &nbsp;·&nbsp; <b>GLOBALG.A.P. CERTIFIED GROWERS</b> &nbsp;·&nbsp; YELLOW MELON · PECÉM → NEWARK &nbsp;·&nbsp; ';
+$('tickerTrack').innerHTML=tick+tick;
+const rtick='MANGO · TAHITI LIME · PAPAYA · YELLOW MELON · AVOCADO · GINGER · SWEET POTATO · PASSION FRUIT · <b>SHIPPED WEEKLY</b> · ';
+$('rangeTrack').innerHTML=rtick+rtick;
+
+/* ---------- hero entrance ---------- */
+gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagger:0.08,delay:0.15});
+
+/* ================= GLOBE (canvas, time-based) ================= */
+(function(){
+  const cv=$('globeCv'),ctx=cv.getContext('2d');
+  let W,H,R,CX,CY;
+  function resize(){
+    const d=Math.min(2,devicePixelRatio||1);
+    W=cv.clientWidth;H=cv.clientHeight;
+    cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+    R=Math.min(W,H)*0.52;
+    CX=W*(W>760?0.72:0.5);CY=H*0.58;
+  }
+  resize();addEventListener('resize',resize);
+  const LAND=[
+    [-80,-50,-22,5],[-73,-40,-33,-5],[-63,-53,-55,-33],[-82,-70,-5,12],
+    [-118,-80,30,49],[-125,-95,40,60],[-105,-85,15,30],[-130,-60,50,68],[-165,-140,58,70],
+    [-52,-42,-3,4],[-45,-22,60,80],
+    [-9,30,38,55],[5,30,55,68],[-8,1,50,58],
+    [-17,32,5,34],[8,42,-12,5],[12,35,-32,-12],[43,50,-25,-13],
+    [34,58,14,36],[44,80,36,52],[60,90,20,36],[70,88,8,22],
+    [80,135,36,62],[95,122,20,36],[98,110,6,20],[95,142,-8,4],[128,144,32,44],
+    [113,152,-36,-12],[166,178,-46,-35]
+  ];
+  const land=(lon,lat)=>LAND.some(b=>lon>=b[0]&&lon<=b[1]&&lat>=b[2]&&lat<=b[3]);
+  const pts=[];
+  for(let lat=-58;lat<=76;lat+=2.4)for(let lon=-180;lon<180;lon+=2.4){
+    const jlon=lon+(Math.random()-.5)*1.6,jlat=lat+(Math.random()-.5)*1.6;
+    if(land(jlon,jlat))pts.push([jlat*Math.PI/180,jlon*Math.PI/180]);
+  }
+  const TILT=0.22;
+  function project(lat,lon,rot,rad){
+    const x0=Math.cos(lat)*Math.sin(lon+rot),y0=Math.sin(lat),z0=Math.cos(lat)*Math.cos(lon+rot);
+    const y=y0*Math.cos(TILT)-z0*Math.sin(TILT),z=y0*Math.sin(TILT)+z0*Math.cos(TILT);
+    return [CX+x0*rad,CY-y*rad,z];
+  }
+  const deg=Math.PI/180;
+  const SANTOS=[-23.9*deg,-46.3*deg];
+  const DESTS=[[51.9,4.4],[25.0,55.1],[31.2,121.5],[40.7,-74.0],[38.7,-9.1],[35.6,139.7]].map(d=>[d[0]*deg,d[1]*deg]);
+  const slerpPt=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t)];
+  let heroVisible=true;
+  ScrollTrigger.create({trigger:'.hero',start:'top bottom',end:'bottom top',
+    onToggle:s=>{heroVisible=s.isActive}});
+  gsap.ticker.add(()=>{
+    if(!heroVisible)return;
+    const t=gsap.ticker.time;
+    ctx.clearRect(0,0,W,H);
+    const g=ctx.createRadialGradient(CX-R*.45,CY-R*.75,R*.1,CX,CY,R*1.45);
+    g.addColorStop(0,'rgba(255,165,31,.26)');
+    g.addColorStop(.45,'rgba(255,107,74,.10)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.beginPath();ctx.arc(CX,CY,R,0,7);ctx.strokeStyle='rgba(255,165,31,.25)';ctx.lineWidth=1.2;ctx.stroke();
+    const rot=reduced?0.6:t*0.06;
+    for(const p of pts){
+      const [x,y,z]=project(p[0],p[1],rot,R);
+      if(z<=0)continue;
+      ctx.globalAlpha=0.13+z*0.75;
+      ctx.fillStyle='#E4E8CE';
+      ctx.fillRect(x,y,1.6,1.6);
+    }
+    ctx.globalAlpha=1;
+    for(let i=0;i<DESTS.length;i++){
+      const d=DESTS[i];
+      ctx.beginPath();let started=false;
+      for(let s=0;s<=40;s++){
+        const q=s/40,[la,lo]=slerpPt(SANTOS,d,q);
+        const rad=R*(1+0.28*Math.sin(Math.PI*q));
+        const [x,y,z]=project(la,lo,rot,rad);
+        if(z>-0.15){ if(!started){ctx.moveTo(x,y);started=true}else ctx.lineTo(x,y); }
+        else started=false;
+      }
+      ctx.strokeStyle='rgba(255,165,31,.4)';ctx.lineWidth=1;ctx.stroke();
+      const q=((reduced?0.5:t*0.11)+i*0.17)%1,[la,lo]=slerpPt(SANTOS,d,q);
+      const rad=R*(1+0.28*Math.sin(Math.PI*q));
+      const [x,y,z]=project(la,lo,rot,rad);
+      if(z>-0.15){ctx.beginPath();ctx.arc(x,y,2.4,0,7);ctx.fillStyle='#FFA51F';ctx.fill();}
+    }
+    const [x,y,z]=project(SANTOS[0],SANTOS[1],rot,R);
+    if(z>0){
+      ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle='#F7F6EC';ctx.fill();
+      ctx.font='9px IBM Plex Mono,monospace';ctx.fillStyle='rgba(247,246,236,.75)';
+      ctx.fillText('SANTOS · BR',x+8,y+3);
+    }
+  });
+})();
+
+/* ================= LOAD (photo composite timeline) ================= */
+{
+  const vw=v=>v*innerWidth/100;
+  const tl=gsap.timeline({
+    defaults:{ease:'none'},
+    scrollTrigger:{trigger:'#load',start:'top top',end:'bottom bottom',scrub:SCRUB}
+  });
+  const mob=innerWidth<=760;
+  const crateTargets=mob?[26,18,10]:[34,26,18];  /* vw travel per crate */
+  ['#crate1','#crate2','#crate3'].forEach((c,i)=>{
+    tl.to(c,{x:()=>vw(crateTargets[i]),ease:'power1.inOut',duration:0.26},0.02+i*0.045)
+      .to(c,{autoAlpha:0,duration:0.05},0.20+i*0.045);
+  });
+  /* lift container — drifts toward the stacker spreader as it rises */
+  tl.to('#ctnImg',{y:()=>-innerHeight*0.24,x:()=>vw(mob?7:5.5),rotation:-1.1,transformOrigin:'50% 50%',ease:'power1.inOut',duration:0.20},0.36);
+  /* slight boom flex on the stacker while lifting */
+  tl.to('#stackerImg',{rotation:-0.6,transformOrigin:'85% 90%',ease:'power1.inOut',duration:0.20},0.36);
+  /* truck arrives */
+  tl.to('#truckImg',{x:()=>vw(mob?86:57),ease:'power2.out',duration:0.24},0.44);
+  /* container swings left over the chassis, then lowers */
+  tl.to('#ctnImg',{x:()=>vw(mob?-3.5:-4.6),rotation:0.6,ease:'power1.inOut',duration:0.12},0.70)
+    .to('#ctnImg',{y:()=>-vwDeck(),rotation:0,ease:'power2.in',duration:0.14},0.82)
+    .to('#truckImg',{y:5,duration:0.03,ease:'power1.out'},0.945)
+    .to('#truckImg',{y:0,duration:0.04,ease:'power1.inOut'},0.975)
+    .to('#stackerImg',{rotation:0,duration:0.14},0.82);
+  function vwDeck(){ /* container rests on the chassis deck: ~31% of truck img height above ground */
+    const truckH=(mob?74:47)*innerWidth/100*(348/1200);
+    return truckH*0.30;
+  }
+}
+
+/* ================= SERVICES ================= */
+{
+  const tl=gsap.timeline({
+    defaults:{ease:'none'},
+    scrollTrigger:{trigger:'#services',start:'top top',end:'bottom bottom',scrub:SCRUB}
+  });
+  tl.fromTo('#svcGhost',{x:'4vw'},{x:'-46vw',duration:1},0);
+  tl.fromTo('#svcRig',{x:'-48vw'},{x:'115vw',duration:1},0);
+  tl.from('#svcGrid .svc',{y:22,autoAlpha:0,stagger:0.045,duration:0.12,ease:'power2.out'},0.06);
+  /* velocity skew on the ghost word */
+  const skewSet=gsap.quickSetter('#svcGhost','skewX','deg');
+  ScrollTrigger.create({trigger:'#services',start:'top bottom',end:'bottom top',
+    onUpdate:s=>{skewSet(clamp(s.getVelocity()/-400,-6,6));}});
+}
+
+/* ================= ROAD ================= */
+{
+  const roadSvg=$('roadSvg'),roadPath=$('roadPath'),tdTruck=$('tdTruck'),kmhEl=$('kmh');
+  const L=roadPath.getTotalLength();
+  const state={p:0};
+  let kmh=0;
+  function place(){
+    const d=L*lerp(0.03,0.985,state.p);
+    const pt=roadPath.getPointAtLength(d);
+    const pt2=roadPath.getPointAtLength(Math.min(L,d+2));
+    const ang=Math.atan2(pt2.y-pt.y,pt2.x-pt.x)*180/Math.PI;
+    tdTruck.setAttribute('transform',`translate(${pt.x},${pt.y}) rotate(${ang+90})`);
+    const scale=roadSvg.getBoundingClientRect().width/1200;
+    const yOff=pt.y*scale-innerHeight*0.42;
+    /* on narrow screens the camera also follows the truck horizontally */
+    const xOff=innerWidth<=760?(pt.x-600)*scale:0;
+    roadSvg.style.transform=`translate(calc(-50% - ${xOff}px),${-yOff}px)`;
+  }
+  place();
+  const tl=gsap.timeline({
+    defaults:{ease:'none'},
+    scrollTrigger:{
+      trigger:'#road',start:'top top',end:'bottom bottom',scrub:reduced?true:0.9,
+      onUpdate:s=>{
+        kmh=lerp(kmh,clamp(Math.abs(s.getVelocity())*0.045,0,92),0.18);
+        kmhEl.textContent=String(Math.round(kmh));
+      }
+    }
+  });
+  tl.to(state,{p:1,duration:1,onUpdate:place},0);
+  const ms=[['.ms-1',0.06,0.30],['.ms-2',0.36,0.60],['.ms-3',0.64,0.92]];
+  ms.forEach(([sel,a,b])=>{
+    tl.fromTo(sel,{autoAlpha:0,y:18},{autoAlpha:1,y:0,duration:0.05,ease:'power2.out'},a)
+      .to(sel,{autoAlpha:0,y:-12,duration:0.05,ease:'power2.in'},b);
+  });
+  addEventListener('resize',place);
+}
+
+/* ================= OCEAN ================= */
+{
+  const tl=gsap.timeline({
+    defaults:{ease:'none'},
+    scrollTrigger:{trigger:'#ocean',start:'top top',end:'bottom bottom',scrub:SCRUB}
+  });
+  tl.fromTo('#shipWrap',{yPercent:-38,scale:1.22},{yPercent:-62,scale:0.94,duration:1,ease:'power1.out'},0);
+  const cards=['.sc-1','.sc-2','.sc-3','.sc-4'];
+  cards.forEach((sel,i)=>{
+    tl.fromTo(sel,{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:0.07,ease:'power2.out'},0.14+i*0.09);
+  });
+  tl.fromTo('#cloudCover',{yPercent:105},{yPercent:-8,duration:0.22,ease:'power1.in'},0.78);
+}
+
+/* ================= SKY ================= */
+{
+  const tl=gsap.timeline({
+    defaults:{ease:'none'},
+    scrollTrigger:{trigger:'#sky',start:'top top',end:'bottom bottom',scrub:SCRUB}
+  });
+  tl.fromTo('#planeWrap',
+    {yPercent:22,xPercent:-50,scale:0.62,rotation:-7},
+    {yPercent:-68,xPercent:-50,scale:1.04,rotation:2,duration:1,ease:'power1.inOut'},0);
+  tl.from('.sky-copy',{autoAlpha:0,y:20,duration:0.18,ease:'power2.out'},0.55);
+}
+
+/* ================= FOOTER WORDMARK ================= */
+(function(){
+  const cv=$('markCv'),ctx=cv.getContext('2d');
+  let pts=[],W,H,built=false;
+  function build(){
+    W=cv.clientWidth;H=cv.clientHeight;
+    const d=Math.min(2,devicePixelRatio||1);
+    cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    let fs=Math.min(H*0.86,W/6.2);
+    oc.font=`900 ${fs}px Archivo,Arial,sans-serif`;
+    while(oc.measureText('BRAZILFRESH').width>W*0.96&&fs>10){fs-=4;oc.font=`900 ${fs}px Archivo,Arial,sans-serif`;}
+    oc.textAlign='center';oc.textBaseline='middle';
+    oc.fillText('BRAZILFRESH',W/2,H/2);
+    const img=oc.getImageData(0,0,W,H).data;
+    pts=[];
+    const step=Math.max(3,Math.round(W/340));
+    for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){
+      if(img[(y*W+x)*4+3]>128)pts.push({tx:x,ty:y,sx:Math.random()*W,sy:Math.random()*H});
+    }
+    built=true;
+  }
+  function draw(p){
+    if(!built)return;
+    ctx.clearRect(0,0,W,H);
+    const q=reduced?1:p;
+    ctx.fillStyle='#0C1F12';
+    for(const pt of pts){
+      ctx.globalAlpha=0.25+q*0.75;
+      ctx.fillRect(lerp(pt.sx,pt.tx,q),lerp(pt.sy,pt.ty,q),2,2);
+    }
+    ctx.globalAlpha=1;
+  }
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(build);
+  else build();
+  addEventListener('resize',()=>{built=false;build();});
+  const state={p:0};
+  gsap.to(state,{p:1,ease:'power2.out',
+    scrollTrigger:{trigger:'#markCv',start:'top 96%',end:'top 74%',scrub:reduced?true:0.6},
+    onUpdate:()=>draw(state.p)});
+  document.fonts&&document.fonts.ready.then(()=>setTimeout(()=>draw(state.p),50));
+})();
+
+ScrollTrigger.refresh();
+
+/* debug: ?scroll=N jumps to an offset (harmless in production) */
+const _sp=new URLSearchParams(location.search);
+if(_sp.has('scroll')){const _y=+_sp.get('scroll');
+  addEventListener('load',()=>setTimeout(()=>{lenis.scrollTo(_y,{immediate:true});ScrollTrigger.update();},300));}
+</script>
