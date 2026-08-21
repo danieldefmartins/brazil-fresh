@@ -21,6 +21,13 @@ def inline_asset(m):
 
 src = re.sub(r"\{\{A:([\w-]+)\}\}", inline_asset, src)
 
+def inline_video(m):
+    p = root / "assets" / (m.group(1) + ".mp4")
+    b64 = base64.b64encode(p.read_bytes()).decode()
+    return "data:video/mp4;base64," + b64
+
+src = re.sub(r"\{\{V:([\w-]+)\}\}", inline_video, src)
+
 out = root / "index.html"
 out.write_text(src)
 print(f"built index.html: {out.stat().st_size/1024:.0f} KB")
