@@ -1,0 +1,388 @@
+<title>Brazil Fresh × Terra Fresca</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ink:#0C1F12;
+  --ink-soft:#41523F;
+  --paper:#F7F6EC;
+  --paper-dim:#EFEEDF;
+  --ghost:#E0E3CC;
+  --mango:#FFA51F;
+  --leaf:#2E9E5B;
+  --leaf-deep:#14532D;
+  --papaya:#FF6B4A;
+  --lime:#A8C838;
+  --terra:#C4572E;          /* Terra Fresca sub-brand */
+  --line:#D6D6C2;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'Archivo',Helvetica,Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#DDDCCB;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+.display{font-stretch:125%;font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:.96;text-wrap:balance}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.slide{
+  width:min(1180px,96vw);aspect-ratio:16/9;margin:26px auto;background:var(--paper);
+  padding:clamp(28px,4.2vw,58px);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(12,31,18,.18);
+}
+.slide.dark{background:var(--ink);color:var(--paper)}
+.slide .num{position:absolute;top:24px;right:28px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-soft)}
+.slide.dark .num{color:#7C9581}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--leaf);margin-bottom:14px}
+.slide.dark .eyebrow{color:var(--mango)}
+h1{font-size:clamp(34px,5vw,64px)}
+h2{font-size:clamp(26px,3.4vw,44px);margin-bottom:18px}
+h3{font-size:17px;font-stretch:118%;font-weight:800;text-transform:uppercase}
+p.small,li{font-size:14px}
+.foot{margin-top:auto;padding-top:14px;display:flex;justify-content:space-between;gap:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.slide.dark .foot{border-color:#1C3323;color:#7C9581}
+.cols{display:grid;gap:clamp(16px,2.4vw,34px)}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}
+ul.clean{list-style:none}
+ul.clean li{padding:9px 0 9px 22px;position:relative;border-bottom:1px solid var(--line)}
+ul.clean li::before{content:"";position:absolute;left:0;top:16px;width:9px;height:9px;background:var(--mango)}
+ul.clean.leafy li::before{background:var(--leaf)}
+.slide.dark ul.clean li{border-color:#1C3323}
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tile{border:1px solid var(--line);padding:20px 20px 16px;background:#FBFAF2}
+.tile .v{font-stretch:125%;font-weight:900;font-size:clamp(30px,3.6vw,48px);font-variant-numeric:tabular-nums;line-height:1}
+.tile .v span{font-size:.5em;font-weight:800}
+.tile .l{margin-top:10px;font-size:13px;color:var(--ink-soft);max-width:24ch}
+.tile.hi{background:var(--leaf-deep);border-color:var(--leaf-deep);color:var(--paper)}
+.tile.hi .l{color:#A9C2AE}
+.tile.hi .v span,.tile.hi .v{color:var(--paper)}
+.tile .v em{font-style:normal;color:var(--mango)}
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;text-align:left;color:var(--ink-soft);padding:8px 10px;border-bottom:2px solid var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.hi td{background:#FFF3DD;font-weight:700}
+.slide.dark th{color:#7C9581;border-color:#345E42}
+.slide.dark td{border-color:#1C3323}
+.pill{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid currentColor}
+.ok{color:var(--leaf)}.warn{color:var(--terra)}
+/* flow diagram */
+.flow{display:flex;align-items:stretch;gap:0;margin:26px 0}
+.fbox{flex:1;border:2px solid var(--ink);padding:16px;background:#FBFAF2}
+.fbox h3{font-size:15px}
+.fbox p{font-size:12.5px;color:var(--ink-soft);margin-top:6px}
+.fbox.bf{border-color:var(--leaf-deep);background:var(--leaf-deep);color:var(--paper)}
+.fbox.bf p{color:#A9C2AE}
+.fbox.tf{border-color:var(--terra);background:var(--terra);color:#FFF4EC}
+.fbox.tf p{color:#F6CDB6}
+.farrow{display:flex;align-items:center;padding:0 10px;font-size:22px;color:var(--ink-soft)}
+/* bar chart */
+.chart{margin-top:8px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 84px;align-items:center;gap:12px;margin:9px 0}
+.bar-row .lbl{font-size:13px;font-weight:700}
+.bar-track{height:22px;background:transparent;position:relative}
+.bar{height:100%;background:var(--leaf);border-radius:0 4px 4px 0;position:relative}
+.bar.mx{background:var(--leaf-deep)}
+.bar.br{background:var(--mango)}
+.bar-row .val{font-family:var(--mono);font-size:11px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.qnum{font-stretch:125%;font-weight:900;font-size:15px;color:var(--mango);margin-right:8px}
+.brandmark{font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:19px}
+.brandmark em{font-style:normal;color:var(--mango)}
+.brandmark.tf em{color:var(--terra)}
+@media(max-width:860px){
+  .slide{aspect-ratio:auto;min-height:70vh}
+  .c2,.c3,.tiles{grid-template-columns:1fr}
+  .flow{flex-direction:column}
+  .farrow{transform:rotate(90deg);justify-content:center}
+}
+@media print{
+  body{background:#fff}
+  @page{size:13.33in 7.5in;margin:0}
+  .slide{width:13.33in;height:7.5in;margin:0;box-shadow:none;page-break-after:always;aspect-ratio:auto}
+}
+</style>
+
+<!-- 1 · CAPA -->
+<section class="slide dark">
+  <span class="num">01</span>
+  <div style="margin-top:auto">
+    <div class="eyebrow">Reunião de sócios · Daniel &amp; Edgard · Agosto 2026</div>
+    <h1 class="display">O negócio de frutas &amp; verduras nos EUA</h1>
+    <p style="margin-top:20px;max-width:52ch;color:#B7C6B4">Como vamos levar o hortifrúti brasileiro para o mercado americano — e as perguntas que precisamos responder antes do primeiro contêiner.</p>
+  </div>
+  <div class="foot">
+    <span><span class="brandmark">Brazil<em>Fresh</em></span> &nbsp;·&nbsp; <span class="brandmark tf">Terra<em>Fresca</em></span></span>
+    <span>Confidencial · rascunho para discussão</span>
+  </div>
+</section>
+
+<!-- 2 · A VISÃO -->
+<section class="slide">
+  <span class="num">02</span>
+  <div class="eyebrow">A visão</div>
+  <h2 class="display">Duas empresas, um fluxo</h2>
+  <div class="flow">
+    <div class="fbox"><h3>Fazendas parceiras</h3><p>Bahia, Ceará, RN, Vale do São Francisco. Edgard lidera o sourcing e a qualidade na origem.</p></div>
+    <div class="farrow">→</div>
+    <div class="fbox bf"><h3>Brazil Fresh · Trading</h3><p>Exportadora: compra, embala, certifica, embarca e vende no atacado para o mundo inteiro (FOB/CIF/DDP).</p></div>
+    <div class="farrow">→</div>
+    <div class="fbox tf"><h3>Terra Fresca · Varejo EUA</h3><p>Nossa loja premium de frescos nos EUA — cliente âncora da Brazil Fresh e margem de varejo para o grupo.</p></div>
+  </div>
+  <div class="cols c2">
+    <div>
+      <h3 style="color:var(--leaf-deep)">Por que os dois juntos?</h3>
+      <ul class="clean leafy">
+        <li>A trading ganha volume e escala; o varejo ganha margem e marca.</li>
+        <li>A Terra Fresca garante demanda mínima para os primeiros contêineres.</li>
+        <li>Aprendemos o mercado vendendo direto ao consumidor.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--terra)">Papéis</h3>
+      <ul class="clean">
+        <li><b>Edgard</b> — origem: fazendas, qualidade, packing, preço de compra.</li>
+        <li><b>Daniel</b> — destino: EUA, importação, vendas, varejo, marketing, tecnologia.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Brazil Fresh × Terra Fresca</span><span>02</span></div>
+</section>
+
+<!-- 3 · MERCADO EUA -->
+<section class="slide">
+  <span class="num">03</span>
+  <div class="eyebrow">O mercado americano</div>
+  <h2 class="display">Um mercado gigante — e faminto por importação</h2>
+  <div class="tiles">
+    <div class="tile hi"><div class="v">US$ <em>~80 bi</em></div><div class="l">vendas anuais de frutas e verduras frescas no varejo americano</div></div>
+    <div class="tile"><div class="v">~60<span>%</span></div><div class="l">das frutas frescas consumidas nos EUA são importadas</div></div>
+    <div class="tile"><div class="v">~38<span>%</span></div><div class="l">dos vegetais frescos consumidos nos EUA são importados</div></div>
+    <div class="tile"><div class="v">US$ 30+<span> bi</span></div><div class="l">em importações de hortifrúti fresco por ano</div></div>
+    <div class="tile"><div class="v">330<span> mi</span></div><div class="l">de consumidores — e a produção local não acompanha a demanda</div></div>
+    <div class="tile"><div class="v">Inverno</div><div class="l">de novembro a abril os EUA dependem quase 100% do hemisfério sul</div></div>
+  </div>
+  <div class="foot"><span>Estimativas USDA/ERS 2024–2025 · números aproximados para discussão</span><span>03</span></div>
+</section>
+
+<!-- 4 · DE ONDE VEM -->
+<section class="slide">
+  <span class="num">04</span>
+  <div class="eyebrow">De onde a fruta vem hoje</div>
+  <h2 class="display">O México domina. O Brasil quase não aparece.</h2>
+  <div class="chart" role="img" aria-label="Participação aproximada nas importações americanas de hortifrúti fresco por país">
+    <div class="bar-row"><span class="lbl">México</span><div class="bar-track"><div class="bar mx" style="width:96%"></div></div><span class="val">~US$ 21 bi</span></div>
+    <div class="bar-row"><span class="lbl">Canadá</span><div class="bar-track"><div class="bar" style="width:18%"></div></div><span class="val">~US$ 4 bi</span></div>
+    <div class="bar-row"><span class="lbl">Peru</span><div class="bar-track"><div class="bar" style="width:16%"></div></div><span class="val">~US$ 3,5 bi</span></div>
+    <div class="bar-row"><span class="lbl">Chile</span><div class="bar-track"><div class="bar" style="width:14%"></div></div><span class="val">~US$ 3 bi</span></div>
+    <div class="bar-row"><span class="lbl">Guatemala</span><div class="bar-track"><div class="bar" style="width:11%"></div></div><span class="val">~US$ 2,4 bi</span></div>
+    <div class="bar-row"><span class="lbl">Brasil</span><div class="bar-track"><div class="bar br" style="width:3%"></div></div><span class="val">&lt; US$ 0,5 bi</span></div>
+  </div>
+  <p class="small" style="margin-top:14px;max-width:70ch"><b>A leitura certa:</b> o Brasil é uma potência agrícola que praticamente não participa do fresco nos EUA. Isso não é fraqueza — é <b>espaço em branco</b>. Manga, lima, mamão e melão brasileiros já têm porta de entrada aprovada.</p>
+  <div class="foot"><span>Hortifrúti fresco · estimativas USDA 2024 · valores aproximados</span><span>04</span></div>
+</section>
+
+<!-- 5 · POR QUE O BRASIL -->
+<section class="slide dark">
+  <span class="num">05</span>
+  <div class="eyebrow">A nossa vantagem</div>
+  <h2 class="display">Por que o Brasil ganha esse jogo</h2>
+  <div class="cols c2" style="margin-top:8px">
+    <ul class="clean">
+      <li><b>Contra-estação:</b> quando o hemisfério norte está no inverno, nós estamos colhendo.</li>
+      <li><b>Calendário tropical:</b> lima, mamão, gengibre e batata-doce o ano inteiro — sem janela morta.</li>
+      <li><b>Vale do São Francisco:</b> manga e uva irrigadas com qualidade de exportação já certificada.</li>
+    </ul>
+    <ul class="clean">
+      <li><b>Câmbio:</b> custo em real, receita em dólar.</li>
+      <li><b>Portos do Nordeste:</b> Pecém e Natal ficam a ~9–11 dias de navio da Flórida — mais perto do que muita gente imagina.</li>
+      <li><b>Comunidade:</b> milhões de brasileiros nos EUA que conhecem e pagam por essas frutas.</li>
+    </ul>
+  </div>
+  <div class="foot"><span>Brazil Fresh × Terra Fresca</span><span>05</span></div>
+</section>
+
+<!-- 6 · O QUE PODE ENTRAR -->
+<section class="slide">
+  <span class="num">06</span>
+  <div class="eyebrow">Regras de entrada (USDA-APHIS)</div>
+  <h2 class="display">O que o Brasil pode exportar fresco para os EUA</h2>
+  <table>
+    <tr><th>Produto</th><th>Status</th><th>Condição principal</th></tr>
+    <tr><td><b>Manga</b> (Tommy, Palmer, Keitt)</td><td><span class="pill ok">Liberada</span></td><td>Tratamento hidrotérmico obrigatório em packing aprovado pelo USDA</td></tr>
+    <tr><td><b>Lima Tahiti</b></td><td><span class="pill ok">Liberada</span></td><td>Certificado fitossanitário padrão</td></tr>
+    <tr><td><b>Mamão</b> (Formosa, Golden)</td><td><span class="pill ok">Liberada</span></td><td>Regiões de produção aprovadas</td></tr>
+    <tr><td><b>Melão</b></td><td><span class="pill ok">Liberada</span></td><td>Requisitos por região — confirmar protocolo</td></tr>
+    <tr><td><b>Gengibre / Batata-doce</b></td><td><span class="pill ok">Liberada</span></td><td>Inspeção padrão</td></tr>
+    <tr><td><b>Abacate</b></td><td><span class="pill warn">Verificar</span></td><td>Acesso fresco ainda em negociação — confirmar status atual no APHIS</td></tr>
+  </table>
+  <p class="small" style="margin-top:12px"><b>Regra da casa:</b> antes de prometer qualquer produto a um cliente, confirmamos a lista APHIS (acesso por produto + região) e o protocolo fitossanitário do MAPA. Isso é tarefa da primeira semana.</p>
+  <div class="foot"><span>Confirmar cada item no APHIS FAVIR antes de fechar contrato</span><span>06</span></div>
+</section>
+
+<!-- 7 · TEMPO -->
+<section class="slide">
+  <span class="num">07</span>
+  <div class="eyebrow">A pergunta central: quanto tempo temos?</div>
+  <h2 class="display">O relógio começa na colheita</h2>
+  <table>
+    <tr><th>Produto</th><th class="num">Vida útil total (bem manejado)</th><th class="num">Viagem de navio (2–3 sem door-to-door)</th><th class="num">Sobra para vender</th></tr>
+    <tr><td>Lima Tahiti</td><td class="num">28–45 dias</td><td class="num">OK</td><td class="num"><b>2–4 semanas</b></td></tr>
+    <tr><td>Melão amarelo</td><td class="num">21–28 dias</td><td class="num">OK</td><td class="num"><b>~1–2 semanas</b></td></tr>
+    <tr><td>Manga</td><td class="num">14–21 dias</td><td class="num">Apertado</td><td class="num"><b>dias — precisa de execução perfeita</b></td></tr>
+    <tr class="hi"><td>Mamão</td><td class="num">7–14 dias</td><td class="num">NÃO fecha</td><td class="num"><b>só de avião</b></td></tr>
+  </table>
+  <p class="small" style="margin-top:14px;max-width:74ch">Por isso a cadeia fria não é detalhe: <b>pré-resfriamento na colheita + reefer a 7–10°C + zero quebra de temperatura</b>. Cada dia ganho na origem é um dia de prateleira que a Terra Fresca vende.</p>
+  <div class="foot"><span>Faixas típicas com colheita no ponto certo e cadeia fria contínua</span><span>07</span></div>
+</section>
+
+<!-- 8 · NAVIO VS AVIÃO -->
+<section class="slide dark">
+  <span class="num">08</span>
+  <div class="eyebrow">Navio × Avião</div>
+  <h2 class="display">Os dois — cada um no seu papel</h2>
+  <div class="cols c2">
+    <div>
+      <h3 style="color:var(--lime)">🚢 Navio (reefer 40')</h3>
+      <ul class="clean leafy">
+        <li>Santos → Miami/Nova York: <b>~10–16 dias</b> porto a porta; Pecém/Natal → Flórida: <b>~9–11 dias</b>.</li>
+        <li>Door-to-door realista: <b>2–3 semanas</b> (inland + liberação).</li>
+        <li>Custo: <b>~US$ 0,15–0,35/kg</b> · ~20–24 t por contêiner.</li>
+        <li>Para: lima, melão, manga, gengibre, batata-doce — o volume do negócio.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--mango)">✈️ Avião</h3>
+      <ul class="clean">
+        <li>GRU/Fortaleza → Miami: <b>8–10h de voo</b>; door-to-door <b>2–4 dias</b>.</li>
+        <li>Custo: <b>~US$ 1,50–3,00/kg</b> — 8–10× o navio.</li>
+        <li>Para: mamão, fruta delicada, janelas curtas, amostras e lançamentos.</li>
+        <li>É também o nosso <b>primeiro teste</b>: 2–4 paletes antes de arriscar um contêiner.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small" style="margin-top:14px;color:#B7C6B4"><b>Regra de bolso:</b> navio paga o aluguel, avião constrói a reputação. Produto que aguenta 3 semanas vai de navio; o resto só voa se a margem pagar.</p>
+  <div class="foot"><span>Valores típicos 2025–2026 · cotar por rota antes de cada embarque</span><span>08</span></div>
+</section>
+
+<!-- 9 · BUROCRACIA -->
+<section class="slide">
+  <span class="num">09</span>
+  <div class="eyebrow">Licenças &amp; papelada</div>
+  <h2 class="display">O que precisamos ter antes do 1º embarque</h2>
+  <div class="cols c2">
+    <div>
+      <h3 style="color:var(--leaf-deep)">Nos EUA (Daniel)</h3>
+      <ul class="clean leafy">
+        <li><b>FDA registration + Prior Notice</b> de cada carga.</li>
+        <li><b>FSMA / FSVP</b> — o importador precisa de um programa de verificação do fornecedor estrangeiro.</li>
+        <li><b>Licença PACA</b> — obrigatória para comprar/vender produce nos EUA.</li>
+        <li><b>Customs broker + bond</b> aduaneiro.</li>
+        <li>Empresa importadora (LLC) + seguro de carga.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--leaf-deep)">No Brasil (Edgard)</h3>
+      <ul class="clean">
+        <li><b>Habilitação de exportação</b> (Radar/Siscomex) da empresa.</li>
+        <li><b>Certificado fitossanitário MAPA</b> por embarque.</li>
+        <li><b>Packing houses habilitados</b> — inclusive tratamento hidrotérmico para manga.</li>
+        <li>Despachante aduaneiro + agente de carga de confiança.</li>
+        <li>Fazendas com <b>GLOBALG.A.P.</b> (o varejo americano pede).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Nada disso é impeditivo — é checklist. Prazo típico: 60–90 dias para montar tudo</span><span>09</span></div>
+</section>
+
+<!-- 10 · TERRA FRESCA -->
+<section class="slide">
+  <span class="num">10</span>
+  <div class="eyebrow" style="color:var(--terra)">Terra Fresca · o varejo</div>
+  <h2 class="display">Nossa loja nos EUA — margem e marca</h2>
+  <div class="cols c3">
+    <div>
+      <h3 style="color:var(--terra)">Conceito</h3>
+      <p class="small" style="margin-top:8px">Mercado premium de frescos com alma brasileira: frutas tropicais chegando toda semana, padaria/café, produtos que a comunidade não acha no supermercado americano.</p>
+    </div>
+    <div>
+      <h3 style="color:var(--terra)">Onde</h3>
+      <p class="small" style="margin-top:8px">Praças com forte comunidade brasileira: <b>Massachusetts</b> (Framingham, Everett), <b>Flórida</b> (Orlando, Miami/Pompano), <b>New Jersey</b> (Newark). Começamos por uma.</p>
+    </div>
+    <div>
+      <h3 style="color:var(--terra)">Por que importa</h3>
+      <p class="small" style="margin-top:8px">Trading opera com margem de <b>~8–15%</b>; o varejo de hortifrúti trabalha com <b>~30–50%</b> de markup. A loja captura a margem inteira da cadeia e vira a vitrine da Brazil Fresh.</p>
+    </div>
+  </div>
+  <table style="margin-top:18px">
+    <tr><th>Exemplo ilustrativo · manga (1 kg)</th><th class="num">Custo acumulado</th></tr>
+    <tr><td>Fazenda (Vale do São Francisco)</td><td class="num">~US$ 0,60</td></tr>
+    <tr><td>+ packing, tratamento, frete interno, FOB Santos</td><td class="num">~US$ 1,10</td></tr>
+    <tr><td>+ frete marítimo, seguro, liberação = landed Miami</td><td class="num">~US$ 1,60</td></tr>
+    <tr><td>Preço de atacado (Brazil Fresh vende)</td><td class="num">~US$ 2,20–2,60</td></tr>
+    <tr class="hi"><td>Prateleira Terra Fresca</td><td class="num">~US$ 3,50–4,50</td></tr>
+  </table>
+  <div class="foot"><span>Números ilustrativos para discussão — validar com cotações reais</span><span>10</span></div>
+</section>
+
+<!-- 11 · PERGUNTAS SOURCING -->
+<section class="slide dark">
+  <span class="num">11</span>
+  <div class="eyebrow">Perguntas para o Edgard · parte 1</div>
+  <h2 class="display">Origem &amp; produto</h2>
+  <ul class="clean" style="columns:2;column-gap:40px">
+    <li><span class="qnum">Q1</span>Quais produtos você consegue garantir <b>volume constante por mês</b> — e em quais meses?</li>
+    <li><span class="qnum">Q2</span>Quais fazendas já têm <b>GLOBALG.A.P.</b> ou conseguem certificar rápido?</li>
+    <li><span class="qnum">Q3</span>Qual o <b>preço FOB realista</b> por produto, por estação — e quanto oscila?</li>
+    <li><span class="qnum">Q4</span>Temos acesso a <b>packing com pré-resfriamento</b>? E para manga, a packing <b>aprovado pelo USDA</b> para tratamento hidrotérmico?</li>
+    <li><span class="qnum">Q5</span>Quem faz o <b>controle de qualidade na colheita</b> — e conseguimos padrão de exportação (calibre, brix, coloração)?</li>
+    <li><span class="qnum">Q6</span>Alguma dessas fazendas <b>já exporta</b>? Para onde, e por quê pararam/continuam?</li>
+  </ul>
+  <div class="foot"><span>Brazil Fresh × Terra Fresca</span><span>11</span></div>
+</section>
+
+<!-- 12 · PERGUNTAS OPERAÇÃO -->
+<section class="slide dark">
+  <span class="num">12</span>
+  <div class="eyebrow">Perguntas para o Edgard · parte 2</div>
+  <h2 class="display">Dinheiro, risco &amp; operação</h2>
+  <ul class="clean" style="columns:2;column-gap:40px">
+    <li><span class="qnum">Q7</span><b>Quem compra a fruta</b>: nós compramos da fazenda (risco nosso) ou consignação (risco compartilhado)?</li>
+    <li><span class="qnum">Q8</span>Qual o <b>prazo de pagamento</b> que o produtor aceita — e quanto capital de giro isso exige por contêiner (~US$ 25–45 mil/reefer)?</li>
+    <li><span class="qnum">Q9</span>Se o reefer falha ou a carga chega ruim, <b>quem assume a perda</b>? Que seguro contratamos?</li>
+    <li><span class="qnum">Q10</span>Conseguimos <b>exclusividade</b> ou prioridade com as melhores fazendas?</li>
+    <li><span class="qnum">Q11</span>Você toparia começar com um <b>teste aéreo</b> (2–4 paletes p/ Miami) antes do primeiro contêiner?</li>
+    <li><span class="qnum">Q12</span>Quem na sua ponta cuida de <b>fitossanitário + despachante + agente de carga</b> — você ou contratamos?</li>
+  </ul>
+  <div class="foot"><span>Brazil Fresh × Terra Fresca</span><span>12</span></div>
+</section>
+
+<!-- 13 · PRÓXIMOS PASSOS -->
+<section class="slide">
+  <span class="num">13</span>
+  <div class="eyebrow">Próximos passos</div>
+  <h2 class="display">Os primeiros 90 dias</h2>
+  <table>
+    <tr><th>#</th><th>Ação</th><th>Dono</th><th class="num">Prazo</th></tr>
+    <tr><td>1</td><td>Escolher <b>2 produtos-campeões</b> (sugestão: lima + manga) e validar lista APHIS</td><td>Edgard + Daniel</td><td class="num">Semana 1–2</td></tr>
+    <tr><td>2</td><td>Cotar FOB real com 3 fazendas/packings e mapear certificações</td><td>Edgard</td><td class="num">Semana 2–4</td></tr>
+    <tr><td>3</td><td>Abrir empresa importadora nos EUA + licença PACA + broker</td><td>Daniel</td><td class="num">Semana 2–8</td></tr>
+    <tr><td>4</td><td><b>Embarque teste aéreo</b> (2–4 paletes) para Miami — vender para 3 compradores</td><td>Juntos</td><td class="num">Semana 6–10</td></tr>
+    <tr class="hi"><td>5</td><td><b>Primeiro contêiner reefer</b> com demanda já vendida (pré-venda)</td><td>Juntos</td><td class="num">Dia ~90</td></tr>
+    <tr><td>6</td><td>Plano da 1ª loja Terra Fresca (praça, ponto, investimento)</td><td>Daniel</td><td class="num">Paralelo</td></tr>
+  </table>
+  <div class="foot"><span>Meta: aprender rápido com pouco dinheiro em risco — depois escalar</span><span>13</span></div>
+</section>
+
+<!-- 14 · FECHAMENTO -->
+<section class="slide dark">
+  <span class="num">14</span>
+  <div style="margin:auto;text-align:center;max-width:760px">
+    <div class="eyebrow" style="text-align:center">Do solo brasileiro para as mesas do mundo</div>
+    <h1 class="display">A fruta já existe.<br>O mercado já existe.<br>Falta a ponte — e a ponte somos nós.</h1>
+    <p style="margin-top:22px;color:#B7C6B4">brazil-fresh · terra fresca · 2026</p>
+  </div>
+  <div class="foot">
+    <span><span class="brandmark">Brazil<em>Fresh</em></span> &nbsp;·&nbsp; <span class="brandmark tf">Terra<em>Fresca</em></span></span>
+    <span>Obrigado · Vamos conversar</span>
+  </div>
+</section>
