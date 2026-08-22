@@ -1226,9 +1226,11 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   /* ---- OCEAN 7.5–9: cast off, camera climbs, live water takes over ---- */
   tl.to('#filmDock',{yPercent:-120,duration:.45,ease:'power2.in'},7.48)
     .to('#filmShip',{y:'-5svh',scale:.38,duration:1.32,ease:'power1.inOut'},7.54)
-    .fromTo('#filmOceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.02,duration:.5,ease:'power1.inOut'},7.92)
-    .to('#filmOcean',{'--wtr':0,duration:.5,ease:'power1.inOut'},7.92)
-    .to('#filmShip',{autoAlpha:0,duration:.42,ease:'power1.inOut'},8.04)
+    /* tight dissolve: the still ship blurs away before the footage is fully in,
+       so the two vessels never read as duplicates */
+    .fromTo('#filmOceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.02,duration:.30,ease:'power1.inOut'},7.86)
+    .to('#filmOcean',{'--wtr':0,duration:.30,ease:'power1.inOut'},7.86)
+    .to('#filmShip',{autoAlpha:0,filter:'blur(8px)',duration:.20,ease:'power1.in'},7.88)
     .to('#filmOceanCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},8.04)
     .to('#filmOceanCopy',{autoAlpha:0,y:-18,duration:.20,ease:'power2.in'},8.90);
 
