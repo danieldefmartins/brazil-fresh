@@ -60,7 +60,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--mango);outline-offs
 
 /* ============ SCENES ============ */
 .scene{position:relative}
-.pin{position:sticky;top:0;height:100svh;overflow:hidden}
+.pin{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate}
 
 /* ============ TICKER + HEADER ============ */
 .ticker{
@@ -174,10 +174,11 @@ nav.main a:hover{color:var(--paper)}
 #road .pin{background:var(--paper);perspective:1200px}
 #roadPersp{position:absolute;inset:0;will-change:transform;transform-origin:50% 20%}
 #roadSvg{position:absolute;top:0;left:50%;width:max(100vw,900px);will-change:transform}
+#roadShip{opacity:0;will-change:opacity}
 .telemetry{position:absolute;top:26px;left:clamp(18px,4vw,52px);z-index:6;color:var(--ink-soft)}
 .telemetry b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
 /* milestone copy lives in the open ground beside/under the road — big and readable */
-.milestone{position:absolute;z-index:6;bottom:9svh;left:clamp(18px,5vw,70px);max-width:560px;visibility:hidden;opacity:0}
+.milestone{position:absolute;z-index:6;bottom:9svh;left:clamp(18px,5vw,70px);max-width:560px;visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0);will-change:transform,opacity,clip-path}
 .milestone .mono{color:var(--leaf);display:block;margin-bottom:12px}
 .milestone h3{font-stretch:120%;font-weight:900;text-transform:uppercase;font-size:clamp(26px,3.6vw,52px);line-height:.98}
 .milestone p{margin-top:12px;font-size:13.5px;color:var(--ink-soft);max-width:40ch}
@@ -475,6 +476,9 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <rect x="0" y="2450" width="1200" height="130" fill="#2A2D2F"/>
       <rect x="0" y="2450" width="1200" height="10" fill="#FFA51F"/>
       <rect x="0" y="2580" width="1200" height="820" fill="#0D3A63"/>
+      <!-- The vessel enters before the road scene ends, so the port-to-ocean cut
+           preserves one continuous subject instead of revealing a new scene cold. -->
+      <image id="roadShip" href="{{A:ship-top}}" x="350" y="2575" width="500" height="825" preserveAspectRatio="xMidYMin meet"/>
       <!-- articulated rig: the cab steers through curves independently of the trailer -->
       <g id="tdTrail">
         <image href="{{A:ctn-top}}" x="-23" y="-82" width="46" height="164"/>
@@ -659,11 +663,13 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- GSAP + Lenis (official integration pattern) ---------- */
 gsap.registerPlugin(ScrollTrigger);
-const lenis=new Lenis({lerp:reduced?1:0.115,anchors:true});
+/* Lenis owns the inertial feel. ScrollTrigger only gets a very short catch-up,
+   avoiding the rubber-band lag caused by smoothing the same gesture twice. */
+const lenis=new Lenis({lerp:reduced?1:0.16,anchors:true});
 lenis.on('scroll',ScrollTrigger.update);
 gsap.ticker.add(t=>lenis.raf(t*1000));
 gsap.ticker.lagSmoothing(0);
-const SCRUB=reduced?true:0.8;
+const SCRUB=reduced?true:0.24;
 
 /* ---------- tickers ---------- */
 const tick='NOW LOADING — TAHITI LIMES · SANTOS → ROTTERDAM &nbsp;·&nbsp; <b>MANGO SEASON SEP–NOV</b> &nbsp;·&nbsp; REEFER SET-POINT 7.0°C &nbsp;·&nbsp; PAPAYA AIRLIFT GRU → DXB &nbsp;·&nbsp; <b>GLOBALG.A.P. CERTIFIED GROWERS</b> &nbsp;·&nbsp; YELLOW MELON · PECÉM → NEWARK &nbsp;·&nbsp; ';
@@ -798,6 +804,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     defaults:{ease:'none'},
     scrollTrigger:{trigger:'#load',start:'top top',end:'bottom bottom',scrub:SCRUB,invalidateOnRefresh:true}
   });
+  tl.to('.load-caption',{autoAlpha:0,y:-18,duration:0.075,ease:'power2.in'},0.30);
   /* 1 · six crates roll in; the cutaway shows the container filling up with fruit */
   const target=21;  /* door position, base vw */
   ['#crate1','#crate2','#crate3','#crate4','#crate5','#crate6'].forEach((c,i)=>{
@@ -848,6 +855,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     defaults:{ease:'none'},
     scrollTrigger:{trigger:'#services',start:'top top',end:'bottom bottom',scrub:SCRUB}
   });
+  tl.fromTo('.svc-band',{yPercent:12},{yPercent:0,duration:0.065,ease:'power2.out'},0);
   tl.fromTo('#svcGhost',{x:'4vw'},{x:'-46vw',duration:1},0);
   /* page 1 → page 2 handoff: the truck arrives still rolling, then makes SIX slow stops —
      one service text per stop, long enough to actually read */
@@ -876,7 +884,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   tl.fromTo('#morphTruck',
     {xPercent:-50,yPercent:-50,rotation:-90,scale:1.9,autoAlpha:0},
     {autoAlpha:1,duration:0.035,ease:'power1.out'},0.885)
-    .to('#morphTruck',{rotation:0,scale:0.58,y:'8svh',ease:'power1.inOut',duration:0.115},0.885);
+    .to('#morphTruck',{rotation:0,scale:0.5,y:'8svh',ease:'power2.inOut',duration:0.115},0.885);
   /* velocity skew on the ghost word */
   const skewSet=gsap.quickSetter('#svcGhost','skewX','deg');
   ScrollTrigger.create({trigger:'#services',start:'top bottom',end:'bottom top',
@@ -908,6 +916,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     roadSvg.style.transform=`translate(calc(-50% - ${xOff}px),${-yOff}px)`;
   }
   place();
+  gsap.set([tdCab,tdTrail],{autoAlpha:0});
   const tl=gsap.timeline({
     defaults:{ease:'none'},
     scrollTrigger:{
@@ -921,12 +930,15 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   /* the camera settles from the morph into the flat top view — gently */
   tl.fromTo('#roadPersp',{rotationX:26,scale:1.24,yPercent:-3},
     {rotationX:0,scale:1,yPercent:0,ease:'power2.out',duration:0.12},0);
+  tl.to([tdCab,tdTrail],{autoAlpha:1,duration:0.025},0);
   tl.to(state,{p:1,duration:1,onUpdate:place},0);
   const ms=[['.ms-1',0.06,0.30],['.ms-2',0.36,0.60],['.ms-3',0.64,0.92]];
   ms.forEach(([sel,a,b])=>{
-    tl.fromTo(sel,{autoAlpha:0,y:18},{autoAlpha:1,y:0,duration:0.05,ease:'power2.out'},a)
-      .to(sel,{autoAlpha:0,y:-12,duration:0.05,ease:'power2.in'},b);
+    tl.fromTo(sel,{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:0.065,ease:'power2.out'},a)
+      .to(sel,{autoAlpha:0,y:-12,clipPath:'inset(0 0% 0 100%)',duration:0.05,ease:'power2.in'},b);
   });
+  /* Establish the next scene while this one is still pinned. */
+  tl.to('#roadShip',{opacity:1,duration:0.075,ease:'power1.in'},0.90);
   addEventListener('resize',place);
 }
 
