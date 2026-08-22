@@ -1239,30 +1239,6 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     .to('#filmPlane',{x:'12vw',y:'-5svh',rotation:-2,scale:.92,duration:.72,ease:'none'},9.70)
     .to('#filmSkyCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},9.78);
 
-  /* rendered flip sequence (reference technique): scroll-scrubbed frames on canvas,
-     starting from a pixel-identical capture of this very page */
-  const FLIP_FRAMES={{FRAMES:truckflip}};
-  if(FLIP_FRAMES.length&&innerWidth>760&&!reduced){
-    const seqCv=$('flipSeq');
-    const seq={imgs:FLIP_FRAMES.map(u=>{const i=new Image();i.src=u;return i}),cur:-1,w:0,h:0};
-    const seqResize=()=>{const d=Math.min(2,devicePixelRatio||1),r=seqCv.getBoundingClientRect();
-      seqCv.width=r.width*d;seqCv.height=r.height*d;
-      seqCv.getContext('2d').setTransform(d,0,0,d,0,0);seq.w=r.width;seq.h=r.height;seq.cur=-1;};
-    seqResize();addEventListener('resize',seqResize);
-    const seqDraw=p2=>{
-      const n=seq.imgs.length,f=clamp(Math.round(p2*(n-1)),0,n-1);
-      if(f===seq.cur)return;
-      const img=seq.imgs[f];if(!img.complete||!img.naturalWidth)return;
-      seq.cur=f;
-      const ctx=seqCv.getContext('2d'),sc=Math.max(seq.w/img.naturalWidth,seq.h/img.naturalHeight);
-      const dw=img.naturalWidth*sc,dh=img.naturalHeight*sc;
-      ctx.clearRect(0,0,seq.w,seq.h);ctx.drawImage(img,(seq.w-dw)/2,(seq.h-dh)/2,dw,dh);
-    };
-    const sp={p:0};
-    tl.set('#flipSeq',{autoAlpha:1},3.80)
-      .to(sp,{p:1,duration:.50,ease:'none',onUpdate:()=>seqDraw(sp.p)},3.80)
-      .to('#flipSeq',{autoAlpha:0,duration:.08},4.32);
-  }
   addEventListener('resize',placeRoad);
   const filmVid=$('filmOceanVid');
   if(filmVid&&!reduced){
