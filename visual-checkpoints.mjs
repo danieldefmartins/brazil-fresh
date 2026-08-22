@@ -84,7 +84,10 @@ for (const viewport of viewports) {
   console.log(`${viewport.name}: ${scenes.map(scene => `${scene.id}@${scene.top}+${scene.height}`).join(', ')}`);
   let current = 0;
   for (const scene of scenes) {
-    const checkpoints = scene.id === 'hero'
+    const dense = process.env.DENSE === '1' && scene.id !== 'hero';
+    const checkpoints = dense
+      ? Array.from({length:19},(_,i)=>[`p${String((i+1)*5).padStart(2,'0')}`,(i+1)*.05])
+      : scene.id === 'hero'
       ? [['action', .5], ['handoff', .92]]
       : [['loading', .08], ['services', .25], ['rotation', .40], ['road', .53], ['port', .66], ['contact', .70], ['ship', .77], ['clouds', .88], ['plane', .96]];
     for (const [label, fraction] of checkpoints) {

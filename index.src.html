@@ -142,7 +142,7 @@ nav.main a:hover{color:var(--paper)}
 #filmServices{z-index:8;background:var(--paper);visibility:hidden;opacity:0}
 #filmServiceGhost{position:absolute;top:4svh;left:0;white-space:nowrap;font-weight:900;font-stretch:125%;font-size:clamp(110px,20vw,290px);line-height:.8;color:var(--ghost)}
 #filmServiceBand{position:absolute;left:0;right:0;bottom:0;height:56svh;background:var(--ink);color:var(--paper)}
-#filmServiceStage{position:absolute;left:clamp(20px,5vw,72px);right:clamp(20px,5vw,72px);bottom:9svh;height:32svh;z-index:20}
+#filmServiceStage{position:absolute;left:clamp(20px,5vw,72px);right:clamp(20px,5vw,72px);bottom:9svh;height:32svh;z-index:20;color:var(--paper)}
 .film-service{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0)}
 .film-service .mono{color:var(--mango);display:block;margin-bottom:12px}
 .film-service h3{font-size:clamp(28px,4vw,58px);line-height:.95;text-transform:uppercase;max-width:15ch}
@@ -159,15 +159,17 @@ nav.main a:hover{color:var(--paper)}
 .film-milestone h3{font-size:clamp(27px,3.6vw,50px);line-height:.96}
 .film-milestone p{margin-top:10px;color:var(--ink-soft);font-size:13px}
 #filmOcean{z-index:20;background:#092b4a;visibility:hidden;opacity:0}
-#filmOceanVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+#filmOcean::before{content:"";position:absolute;inset:-20%;background:radial-gradient(ellipse at 30% 20%,rgba(120,190,225,.18),transparent 38%),radial-gradient(ellipse at 72% 68%,rgba(30,115,165,.22),transparent 42%),repeating-linear-gradient(102deg,rgba(255,255,255,.035) 0 2px,transparent 2px 18px);background-size:auto,auto,180px 180px;animation:filmWater 12s linear infinite;will-change:transform}
+@keyframes filmWater{from{transform:translate3d(-2%,-2%,0)}to{transform:translate3d(3%,4%,0)}}
 #filmDock{position:absolute;inset:0 0 auto;height:16svh;background:#242629;border-bottom:6px solid var(--mango)}
 #filmShip{position:absolute;z-index:12;left:50%;top:54%;width:clamp(170px,20vw,300px);transform:translate(-50%,-50%);filter:drop-shadow(0 24px 22px rgba(0,0,0,.45));will-change:transform}
 #filmShip img{display:block;width:100%}
-#filmShipSlot{position:absolute;left:46.5%;top:55%;width:6%;opacity:0}
+#filmShip img#filmShipSlot{position:absolute;left:46.5%;top:55%;width:6%;opacity:0}
 #filmDeckTarget{position:absolute;z-index:14;left:50%;top:56%;width:clamp(30px,3.8vw,48px);height:clamp(105px,13.5vw,170px);transform:translate(-50%,-4%);border:2px solid var(--mango);opacity:0;will-change:opacity,transform}
 #filmDeckTarget::after{content:"YOUR REEFER";position:absolute;left:calc(100% + 10px);top:50%;white-space:nowrap;color:var(--paper);font:500 9px/1 var(--mono);letter-spacing:.12em;transform:translateY(-50%)}
 #filmWake{position:absolute;left:42%;top:96%;width:16%;height:55%;background:linear-gradient(rgba(255,255,255,.65),transparent);filter:blur(8px);opacity:.75}
 #filmClouds{position:absolute;inset:-15%;z-index:24;pointer-events:none;transform:translateY(115%);background:radial-gradient(55vw 30vh at 18% 72%,#fff,transparent 72%),radial-gradient(65vw 34vh at 80% 82%,#fff,transparent 72%),radial-gradient(85vw 42vh at 50% 98%,#fff,transparent 74%);will-change:transform}
+#filmOceanCopy{color:var(--paper);text-shadow:0 2px 24px rgba(3,18,32,.55)}
 #filmSky{z-index:11;background:linear-gradient(#eef4f8,#c7dceb);visibility:hidden;opacity:0}
 #filmPlane{position:absolute;left:50%;top:48%;width:clamp(400px,58vw,820px);filter:drop-shadow(0 40px 34px rgba(30,60,90,.24));will-change:transform}
 #filmPlane img{display:block;width:100%;transform:rotate(90deg)}
@@ -448,7 +450,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
 @media(max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
 
 @media (prefers-reduced-motion:reduce){
-  .ticker-track,.range-marquee div,#shipWrap .hull,.water,.mist,.cloudfield i,.wake,.sidefoam{animation:none!important}
+  .ticker-track,.range-marquee div,#filmOcean::before,#shipWrap .hull,.water,.mist,.cloudfield i,.wake,.sidefoam{animation:none!important}
 }
 </style>
 
@@ -523,7 +525,6 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     </div>
 
     <div class="film-layer" id="filmOcean">
-      <video id="filmOceanVideo" muted loop playsinline preload="auto" src="{{V:ocean-loop}}"></video>
       <div id="filmDock"></div>
       <div id="filmShip"><img src="{{A:ship-top}}" alt="Container ship seen from above"><img id="filmShipSlot" src="{{A:ctn-top}}" alt=""><div id="filmWake"></div></div>
       <div id="filmDeckTarget" aria-hidden="true"></div>
@@ -982,10 +983,12 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   const film=$('journeyFilm'),roadSvg=$('filmRoadSvg'),roadPath=$('filmRoadPath');
   const roadLength=roadPath.getTotalLength(),roadState={p:0};
   const topPayload=$('filmTopPayload'),topCab=$('filmTopCab');
-  const oceanVideo=$('filmOceanVideo');
   const services=gsap.utils.toArray('.film-service');
-  const S=()=>innerWidth<=760?1.25:1;
-  const vw=n=>`${n*S()}vw`;
+  const vw=n=>`${n}vw`;
+  const loadingTruckX=()=>innerWidth<=760?6:31;
+  const serviceStops=()=>innerWidth<=760?[6,18,30,42]:[18,32,46,60];
+  const morphX=()=>innerWidth<=760?14:26;
+  const payloadOffset=()=>innerWidth<=760?23:-2;
 
   function roadPose(distance){
     const a=roadPath.getPointAtLength(clamp(distance,0,roadLength));
@@ -1004,7 +1007,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     topCab.style.rotate=`${steering}deg`;
   }
 
-  gsap.set('#filmSideTruck',{x:vw(-58)});
+  gsap.set('#filmSideTruck',{x:()=>vw(innerWidth<=760?-82:-58)});
   gsap.set('#filmSidePayload',{x:vw(29),y:'-22svh',rotation:-1.2});
   gsap.set('#filmSpreader',{y:'12svh'});
   gsap.set('#filmCable',{height:'12svh'});
@@ -1016,14 +1019,11 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
 
   const tl=gsap.timeline({
     defaults:{ease:'none'},
-    scrollTrigger:{trigger:film,start:'top top',end:'bottom bottom',scrub:SCRUB,invalidateOnRefresh:true,
-      onEnter:()=>oceanVideo&&!reduced&&oceanVideo.play().catch(()=>{}),
-      onEnterBack:()=>oceanVideo&&!reduced&&oceanVideo.play().catch(()=>{}),
-      onLeave:()=>oceanVideo&&oceanVideo.pause(),onLeaveBack:()=>oceanVideo&&oceanVideo.pause()}
+    scrollTrigger:{trigger:film,start:'top top',end:'bottom bottom',scrub:SCRUB,invalidateOnRefresh:true}
   });
 
   /* 0–2: the crane lowers the exact container that stays with us for the film. */
-  tl.to('#filmSideTruck',{x:vw(31),duration:.72,ease:'power2.out'},0)
+  tl.to('#filmSideTruck',{x:()=>vw(loadingTruckX()),duration:.72,ease:'power2.out'},0)
     .to('#filmSidePayload',{y:'-4.1svh',rotation:0,duration:.48,ease:'power2.inOut'},.34)
     .to('#filmSpreader',{y:'29.9svh',duration:.48,ease:'power2.inOut'},.34)
     .to('#filmCable',{height:'29.9svh',duration:.48,ease:'power2.inOut'},.34)
@@ -1038,10 +1038,10 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   tl.to('#filmServices',{autoAlpha:1,duration:.22},1.28)
     .to('#filmGround',{autoAlpha:0,duration:.16},1.30)
     .to('#filmServiceGhost',{x:'-34vw',duration:2.45},1.32);
-  const sideStops=[31,42,54,66];
   services.forEach((service,i)=>{
     const at=1.38+i*.55;
-    tl.to(['#filmSideTruck','#filmSidePayload'],{x:(index)=>vw(sideStops[i]+(index?0:0)),duration:.20,ease:'power2.inOut'},at)
+    tl.to('#filmSideTruck',{x:()=>vw(serviceStops()[i]),duration:.20,ease:'power2.inOut'},at)
+      .to('#filmSidePayload',{x:()=>vw(serviceStops()[i]+payloadOffset()),duration:.20,ease:'power2.inOut'},at)
       .fromTo(service,{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.14,ease:'power2.out'},at+.16)
       .to(service,{autoAlpha:0,y:-12,clipPath:'inset(0 0% 0 100%)',duration:.12,ease:'power2.in'},at+.48);
   });
@@ -1052,9 +1052,10 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     .fromTo('#filmRoadCamera',{rotationX:30,scale:1.22,yPercent:-3},{rotationX:0,scale:1,yPercent:0,duration:.62,ease:'power2.out'},3.55)
     .to('#filmServiceBand',{clipPath:'inset(0 0 100% 0)',duration:.48,ease:'power2.inOut'},3.62)
     .to('#filmServiceGhost',{autoAlpha:0,duration:.22},3.68)
-    .to(['#filmSideTruck','#filmSidePayload'],{x:vw(28),rotationX:76,rotationZ:90,scale:.52,duration:.50,ease:'power2.inOut'},3.62)
-    .fromTo([topPayload,topCab],{autoAlpha:0,scale:1.55,rotation:-90},{autoAlpha:1,scale:1,rotation:0,duration:.24,ease:'power2.out'},3.84)
-    .to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,duration:.18,ease:'power1.in'},3.98)
+    .to('#filmSideTruck',{x:()=>vw(morphX()),y:'-32svh',scale:.84,duration:.42,ease:'power2.inOut'},3.62)
+    .to('#filmSidePayload',{x:()=>vw(morphX()+payloadOffset()),y:'-32svh',scale:.84,duration:.42,ease:'power2.inOut'},3.62)
+    .fromTo([topPayload,topCab],{autoAlpha:0,scale:1.7,rotation:-90,y:'8svh'},{autoAlpha:1,scale:1,rotation:0,y:0,duration:.42,ease:'power2.inOut'},3.76)
+    .to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,scale:.68,duration:.24,ease:'power1.in'},3.88)
     .set('#filmOrigin',{autoAlpha:0},4.18)
     .set('#filmServices',{autoAlpha:0},4.18);
 
@@ -1068,7 +1069,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   /* 7–8: the port exists under the road. The road becomes transparent while
      the same top-view container crosses the dock and locks into the ship slot. */
   tl.set('#filmOcean',{autoAlpha:1},6.05)
-    .fromTo('#filmShip',{xPercent:-50,yPercent:-50,y:'64svh',scale:1.75},{y:'7svh',duration:.72,ease:'power2.out'},6.05)
+    .fromTo('#filmShip',{xPercent:-50,yPercent:-50,y:'64svh',scale:1.45},{y:'7svh',duration:.72,ease:'power2.out'},6.05)
     .to('#filmRoadSvg',{autoAlpha:0,duration:.38,ease:'power1.in'},6.22)
     .to('#filmRoad',{backgroundColor:'rgba(248,248,244,0)',duration:.38},6.22)
     .to('#filmDeckTarget',{opacity:1,scale:1.08,duration:.20,ease:'power2.out'},6.28)
@@ -1080,12 +1081,10 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     .to('#filmDeckTarget',{opacity:0,scale:.92,duration:.15,ease:'power1.in'},7.00)
     .set('#filmRoad',{autoAlpha:0},7.08);
 
-  /* 8–9.5: after contact, the camera climbs straight up. Live water replaces
-     the berth render and the ship becomes smaller without changing direction. */
+  /* 8–9.5: after contact, the camera climbs straight up and the one ship
+     becomes smaller without changing direction or crossfading to a duplicate. */
   tl.to('#filmDock',{yPercent:-120,duration:.45,ease:'power2.in'},7.06)
-    .to('#filmOceanVideo',{opacity:1,scale:1.1,duration:.30},7.18)
-    .to('#filmOceanVideo',{scale:1,duration:1.18},7.48)
-    .to('#filmShip',{y:'-5svh',scale:.62,duration:1.32,ease:'power1.inOut'},7.12)
+    .to('#filmShip',{y:'-5svh',scale:.38,duration:1.32,ease:'power1.inOut'},7.12)
     .to('#filmOceanCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},7.62)
     .to('#filmOceanCopy',{autoAlpha:0,y:-18,duration:.20,ease:'power2.in'},8.48);
 
@@ -1093,8 +1092,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
      then the plane occupies the same central flight line. */
   tl.set('#filmSky',{autoAlpha:1},8.32)
     .to('#filmClouds',{yPercent:-9,duration:.72,ease:'power1.inOut'},8.32)
-    .to('#filmShip',{scale:.26,y:'-20svh',duration:.66,ease:'power2.in'},8.34)
-    .to('#filmOceanVideo',{opacity:0,duration:.24},8.75)
+    .to('#filmShip',{scale:.16,y:'-20svh',duration:.66,ease:'power2.in'},8.34)
     .to('#filmPlane',{x:'0vw',rotation:-1,scale:1,duration:.92,ease:'power2.out'},8.68)
     .to('#filmClouds',{autoAlpha:0,duration:.30},9.05)
     .set('#filmOcean',{autoAlpha:0},9.10)
