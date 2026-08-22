@@ -131,16 +131,23 @@ nav.main a:hover{color:var(--paper)}
 .film-copy p{margin-top:14px;max-width:42ch;color:var(--ink-soft);font-size:14px}
 #filmOrigin{z-index:40;background:transparent;perspective:1400px}
 #filmGround{position:absolute;left:0;right:0;bottom:0;height:16svh;background:var(--ink)}
-#filmStacker{position:absolute;z-index:7;left:2vw;bottom:16svh;width:min(36vw,540px);filter:drop-shadow(0 16px 12px rgba(0,0,0,.18));transform-origin:50% 100%}
+#filmStacker{position:absolute;z-index:7;left:4.6vw;bottom:16svh;width:min(44vw,660px);filter:drop-shadow(0 16px 12px rgba(0,0,0,.18));transform-origin:50% 100%}
 #filmStacker>img:first-child{display:block;width:100%}
 #filmSpreader{position:absolute;left:65.5%;top:21.3%;width:34.5%;will-change:transform}
 #filmCable{position:absolute;left:82.4%;top:20.6%;width:0.7%;height:0;background:#141814;will-change:height}
 .film-crate{position:absolute;z-index:5;bottom:16svh;width:min(7vw,105px);will-change:transform}
 #fc1{left:-8vw}#fc2{left:-15vw}#fc3{left:-22vw}#fc4{left:-29vw}#fc5{left:-36vw}#fc6{left:-43vw}
 #filmFill{position:absolute;inset:0;opacity:0}
-#filmSideTruck{position:absolute;z-index:6;left:0;bottom:15.7svh;width:min(47vw,700px);filter:drop-shadow(0 14px 10px rgba(0,0,0,.18));transform-origin:58% 84%}
-#filmSideTruck img{display:block;width:100%;transform:scaleX(-1)}
+#filmSideTruck{position:absolute;z-index:6;left:0;bottom:15.7svh;width:min(47vw,700px);filter:drop-shadow(0 14px 10px rgba(0,0,0,.18));transform-origin:50% 100%}
+#filmSideTruck>img:first-child{display:block;width:100%;transform:scaleX(-1)}
+.twheel{position:absolute;will-change:transform}
+.tw1{left:85.33%;top:70.7%;width:8.5%}
+.tw2{left:59.17%;top:71.0%;width:8.33%}
+.tw3{left:23.75%;top:72.4%;width:7.5%}
+.tw4{left:14.17%;top:72.4%;width:7.5%}
+.tw5{left:5.25%;top:73.0%;width:7.0%}
 #filmSidePayload{position:absolute;z-index:8;left:0;bottom:16svh;width:min(29vw,435px);filter:drop-shadow(0 12px 9px rgba(0,0,0,.15));transform-origin:50% 100%}
+#filmServices{perspective:1400px}
 #filmSidePayload img{display:block;width:100%}
 #filmSidePayload::before{content:"";position:absolute;z-index:3;left:3%;right:3%;top:-5px;height:5px;background:#151817;opacity:var(--cable-alpha,0)}
 #filmSidePayload::after{content:"";position:absolute;z-index:2;left:50%;bottom:100%;width:2px;height:clamp(62px,13svh,150px);background:#151817;transform:translateX(-50%) scaleY(var(--cable-scale,.35));transform-origin:50% 100%;opacity:var(--cable-alpha,0)}
@@ -519,7 +526,11 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <img class="film-crate" id="fc4" src="{{A:crate-melon-cut}}" alt="Crate of yellow melons">
       <img class="film-crate" id="fc5" src="{{A:crate-avocado-cut}}" alt="Crate of avocados">
       <img class="film-crate" id="fc6" src="{{A:crate-passion-cut}}" alt="Crate of passion fruit">
-      <div id="filmSideTruck"><img src="{{A:truck-side}}" alt="Brazil Fresh refrigerated truck"></div>
+      <div id="filmSideTruck"><img src="{{A:truck-side}}" alt="Brazil Fresh refrigerated truck">
+        <img class="twheel tw1" src="{{A:wheel-w1}}" alt=""><img class="twheel tw2" src="{{A:wheel-w2}}" alt="">
+        <img class="twheel tw3" src="{{A:wheel-w3}}" alt=""><img class="twheel tw4" src="{{A:wheel-w4}}" alt="">
+        <img class="twheel tw5" src="{{A:wheel-w5}}" alt="">
+      </div>
       <div id="filmSidePayload"><img src="{{A:container-side}}" alt="Refrigerated container"><img id="filmFill" src="{{A:container-filled}}" alt="Container interior filled with fruit crates"></div>
       <div id="filmStacker"><img src="{{A:stacker-body}}" alt="Reach stacker"><div id="filmCable"></div><img id="filmSpreader" src="{{A:spreader}}" alt=""></div>
     </div>
@@ -1016,10 +1027,10 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   const services=gsap.utils.toArray('.film-service');
   const vw=n=>`${n}vw`;
   const mob=()=>innerWidth<=760;
-  const loadingTruckX=()=>mob()?6:31;
+  const loadingTruckX=()=>mob()?28:32;
   const serviceStops=()=>mob()?[10,22,34,46]:[30,40,50,60];
-  const centerTruckX=()=>mob()?3.5:37.5;
-  const payloadOffset=()=>mob()?23:-2;
+  const centerTruckX=()=>mob()?1.5:33.5;
+  const payloadOffset=()=>2;
 
   function roadPose(distance){
     const a=roadPath.getPointAtLength(clamp(distance,0,roadLength));
@@ -1041,11 +1052,20 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   }
 
   gsap.set('#filmSideTruck',{x:()=>vw(mob()?-82:-58)});
-  gsap.set('#filmSidePayload',{x:vw(29),y:0,rotation:0});
+  gsap.set('#filmSidePayload',{x:()=>vw(mob()?30:34),y:0,rotation:0});
   /* crane geometry in px — spreader rest height vs payload height, any viewport */
-  const stackerW=()=>mob()?.58*innerWidth:Math.min(.36*innerWidth,540);
+  const stackerW=()=>mob()?.58*innerWidth:Math.min(.44*innerWidth,660);
   const spreadBottom=()=>stackerW()*(939/900)*.645;
-  const dropPx=()=>Math.max(20,spreadBottom()-Math.min((mob()?.47:.29)*innerWidth,435)*(362/1200));
+  const dropPx=()=>Math.max(20,spreadBottom()-Math.min((mob()?.47:.29)*innerWidth,435)*(362/1200)+34);
+  /* the trailer deck sits at 34.5% of the truck photo's height — the container rests ON it */
+  const truckW=()=>Math.min((mob()?.76:.47)*innerWidth,700);
+  const deckRest=()=>truckW()*(348/1200)*.345-.003*innerHeight;
+  /* wheels turn with real distance travelled — scrub-reversible */
+  const wheelSet=gsap.quickSetter('.twheel','rotation','deg');
+  gsap.ticker.add(()=>{
+    const x=parseFloat(gsap.getProperty('#filmSideTruck','x'))||0;
+    wheelSet(x/(0.042*truckW())*57.3);
+  });
   gsap.set(['#filmRoad','#filmOcean','#filmSky'],{autoAlpha:0});
   gsap.set('#filmRoad',{autoAlpha:1,backgroundColor:'rgba(248,248,244,0)'});
   gsap.set('#filmRoadSvg',{autoAlpha:0});
@@ -1064,7 +1084,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   /* ---- ORIGIN 0–1.28: crates fill the container, the crane loads the truck ---- */
   const crateStarts=[-8,-15,-22,-29,-36,-43];
   gsap.utils.toArray('.film-crate').forEach((c,i)=>{
-    tl.fromTo(c,{x:0,autoAlpha:1},{x:()=>vw((mob()?33:31)-crateStarts[i]),ease:'power1.inOut',duration:.13},.01+i*.058)
+    tl.fromTo(c,{x:0,autoAlpha:1},{x:()=>vw((mob()?34:36)-crateStarts[i]),ease:'power1.inOut',duration:.13},.01+i*.058)
       .to(c,{autoAlpha:0,duration:.03},.12+i*.058);
     tl.to('#filmFill',{opacity:(i+1)/6*.95,duration:.03},.12+i*.058);
   });
@@ -1077,9 +1097,9 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     .to('#filmSidePayload',{rotation:.8,duration:.05,ease:'sine.inOut'},.80)
     .to('#filmSidePayload',{rotation:0,duration:.05,ease:'sine.out'},.85);
   tl.to('#filmSideTruck',{x:()=>vw(loadingTruckX()),duration:.30,ease:'power2.out'},.62);
-  tl.to('#filmSidePayload',{y:'-4.1svh',rotation:0,duration:.15,ease:'power2.in'},.94)
-    .to('#filmSpreader',{y:()=>Math.max(0,dropPx()-.041*innerHeight),duration:.15,ease:'power2.in'},.94)
-    .to('#filmCable',{height:()=>Math.max(0,dropPx()-.041*innerHeight),duration:.15,ease:'power2.in'},.94)
+  tl.to('#filmSidePayload',{y:()=>-deckRest(),rotation:0,duration:.15,ease:'power2.in'},.94)
+    .to('#filmSpreader',{y:()=>Math.max(0,dropPx()-deckRest()),duration:.15,ease:'power2.in'},.94)
+    .to('#filmCable',{height:()=>Math.max(0,dropPx()-deckRest()),duration:.15,ease:'power2.in'},.94)
     .to('#filmSideTruck',{y:3,duration:.04,ease:'power1.out'},1.085)
     .to('#filmSideTruck',{y:0,duration:.05,ease:'sine.out'},1.13)
     .to('#filmSpreader',{y:0,duration:.09,ease:'power1.inOut'},1.13)
@@ -1111,9 +1131,11 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     .to('#filmSidePayload',{x:()=>vw(centerTruckX()+payloadOffset()),duration:.16,ease:'power2.inOut'},3.62);
   tl.to('#laneDashes',{opacity:1,duration:.14},3.68)
     .fromTo('#laneDashes',{xPercent:0},{xPercent:-26,duration:1.3},3.68);
-  tl.to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,duration:.12},3.86)
-    .to('#filmGround',{autoAlpha:0,duration:.16},3.86)
-    .fromTo('#hTopRig',{autoAlpha:0,y:'-24svh',scale:1.06},{autoAlpha:1,y:0,scale:1,duration:.16,ease:'power1.inOut'},3.86);
+  /* the 2D side image falls flat in real 3D; the top view rises out of the same spot */
+  tl.to(['#filmSideTruck','#filmSidePayload'],{rotationX:86,duration:.16,ease:'power2.in'},3.84)
+    .to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,duration:.05},3.97)
+    .to('#filmGround',{autoAlpha:0,duration:.16},3.88)
+    .fromTo('#hTopRig',{autoAlpha:1,rotationX:-86,y:'-8svh'},{rotationX:0,y:0,duration:.18,ease:'power2.out'},3.97);
   /* streaming hold — motion without a cut */
   tl.to('#hTopRig',{y:2,duration:.10,ease:'sine.inOut'},4.10)
     .to('#hTopRig',{y:0,duration:.10,ease:'sine.inOut'},4.20);
