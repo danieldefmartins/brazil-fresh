@@ -491,7 +491,11 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
   font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
 }
 #markCv{display:block;width:100%;height:24vh;min-height:120px}
-@media(max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){
+  .foot-grid{grid-template-columns:1fr 1fr;gap:20px}
+  .foot-col a,.foot-col span{font-size:12.5px;overflow-wrap:anywhere}
+  .smallprint{font-size:9px}
+}
 
 @media (prefers-reduced-motion:reduce){
   .ticker-track,.range-marquee div,#filmOcean::before,#filmOcean::after,#filmWake,#filmSky::before,#filmSky::after,#shipWrap .hull,.water,.mist,.cloudfield i,.wake,.sidefoam{animation:none!important}
