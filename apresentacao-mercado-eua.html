@@ -90,10 +90,33 @@ tr.hi td{background:#FFF3DD;font-weight:700}
 .brandmark em{font-style:normal;color:var(--mango)}
 .brandmark.tf em{color:var(--terra)}
 @media screen and (max-width:860px){
-  .slide{aspect-ratio:auto;min-height:70vh}
-  .c2,.c3,.tiles{grid-template-columns:1fr}
-  .flow{flex-direction:column}
-  .farrow{transform:rotate(90deg);justify-content:center}
+  body{font-size:15px}
+  .slide{
+    aspect-ratio:auto;min-height:0;width:100%;margin:0 0 10px;
+    padding:26px 20px 22px;box-shadow:none;border-bottom:1px solid var(--line);
+  }
+  .slide > .num{top:14px;right:16px}
+  h1{font-size:clamp(30px,9vw,44px)}
+  h2{font-size:clamp(23px,6.6vw,32px);margin-bottom:14px}
+  .eyebrow{font-size:10px;margin-bottom:10px}
+  p.small,li{font-size:13.5px}
+  .c2,.c3,.tiles{grid-template-columns:1fr;gap:12px}
+  .tile{padding:16px 16px 14px}
+  .tile .v{font-size:34px}
+  .tile .l{max-width:none}
+  .flow{flex-direction:column;margin:18px 0}
+  .farrow{transform:rotate(90deg);justify-content:center;padding:2px 0}
+  /* tables become swipe-scrollable cards */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;min-width:0}
+  table tbody,table tr{min-width:620px;display:table;width:100%}
+  th,td{padding:8px 8px;font-size:12.5px}
+  .bar-row{grid-template-columns:86px 1fr 70px;gap:8px}
+  .bar-row .lbl{font-size:12px}
+  .bar-row .val{font-size:10px}
+  .foot{flex-direction:column;gap:4px;font-size:8.5px}
+  ul.clean li{padding:8px 0 8px 18px}
+  ul.clean[style*="columns"]{columns:1!important}
+  .brandmark{font-size:16px}
 }
 @media print{
   body{background:#fff}
