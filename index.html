@@ -1090,8 +1090,9 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
      leaves the chassis and locks into the moving ship ---- */
   tl.set('#filmOcean',{autoAlpha:1},6.45)
     .fromTo('#filmShip',{xPercent:-50,yPercent:-50,y:'64svh',scale:1.45},{y:'7svh',duration:.72,ease:'power2.out'},6.45)
-    .to('#filmRoadSvg',{autoAlpha:0,duration:.38,ease:'power1.in'},6.62)
-    .to('#filmRoad',{backgroundColor:'rgba(248,248,244,0)',duration:.38},6.62)
+    .to('#filmRoadSvg',{autoAlpha:0,duration:.30,ease:'power1.in'},6.56)
+    .to('#filmRoadCamera',{scale:1.22,filter:'blur(9px)',duration:.34,ease:'power1.in'},6.54)
+    .to('#filmRoad',{backgroundColor:'rgba(248,248,244,0)',duration:.30},6.56)
     .to('#filmDeckTarget',{opacity:1,scale:1.08,duration:.20,ease:'power2.out'},6.68);
   /* hand the sprites from the SVG to the screen layer at the exact same spot */
   tl.set([fCab,fTrail],{autoAlpha:0},6.72)
