@@ -128,6 +128,8 @@ nav.main a:hover{color:var(--paper)}
 #ctnImg{width:calc(28vw*var(--S));left:calc(17vw*var(--S));bottom:15svh;z-index:4}
 #ctnFill{position:absolute;inset:0;opacity:0}
 #stackerImg{width:calc(32vw*var(--S));left:calc(1vw*var(--S));bottom:15svh;z-index:6}
+#sprd{position:absolute;left:65.5%;top:14.9%;width:34.5%;will-change:transform}
+#cable{position:absolute;left:82.4%;top:12.5%;width:0.7%;height:0;background:#141814;will-change:height}
 #truckImg{width:calc(44vw*var(--S));left:calc(17vw*var(--S));bottom:14.6svh;z-index:3}
 .crate{width:calc(7vw*var(--S));bottom:15svh;z-index:3}
 #crate1{left:calc(-9vw*var(--S))}#crate2{left:calc(-16vw*var(--S))}#crate3{left:calc(-23vw*var(--S))}
@@ -142,28 +144,27 @@ nav.main a:hover{color:var(--paper)}
   font-size:clamp(120px,21vw,300px);line-height:.8;color:var(--ghost);
   will-change:transform;
 }
+.svc-top{perspective:1100px}
 .svc-top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:var(--road)}
-.rig{position:absolute;bottom:6px;left:0;width:clamp(330px,42vw,600px);will-change:transform;z-index:2}
+.rig{position:absolute;bottom:6px;left:0;width:clamp(330px,42vw,600px);will-change:transform;z-index:2;transform-origin:50% 100%}
 .rig img.t{width:100%;display:block}
 .rig img.c{position:absolute;left:4%;bottom:31%;width:64.5%}
 .svc-band{
   flex:1;background:var(--leaf-deep);color:var(--paper);
   padding:clamp(22px,4vh,44px) clamp(18px,4vw,52px);
-  display:flex;flex-direction:column;justify-content:space-between;gap:18px;
+  display:flex;flex-direction:column;justify-content:center;
+  will-change:transform;
 }
-.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,44px)}
-.svc .mono{color:var(--lime);display:block;margin-bottom:10px}
+/* one service reads per truck stop */
+.svc-stage{position:relative;width:100%;max-width:760px;margin:0 auto;flex:1;min-height:180px}
+.svc{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;text-align:center;visibility:hidden;opacity:0}
+.svc .mono{color:var(--lime);display:block;margin-bottom:12px}
 .svc h3{
-  font-stretch:118%;font-weight:800;text-transform:uppercase;
-  font-size:clamp(15px,1.5vw,21px);line-height:1.05;margin-bottom:8px;
+  font-stretch:120%;font-weight:900;text-transform:uppercase;
+  font-size:clamp(24px,3vw,44px);line-height:1;margin-bottom:12px;
 }
-.svc p{font-size:12.5px;color:#A9C2AE;max-width:30ch}
-.svc-cta{text-align:center}
-@media(max-width:860px){
-  .svc-grid{grid-template-columns:repeat(2,1fr);gap:16px}
-  .svc:nth-child(n+5){display:none}
-  .svc-top{height:34svh}
-}
+.svc p{font-size:14px;color:#A9C2AE;max-width:46ch;margin:0 auto}
+@media(max-width:860px){.svc-top{height:34svh}.svc p{font-size:13px;max-width:34ch}}
 
 /* ============ ROAD ============ */
 #road .pin{background:var(--paper);perspective:1200px}
@@ -190,8 +191,10 @@ nav.main a:hover{color:var(--paper)}
   display:flex;align-items:center;justify-content:center;will-change:transform;
 }
 .dock span{font-family:var(--mono);font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:#9FB9CE}
-.dropctn{position:absolute;left:48.4vw;top:-10svh;width:calc(4vw + 14px);z-index:6;will-change:transform;
-  filter:drop-shadow(0 10px 14px rgba(3,14,26,.5))}
+#dockRig{position:absolute;left:47.6vw;top:1svh;width:calc(3.6vw + 12px);z-index:6;will-change:transform}
+#dockRig img{width:100%;display:block}
+#dockRig img.cab{transform:rotate(180deg);margin-top:-2px}
+.dropctn{will-change:transform;filter:drop-shadow(0 10px 14px rgba(3,14,26,.5))}
 #shipWrap img.shipslot{position:absolute;left:45.5%;top:56.5%;width:6.5%;opacity:0;filter:drop-shadow(0 3px 6px rgba(3,14,26,.5))}
 .water{position:absolute;inset:-20%;opacity:.5;pointer-events:none}
 .water.w1{
@@ -419,13 +422,17 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <img src="{{A:container-side}}" alt="White refrigerated container">
       <img id="ctnFill" src="{{A:container-filled}}" alt="Container interior filled with fruit crates">
     </div>
-    <div class="sprite" id="stackerImg"><img src="{{A:stacker-tall}}" alt="Reach stacker holding the container spreader"></div>
+    <div class="sprite" id="stackerImg">
+      <img src="{{A:stacker-body}}" alt="Reach stacker">
+      <div id="cable"></div>
+      <img id="sprd" src="{{A:spreader}}" alt="Container spreader">
+    </div>
     <div class="ground"></div>
   </div>
 </section>
 
 <!-- ================= SERVICES ================= -->
-<section class="scene" id="services" style="height:260vh">
+<section class="scene" id="services" style="height:340vh">
   <div class="pin">
     <div class="svc-top">
       <div class="svc-ghost" id="svcGhost">SERVICES&nbsp;&nbsp;SERVICES</div>
@@ -435,15 +442,14 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       </div>
     </div>
     <div class="svc-band">
-      <div class="svc-grid" id="svcGrid">
-        <div class="svc"><span class="mono">01</span><h3>Fresh Sourcing</h3><p>Direct from certified growers in Bahia, Ceará, and the São Francisco Valley — graded and packed at origin.</p></div>
-        <div class="svc"><span class="mono">02</span><h3>Cold Chain</h3><p>Reefer containers held at spec from farm gate to port of discharge — temperature logged end to end.</p></div>
-        <div class="svc"><span class="mono">03</span><h3>Ocean Freight</h3><p>Weekly reefer capacity out of Santos, Itajaí, Pecém, and Natal on every major trade lane.</p></div>
-        <div class="svc"><span class="mono">04</span><h3>Air Freight</h3><p>Same-week delivery for delicate, short-window fruit via São Paulo–GRU and Fortaleza.</p></div>
-        <div class="svc"><span class="mono">05</span><h3>Customs &amp; Phytosanitary</h3><p>Export documents, MAPA phytosanitary certificates, and destination compliance handled in-house.</p></div>
-        <div class="svc"><span class="mono">06</span><h3>Door Delivery</h3><p>From Brazilian soil to your distribution center — one invoice, one accountable team.</p></div>
+      <div class="svc-stage" id="svcStage">
+        <div class="svc"><span class="mono">01 / 06</span><h3>Fresh Sourcing</h3><p>Direct from certified growers in Bahia, Ceará, and the São Francisco Valley — graded and packed at origin.</p></div>
+        <div class="svc"><span class="mono">02 / 06</span><h3>Cold Chain</h3><p>Reefer containers held at spec from farm gate to port of discharge — temperature logged end to end.</p></div>
+        <div class="svc"><span class="mono">03 / 06</span><h3>Ocean Freight</h3><p>Weekly reefer capacity out of Santos, Itajaí, Pecém, and Natal on every major trade lane.</p></div>
+        <div class="svc"><span class="mono">04 / 06</span><h3>Air Freight</h3><p>Same-week delivery for delicate, short-window fruit via São Paulo–GRU and Fortaleza.</p></div>
+        <div class="svc"><span class="mono">05 / 06</span><h3>Customs &amp; Phytosanitary</h3><p>Export documents, MAPA phytosanitary certificates, and destination compliance handled in-house.</p></div>
+        <div class="svc"><span class="mono">06 / 06</span><h3>Door Delivery</h3><p>From Brazilian soil to your distribution center — one invoice, one accountable team.</p></div>
       </div>
-      <div class="svc-cta"><a class="btn" href="#cta">Our services</a></div>
     </div>
   </div>
 </section>
@@ -461,9 +467,12 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <rect x="0" y="2450" width="1200" height="130" fill="#2A2D2F"/>
       <rect x="0" y="2450" width="1200" height="10" fill="#FFA51F"/>
       <rect x="0" y="2580" width="1200" height="820" fill="#0D3A63"/>
-      <text x="600" y="2530" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="22" letter-spacing="6" fill="#9FB9CE">PORT OF SANTOS · BERTH 14</text>
-      <g id="tdTruck">
-        <image href="{{A:truck-top}}" x="-23" y="-121" width="46" height="242"/>
+      <!-- articulated rig: the cab steers through curves independently of the trailer -->
+      <g id="tdTrail">
+        <image href="{{A:ctn-top}}" x="-23" y="-82" width="46" height="164"/>
+      </g>
+      <g id="tdCab">
+        <image href="{{A:cab-top}}" x="-23" y="-39" width="46" height="79"/>
       </g>
     </svg>
     </div>
@@ -494,7 +503,10 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     <div class="mist m1"></div>
     <div class="mist m2"></div>
     <div class="dock" id="oceanDock"><span>Port of Santos · Berth 14</span></div>
-    <img class="dropctn" id="dropCtn" src="{{A:ctn-top}}" alt="">
+    <div id="dockRig">
+      <img class="dropctn" id="dropCtn" src="{{A:ctn-top}}" alt="">
+      <img class="cab" src="{{A:cab-top}}" alt="">
+    </div>
     <div class="ocean-head">
       <span class="mono">03 / Ocean — Santos → the world</span>
       <h2 class="display">Freshness that crosses oceans</h2>
@@ -666,20 +678,17 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     CX=W*(W>760?0.72:0.5);CY=H*0.58;
   }
   resize();addEventListener('resize',resize);
-  const LAND=[
-    [-80,-50,-22,5],[-73,-40,-33,-5],[-63,-53,-55,-33],[-82,-70,-5,12],
-    [-118,-80,30,49],[-125,-95,40,60],[-105,-85,15,30],[-130,-60,50,68],[-165,-140,58,70],
-    [-52,-42,-3,4],[-45,-22,60,80],
-    [-9,30,38,55],[5,30,55,68],[-8,1,50,58],
-    [-17,32,5,34],[8,42,-12,5],[12,35,-32,-12],[43,50,-25,-13],
-    [34,58,14,36],[44,80,36,52],[60,90,20,36],[70,88,8,22],
-    [80,135,36,62],[95,122,20,36],[98,110,6,20],[95,142,-8,4],[128,144,32,44],
-    [113,152,-36,-12],[166,178,-46,-35]
-  ];
-  const land=(lon,lat)=>LAND.some(b=>lon>=b[0]&&lon<=b[1]&&lat>=b[2]&&lat<=b[3]);
+  /* real Earth landmass — Natural Earth 110m coastlines packed into a 192×96 bitmask */
+  const LB=Uint8Array.from(atob('{{LAND}}'),c=>c.charCodeAt(0));
+  const LW=192,LH=96;
+  const land=(lon,lat)=>{
+    const c=clamp(Math.floor((lon+180)/360*LW),0,LW-1);
+    const r=clamp(Math.floor((90-lat)/180*LH),0,LH-1);
+    const i=r*LW+c;return (LB[i>>3]>>(i&7))&1;
+  };
   const pts=[];
-  for(let lat=-58;lat<=76;lat+=2.4)for(let lon=-180;lon<180;lon+=2.4){
-    const jlon=lon+(Math.random()-.5)*1.6,jlat=lat+(Math.random()-.5)*1.6;
+  for(let lat=-58;lat<=80;lat+=1.9)for(let lon=-180;lon<180;lon+=1.9){
+    const jlon=lon+(Math.random()-.5)*0.9,jlat=lat+(Math.random()-.5)*0.9;
     if(land(jlon,jlat))pts.push([jlat*Math.PI/180,jlon*Math.PI/180]);
   }
   const TILT=0.22;
@@ -778,24 +787,33 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     {x:0,rotationY:0,scale:1,ease:'power2.out',duration:0.14},0.34)
     .to('#stackerImg',{y:2,duration:0.015,ease:'power1.out'},0.475)
     .to('#stackerImg',{y:0,duration:0.02},0.49);
-  /* 4 · spreader engages, then the pickup — the load swings and settles naturally */
-  tl.to('#ctnImg',{y:-3,duration:0.02,ease:'power1.out'},0.50);
-  tl.to('#ctnImg',{y:()=>vwS(-13.3),rotation:-1.4,transformOrigin:'50% 0%',ease:'power1.inOut',duration:0.10},0.52)
-    .to('#ctnImg',{rotation:1.1,duration:0.045,ease:'sine.inOut'},0.62)
-    .to('#ctnImg',{rotation:-0.6,duration:0.04,ease:'sine.inOut'},0.665)
-    .to('#ctnImg',{rotation:0.3,duration:0.035,ease:'sine.inOut'},0.705)
-    .to('#ctnImg',{rotation:0,duration:0.03,ease:'sine.out'},0.74);
+  /* 4 · the spreader rides DOWN the cable, locks on, and lifts WITH the container */
+  tl.to('#sprd',{y:()=>vwS(12.7),ease:'power1.inOut',duration:0.045},0.465)
+    .to('#cable',{height:()=>vwS(12.7),ease:'power1.inOut',duration:0.045},0.465)
+    .to('#ctnImg',{y:-3,duration:0.012,ease:'power1.out'},0.512);
+  tl.to('#ctnImg',{y:()=>vwS(-13.3),rotation:-1.4,transformOrigin:'50% 0%',ease:'power1.inOut',duration:0.09},0.53)
+    .to('#sprd',{y:0,ease:'power1.inOut',duration:0.09},0.53)
+    .to('#cable',{height:0,ease:'power1.inOut',duration:0.09},0.53)
+    .to('#ctnImg',{rotation:1.1,duration:0.04,ease:'sine.inOut'},0.62)
+    .to('#ctnImg',{rotation:-0.6,duration:0.035,ease:'sine.inOut'},0.66)
+    .to('#ctnImg',{rotation:0.3,duration:0.03,ease:'sine.inOut'},0.695)
+    .to('#ctnImg',{rotation:0,duration:0.025,ease:'sine.out'},0.725);
   /* 5 · truck drives in forward (cab first) under the hanging load */
-  tl.to('#truckImg',{x:0,ease:'power2.out',duration:0.18},0.56);
-  /* 6 · crane lowers the container in sync with the truck creeping into position */
-  tl.to('#ctnImg',{y:()=>vwS(-3.8),ease:'power2.in',duration:0.12},0.76)
-    .to('#ctnImg',{x:()=>vwS(0.8),ease:'power1.out',duration:0.12},0.76)
-    .to('#truckImg',{x:()=>vwS(0.8),ease:'power1.out',duration:0.12},0.76)
-    .to('#truckImg',{y:4,duration:0.025,ease:'power1.out'},0.878)
-    .to('#truckImg',{y:0,duration:0.03,ease:'power1.inOut'},0.905);
-  /* 7 · loaded truck pulls away to the right — the motion carries into the next page */
-  tl.to('#truckImg',{x:()=>vwS(95),duration:0.062,ease:'power1.in'},0.938)
-    .to('#ctnImg',{x:()=>vwS(95),duration:0.062,ease:'power1.in'},0.938);
+  tl.to('#truckImg',{x:0,ease:'power2.out',duration:0.16},0.56);
+  /* 6 · spreader + container come down together, in sync with the truck creeping in */
+  tl.to('#ctnImg',{y:()=>vwS(-3.8),ease:'power2.in',duration:0.11},0.74)
+    .to('#sprd',{y:()=>vwS(8.93),ease:'power2.in',duration:0.11},0.74)
+    .to('#cable',{height:()=>vwS(8.93),ease:'power2.in',duration:0.11},0.74)
+    .to('#ctnImg',{x:()=>vwS(0.8),ease:'power1.out',duration:0.11},0.74)
+    .to('#truckImg',{x:()=>vwS(0.8),ease:'power1.out',duration:0.11},0.74)
+    .to('#truckImg',{y:4,duration:0.02,ease:'power1.out'},0.856)
+    .to('#truckImg',{y:0,duration:0.025,ease:'power1.inOut'},0.88);
+  /* 7 · spreader releases and rises while the loaded truck pulls away — slowly,
+     so the motion flows straight into the next page */
+  tl.to('#sprd',{y:0,ease:'power1.inOut',duration:0.06},0.905)
+    .to('#cable',{height:0,ease:'power1.inOut',duration:0.06},0.905);
+  tl.to('#truckImg',{x:()=>vwS(95),duration:0.10,ease:'power1.inOut'},0.90)
+    .to('#ctnImg',{x:()=>vwS(95),duration:0.10,ease:'power1.inOut'},0.90);
 }
 
 /* ================= SERVICES ================= */
@@ -805,12 +823,29 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     scrollTrigger:{trigger:'#services',start:'top top',end:'bottom bottom',scrub:SCRUB}
   });
   tl.fromTo('#svcGhost',{x:'4vw'},{x:'-46vw',duration:1},0);
-  /* page 1 → page 2 handoff: the truck that just pulled away arrives here still rolling,
-     slows to a crawl while the services read, then accelerates out toward the road */
-  tl.fromTo('#svcRig',{x:'-55vw'},{x:'10vw',ease:'power2.out',duration:0.10},0)
-    .to('#svcRig',{x:'22vw',duration:0.62},0.10)
-    .to('#svcRig',{x:'125vw',ease:'power1.in',duration:0.16},0.72);
-  tl.from('#svcGrid .svc',{y:22,autoAlpha:0,stagger:0.045,duration:0.12,ease:'power2.out'},0.10);
+  /* page 1 → page 2 handoff: the truck arrives still rolling, then makes SIX stops —
+     one service text per stop, with real suspension nods on braking and pull-away */
+  const stops=[10,22,34,46,58,70];
+  const svcs=gsap.utils.toArray('#svcStage .svc');
+  tl.fromTo('#svcRig',{x:'-55vw'},{x:stops[0]+'vw',ease:'power2.out',duration:0.085},0)
+    .to('#svcRig',{rotation:0.9,duration:0.012,ease:'power1.out'},0.085)
+    .to('#svcRig',{rotation:0,duration:0.015,ease:'power1.inOut'},0.097);
+  svcs.forEach((el,i)=>{
+    const stopStart=0.09+i*0.122, stopEnd=stopStart+0.082;
+    tl.fromTo(el,{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:0.028,ease:'power2.out'},stopStart+0.004)
+      .to(el,{autoAlpha:0,y:-16,duration:0.022,ease:'power2.in'},stopEnd);
+    if(i<svcs.length-1){
+      /* pull away: nose lifts; brake at next stop: nose dips */
+      tl.to('#svcRig',{x:stops[i+1]+'vw',duration:0.04,ease:'power1.inOut'},stopEnd)
+        .to('#svcRig',{rotation:-0.7,duration:0.012,ease:'power1.out'},stopEnd)
+        .to('#svcRig',{rotation:0.8,duration:0.014,ease:'power1.inOut'},stopEnd+0.026)
+        .to('#svcRig',{rotation:0,duration:0.014,ease:'power1.inOut'},stopEnd+0.04);
+    }
+  });
+  /* same-screen morph: the band drops away and the truck flattens toward the top view */
+  tl.to('.svc-band',{yPercent:104,ease:'power1.in',duration:0.13},0.83);
+  tl.to('#svcGhost',{autoAlpha:0,duration:0.07},0.83);
+  tl.to('#svcRig',{x:'42vw',scale:0.5,rotationX:62,autoAlpha:0,ease:'power1.in',duration:0.16},0.83);
   /* velocity skew on the ghost word */
   const skewSet=gsap.quickSetter('#svcGhost','skewX','deg');
   ScrollTrigger.create({trigger:'#services',start:'top bottom',end:'bottom top',
@@ -819,20 +854,26 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
 
 /* ================= ROAD ================= */
 {
-  const roadSvg=$('roadSvg'),roadPath=$('roadPath'),tdTruck=$('tdTruck'),kmhEl=$('kmh');
+  const roadSvg=$('roadSvg'),roadPath=$('roadPath'),tdCab=$('tdCab'),tdTrail=$('tdTrail'),kmhEl=$('kmh');
   const L=roadPath.getTotalLength();
   const state={p:0};
   let kmh=0;
+  function poseAt(d){
+    const pt=roadPath.getPointAtLength(clamp(d,0,L));
+    const pt2=roadPath.getPointAtLength(clamp(d+2,0,L));
+    return {x:pt.x,y:pt.y,ang:Math.atan2(pt2.y-pt.y,pt2.x-pt.x)*180/Math.PI};
+  }
   function place(){
-    const d=L*lerp(0.03,0.985,state.p);
-    const pt=roadPath.getPointAtLength(d);
-    const pt2=roadPath.getPointAtLength(Math.min(L,d+2));
-    const ang=Math.atan2(pt2.y-pt.y,pt2.x-pt.x)*180/Math.PI;
-    tdTruck.setAttribute('transform',`translate(${pt.x},${pt.y}) rotate(${ang+90})`);
+    const d=L*lerp(0.03,0.99,state.p);
+    /* cab runs ahead of the trailer on the same path — real tractor-trailer articulation */
+    const cab=poseAt(d+58),trail=poseAt(d-62);
+    tdCab.setAttribute('transform',`translate(${cab.x},${cab.y}) rotate(${cab.ang+90})`);
+    tdTrail.setAttribute('transform',`translate(${trail.x},${trail.y}) rotate(${trail.ang+90})`);
+    const mid=poseAt(d);
     const scale=roadSvg.getBoundingClientRect().width/1200;
-    const yOff=pt.y*scale-innerHeight*0.42;
+    const yOff=mid.y*scale-innerHeight*0.42;
     /* on narrow screens the camera also follows the truck horizontally */
-    const xOff=innerWidth<=760?(pt.x-600)*scale:0;
+    const xOff=innerWidth<=760?(mid.x-600)*scale:0;
     roadSvg.style.transform=`translate(calc(-50% - ${xOff}px),${-yOff}px)`;
   }
   place();
@@ -879,13 +920,15 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   tl.fromTo('#shipWrap',{yPercent:-42,scale:1.9},{yPercent:-55,scale:1.9,duration:0.30},0)
     .to('#shipWrap',{yPercent:-60,scale:0.95,ease:'power1.inOut',duration:0.26},0.30)
     .to('#shipWrap',{autoAlpha:0,duration:0.08},0.54);
-  /* the container drops from the dock onto the moving deck */
-  tl.fromTo('#dropCtn',{top:'-10svh',scale:1,rotation:7,autoAlpha:1},
-    {top:'35svh',scale:0.52,rotation:0,ease:'power1.in',duration:0.19},0.03)
+  /* the container lifts OFF the parked truck and lowers onto the moving deck */
+  gsap.set('#dropCtn',{autoAlpha:1});
+  tl.to('#dropCtn',{y:()=>innerHeight*0.30,x:()=>innerWidth*0.018,scale:0.52,rotation:2,
+    transformOrigin:'50% 50%',ease:'power1.inOut',duration:0.19},0.04)
     .to('#dropCtn',{autoAlpha:0,duration:0.02},0.225)
     .to('#shipSlot',{opacity:1,duration:0.02},0.225);
-  /* cast off: the dock slides away */
-  tl.to('#oceanDock',{yPercent:-130,ease:'power1.in',duration:0.20},0.28);
+  /* cast off: the dock and the empty truck slide away */
+  tl.to('#oceanDock',{yPercent:-130,ease:'power1.in',duration:0.20},0.28)
+    .to('#dockRig',{y:'-30svh',autoAlpha:0,ease:'power1.in',duration:0.18},0.28);
   /* live water takes over */
   tl.fromTo('#oceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.06,duration:0.10},0.50)
     .to('#oceanVid',{scale:1,duration:0.40},0.60);

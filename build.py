@@ -28,6 +28,9 @@ def inline_video(m):
 
 src = re.sub(r"\{\{V:([\w-]+)\}\}", inline_video, src)
 
+land = (root / "assets" / "landbits.txt").read_text().strip()
+src = src.replace("{{LAND}}", land)
+
 out = root / "index.html"
 out.write_text(src)
 print(f"built index.html: {out.stat().st_size/1024:.0f} KB")
