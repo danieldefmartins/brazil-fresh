@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Brazil Fresh</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5,12 +6,12 @@
 <style>
 /* ============ TOKENS — lively produce palette, single committed look ============ */
 :root{
-  --ink:#0C1F12;          /* deep leaf green-black */
-  --ink-soft:#41523F;
-  --paper:#F7F6EC;        /* warm market-paper white */
-  --paper-dim:#EEEDDF;
-  --ghost:#E0E3CC;        /* lime-tinted ghost type */
-  --mango:#FFA51F;
+  --ink:#0A0A0A;
+  --ink-soft:#555550;
+  --paper:#F8F8F4;
+  --paper-dim:#ECECE7;
+  --ghost:#E9E9E4;
+  --mango:#FF5A36;
   --leaf:#2E9E5B;
   --leaf-deep:#14532D;
   --papaya:#FF6B4A;
@@ -33,6 +34,15 @@ body{
   font-size:16px;line-height:1.55;
   overflow-x:hidden;
 }
+.sound-toggle{
+  position:fixed;right:18px;bottom:18px;z-index:90;width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(248,248,244,.35);background:rgba(10,10,10,.78);color:var(--paper);
+  display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(10px);font:500 9px/1 var(--mono);
+  letter-spacing:.08em;text-transform:uppercase;transition:transform .25s,background .25s;color .25s;
+}
+.sound-toggle:hover{transform:scale(1.06)}
+.sound-toggle[aria-pressed="true"]{background:var(--mango);color:var(--ink);border-color:var(--mango)}
+.journey-progress{position:fixed;left:0;top:0;height:2px;width:100%;z-index:100;transform:scaleX(0);transform-origin:0 50%;background:var(--mango);pointer-events:none}
 ::selection{background:var(--mango);color:var(--ink)}
 h1,h2,h3{text-wrap:balance}
 img{max-width:100%}
@@ -59,8 +69,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--mango);outline-offs
 .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;display:block;margin-bottom:16px}
 
 /* ============ SCENES ============ */
-.scene{position:relative}
+.scene{position:relative;background:var(--paper)}
 .pin{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate}
+.pin::after{content:"";position:absolute;inset:0;z-index:30;pointer-events:none;box-shadow:inset 0 0 100px rgba(0,0,0,.045)}
 
 /* ============ TICKER + HEADER ============ */
 .ticker{
@@ -111,7 +122,7 @@ nav.main a:hover{color:var(--paper)}
 @media(max-width:760px){.hero-foot{flex-direction:column;align-items:flex-start;gap:6px}}
 
 /* ============ LOAD SCENE (photo composite) ============ */
-#load .pin{background:var(--paper)}
+#load .pin{background:var(--paper);transform-origin:50% 70%}
 .scene-label{position:absolute;top:26px;left:clamp(18px,4vw,52px);z-index:8;color:var(--ink-soft)}
 .scene-label b{color:var(--mango);font-weight:500}
 .load-caption{position:absolute;top:16svh;left:clamp(18px,4vw,52px);max-width:420px;z-index:8}
@@ -121,9 +132,11 @@ nav.main a:hover{color:var(--paper)}
 #load .ground::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#0A0E0A}
 /* one geometry, one scale factor — desktop and mobile share every position */
 #load .pin{--S:1;perspective:1400px}
+#loadCamera{position:absolute;inset:0;transform-origin:50% 72%;will-change:transform}
 @media(max-width:760px){#load .pin{--S:1.35}.load-caption{top:11svh}}
 .sprite{position:absolute;will-change:transform}
 .sprite img{width:100%;display:block}
+#ctnImg,#truckImg,#stackerImg{filter:drop-shadow(0 16px 11px rgba(0,0,0,.16))}
 .flipx{transform:scaleX(-1)}
 #ctnImg{width:calc(28vw*var(--S));left:calc(17vw*var(--S));bottom:15svh;z-index:4}
 #ctnFill{position:absolute;inset:0;opacity:0}
@@ -154,20 +167,20 @@ nav.main a:hover{color:var(--paper)}
 #morphTruck img{width:100%;display:block}
 @media(max-width:760px){#morphTruck{width:14vw}}
 .svc-band{
-  flex:1;background:var(--leaf-deep);color:var(--paper);
+  flex:1;background:var(--ink);color:var(--paper);
   padding:clamp(22px,4vh,44px) clamp(18px,4vw,52px);
   display:flex;flex-direction:column;justify-content:center;
   will-change:transform;
 }
 /* one service reads per truck stop */
 .svc-stage{position:relative;width:100%;max-width:760px;margin:0 auto;flex:1;min-height:180px}
-.svc{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;text-align:center;visibility:hidden;opacity:0}
+.svc{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;text-align:left;visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0)}
 .svc .mono{color:var(--lime);display:block;margin-bottom:12px}
 .svc h3{
   font-stretch:120%;font-weight:900;text-transform:uppercase;
   font-size:clamp(24px,3vw,44px);line-height:1;margin-bottom:12px;
 }
-.svc p{font-size:14px;color:#A9C2AE;max-width:46ch;margin:0 auto}
+.svc p{font-size:14px;color:#A9A9A4;max-width:46ch;margin:0}
 @media(max-width:860px){.svc-top{height:34svh}.svc p{font-size:13px;max-width:34ch}}
 
 /* ============ ROAD ============ */
@@ -178,7 +191,7 @@ nav.main a:hover{color:var(--paper)}
 .telemetry{position:absolute;top:26px;left:clamp(18px,4vw,52px);z-index:6;color:var(--ink-soft)}
 .telemetry b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
 /* milestone copy lives in the open ground beside/under the road — big and readable */
-.milestone{position:absolute;z-index:6;bottom:9svh;left:clamp(18px,5vw,70px);max-width:560px;visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0);will-change:transform,opacity,clip-path}
+.milestone{position:absolute;z-index:6;bottom:8svh;left:clamp(18px,5vw,70px);width:min(520px,76vw);padding:24px 26px;background:rgba(248,248,244,.96);border-left:4px solid var(--mango);visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0);will-change:transform,opacity,clip-path}
 .milestone .mono{color:var(--leaf);display:block;margin-bottom:12px}
 .milestone h3{font-stretch:120%;font-weight:900;text-transform:uppercase;font-size:clamp(26px,3.6vw,52px);line-height:.98}
 .milestone p{margin-top:12px;font-size:13.5px;color:var(--ink-soft);max-width:40ch}
@@ -256,12 +269,12 @@ nav.main a:hover{color:var(--paper)}
   display:flex;align-items:center;gap:10px;pointer-events:none;
 }
 .callout .dotline{width:74px;border-top:1.5px dashed rgba(247,246,236,.8)}
-.callout .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:rgba(7,30,54,.72);padding:6px 10px;border:1px solid rgba(255,165,31,.6)}
+.callout .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:rgba(7,30,54,.72);padding:6px 10px;border:1px solid rgba(255,90,54,.65)}
 .callout .lbl b{color:var(--mango);font-weight:500}
-.ocean-head{position:absolute;top:9svh;left:0;right:0;text-align:center;z-index:6;padding:0 18px}
+.ocean-head{position:absolute;top:9svh;left:0;right:0;text-align:center;z-index:6;padding:0 18px;clip-path:inset(0 100% 0 0)}
 .ocean-head .mono{color:var(--mango);display:block;margin-bottom:12px}
 .ocean-head h2{font-size:clamp(30px,4.6vw,62px);color:var(--paper);text-shadow:0 2px 34px rgba(4,18,34,.9),0 1px 8px rgba(4,18,34,.6)}
-.sea-card{position:absolute;z-index:6;max-width:250px;visibility:hidden;opacity:0}
+.sea-card{position:absolute;z-index:6;max-width:250px;visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0)}
 .sea-card .mono{color:var(--mango);display:block;margin-bottom:8px}
 .sea-card h3{font-stretch:118%;font-weight:800;text-transform:uppercase;font-size:16px;line-height:1.1;margin-bottom:6px}
 .sea-card p{font-size:12px;color:#9FB9CE;max-width:28ch}
@@ -302,7 +315,7 @@ nav.main a:hover{color:var(--paper)}
   filter:drop-shadow(0 44px 38px rgba(30,60,90,.24));
 }
 #planeWrap img{width:100%;display:block;transform:rotate(90deg)}
-.sky-copy{position:absolute;left:0;right:0;bottom:8svh;text-align:center;z-index:6;padding:0 18px}
+.sky-copy{position:absolute;left:0;right:0;bottom:8svh;text-align:center;z-index:6;padding:0 18px;clip-path:inset(0 100% 0 0)}
 .sky-copy .mono{color:var(--ink-soft);display:block;margin-bottom:10px}
 .sky-copy h2{font-size:clamp(24px,3.6vw,50px)}
 @media(max-width:760px){#planeWrap{width:82vw}}
@@ -377,6 +390,9 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
 }
 </style>
 
+<div class="journey-progress" id="journeyProgress" aria-hidden="true"></div>
+<button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="Turn journey ambience on">Sound</button>
+
 <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
 
 <header class="site">
@@ -416,6 +432,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <h2 class="display">Picked, packed, and sealed at origin</h2>
       <p>Every reefer is graded, pre-cooled, and loaded within hours of harvest — so the clock starts full.</p>
     </div>
+    <div id="loadCamera">
     <img class="sprite crate" id="crate1" src="{{A:crate-mango-cut}}" alt="Crate of mangoes">
     <img class="sprite crate" id="crate2" src="{{A:crate-lime-cut}}" alt="Crate of Tahiti limes">
     <img class="sprite crate" id="crate3" src="{{A:crate-papaya-cut}}" alt="Crate of papayas">
@@ -433,6 +450,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <img id="sprd" src="{{A:spreader}}" alt="Container spreader">
     </div>
     <div class="ground"></div>
+    </div>
   </div>
 </section>
 
@@ -448,12 +466,10 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     </div>
     <div class="svc-band">
       <div class="svc-stage" id="svcStage">
-        <div class="svc"><span class="mono">01 / 06</span><h3>Fresh Sourcing</h3><p>Direct from certified growers in Bahia, Ceará, and the São Francisco Valley — graded and packed at origin.</p></div>
-        <div class="svc"><span class="mono">02 / 06</span><h3>Cold Chain</h3><p>Reefer containers held at spec from farm gate to port of discharge — temperature logged end to end.</p></div>
-        <div class="svc"><span class="mono">03 / 06</span><h3>Ocean Freight</h3><p>Weekly reefer capacity out of Santos, Itajaí, Pecém, and Natal on every major trade lane.</p></div>
-        <div class="svc"><span class="mono">04 / 06</span><h3>Air Freight</h3><p>Same-week delivery for delicate, short-window fruit via São Paulo–GRU and Fortaleza.</p></div>
-        <div class="svc"><span class="mono">05 / 06</span><h3>Customs &amp; Phytosanitary</h3><p>Export documents, MAPA phytosanitary certificates, and destination compliance handled in-house.</p></div>
-        <div class="svc"><span class="mono">06 / 06</span><h3>Door Delivery</h3><p>From Brazilian soil to your distribution center — one invoice, one accountable team.</p></div>
+        <div class="svc"><span class="mono">01 / 04</span><h3>Source &amp; Pack</h3><p>Certified growers, export grading, pre-cooling, and origin packing managed as one operation.</p></div>
+        <div class="svc"><span class="mono">02 / 04</span><h3>Protect the Cold Chain</h3><p>Reefer set-points and pulp temperature logged continuously from the farm gate to discharge.</p></div>
+        <div class="svc"><span class="mono">03 / 04</span><h3>Move by Ocean or Air</h3><p>Weekly vessel capacity plus same-week air freight for delicate fruit with a short delivery window.</p></div>
+        <div class="svc"><span class="mono">04 / 04</span><h3>Clear &amp; Deliver</h3><p>Phytosanitary documents, destination compliance, customs, and final delivery through one accountable team.</p></div>
       </div>
     </div>
     <div id="morphTruck" aria-hidden="true">
@@ -470,11 +486,11 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     <div id="roadPersp">
     <svg id="roadSvg" viewBox="0 0 1200 3400" aria-hidden="true">
       <path id="roadPath" d="M600,-100 L600,560 C600,740 900,740 900,920 L900,1480 C900,1660 600,1660 600,1840 L600,2450"
-            fill="none" stroke="#191C18" stroke-width="150"/>
+            fill="none" stroke="#0A0A0A" stroke-width="220"/>
       <path d="M600,-100 L600,560 C600,740 900,740 900,920 L900,1480 C900,1660 600,1660 600,1840 L600,2450"
             fill="none" stroke="#F7F6EC" stroke-width="4" stroke-dasharray="44 52" opacity=".5"/>
       <rect x="0" y="2450" width="1200" height="130" fill="#2A2D2F"/>
-      <rect x="0" y="2450" width="1200" height="10" fill="#FFA51F"/>
+      <rect x="0" y="2450" width="1200" height="10" fill="#FF5A36"/>
       <rect x="0" y="2580" width="1200" height="820" fill="#0D3A63"/>
       <!-- The vessel enters before the road scene ends, so the port-to-ocean cut
            preserves one continuous subject instead of revealing a new scene cold. -->
@@ -564,7 +580,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     </blockquote>
     <blockquote class="quote">
       <p>“One contact, one invoice, and the limes land in Jebel Ali on the day they said. That is all I ever wanted from an exporter.”</p>
-      <footer><span class="avatar" style="background:#FFA51F;color:#0C1F12">RA</span><span class="who"><b>R. Al-Farsi</b><span>Wholesale distributor · Dubai</span></span></footer>
+      <footer><span class="avatar" style="background:#FF5A36;color:#0A0A0A">RA</span><span class="who"><b>R. Al-Farsi</b><span>Wholesale distributor · Dubai</span></span></footer>
     </blockquote>
     <blockquote class="quote">
       <p>“Papaya is unforgiving. Their air-freight program got us shelf-ready fruit with days of life to spare — week after week.”</p>
@@ -677,6 +693,54 @@ $('tickerTrack').innerHTML=tick+tick;
 const rtick='MANGO · TAHITI LIME · PAPAYA · YELLOW MELON · AVOCADO · GINGER · SWEET POTATO · PASSION FRUIT · <b>SHIPPED WEEKLY</b> · ';
 $('rangeTrack').innerHTML=rtick+rtick;
 
+/* ---------- journey progress + optional procedural ambience ---------- */
+gsap.to('#journeyProgress',{scaleX:1,ease:'none',scrollTrigger:{start:0,end:'max',scrub:true}});
+
+(function(){
+  const button=$('soundToggle');
+  let ac,master,engine,sea,air,noiseSource,started=false,currentScene='hero';
+  const ramp=(node,value,time=.45)=>{
+    if(!ac||!node)return;
+    node.gain.cancelScheduledValues(ac.currentTime);
+    node.gain.linearRampToValueAtTime(value,ac.currentTime+time);
+  };
+  function init(){
+    if(started)return;
+    ac=new (window.AudioContext||window.webkitAudioContext)();
+    master=ac.createGain();engine=ac.createGain();sea=ac.createGain();air=ac.createGain();
+    master.gain.value=0;engine.gain.value=0;sea.gain.value=0;air.gain.value=0;
+    engine.connect(master);sea.connect(master);air.connect(master);master.connect(ac.destination);
+    const motor=ac.createOscillator(),motorFilter=ac.createBiquadFilter();
+    motor.type='sawtooth';motor.frequency.value=46;motorFilter.type='lowpass';motorFilter.frequency.value=120;
+    motor.connect(motorFilter).connect(engine);motor.start();
+    const buffer=ac.createBuffer(1,ac.sampleRate*3,ac.sampleRate),data=buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(.55+.45*Math.sin(i/97));
+    noiseSource=ac.createBufferSource();noiseSource.buffer=buffer;noiseSource.loop=true;
+    const seaFilter=ac.createBiquadFilter();seaFilter.type='lowpass';seaFilter.frequency.value=720;
+    const airFilter=ac.createBiquadFilter();airFilter.type='highpass';airFilter.frequency.value=950;
+    noiseSource.connect(seaFilter).connect(sea);noiseSource.connect(airFilter).connect(air);noiseSource.start();
+    started=true;
+  }
+  function mix(scene){
+    currentScene=scene;
+    if(!started)return;
+    const on=button.getAttribute('aria-pressed')==='true';
+    ramp(engine,(on&&['load','services','road'].includes(scene)) ? .045 : 0);
+    ramp(sea,(on&&scene==='ocean') ? .065 : 0);
+    ramp(air,(on&&scene==='sky') ? .035 : 0);
+  }
+  button.addEventListener('click',()=>{
+    init();ac.resume();
+    const on=button.getAttribute('aria-pressed')!=='true';
+    button.setAttribute('aria-pressed',String(on));
+    button.setAttribute('aria-label',on?'Turn journey ambience off':'Turn journey ambience on');
+    button.textContent=on?'On':'Sound';ramp(master,on?.8:0,.3);mix(currentScene);
+  });
+  ['load','services','road','ocean','sky'].forEach(id=>ScrollTrigger.create({
+    trigger:'#'+id,start:'top center',end:'bottom center',onEnter:()=>mix(id),onEnterBack:()=>mix(id)
+  }));
+})();
+
 /* ---------- hero entrance ---------- */
 gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagger:0.08,delay:0.15});
 
@@ -742,11 +806,11 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     const t=gsap.ticker.time;
     ctx.clearRect(0,0,W,H);
     const g=ctx.createRadialGradient(CX-R*.45,CY-R*.75,R*.1,CX,CY,R*1.45);
-    g.addColorStop(0,'rgba(255,165,31,.26)');
+    g.addColorStop(0,'rgba(255,90,54,.22)');
     g.addColorStop(.45,'rgba(255,107,74,.10)');
     g.addColorStop(1,'rgba(0,0,0,0)');
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    ctx.beginPath();ctx.arc(CX,CY,R,0,7);ctx.strokeStyle='rgba(255,165,31,.25)';ctx.lineWidth=1.2;ctx.stroke();
+    ctx.beginPath();ctx.arc(CX,CY,R,0,7);ctx.strokeStyle='rgba(255,90,54,.25)';ctx.lineWidth=1.2;ctx.stroke();
     const rot=(reduced?0.6:t*0.06)+userRot;
     for(const p of pts){
       const [x,y,z]=project(p[0],p[1],rot,R);
@@ -766,11 +830,11 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
         if(z>-0.15){ if(!started){ctx.moveTo(x,y);started=true}else ctx.lineTo(x,y); }
         else started=false;
       }
-      ctx.strokeStyle='rgba(255,165,31,.4)';ctx.lineWidth=1;ctx.stroke();
+      ctx.strokeStyle='rgba(255,90,54,.42)';ctx.lineWidth=1;ctx.stroke();
       const q=((reduced?0.5:t*0.11)+i*0.17)%1,[la,lo]=slerpPt(SANTOS,d,q);
       const rad=R*(1+0.28*Math.sin(Math.PI*q));
       const [x,y,z]=project(la,lo,rot,rad);
-      if(z>-0.15){ctx.beginPath();ctx.arc(x,y,2.4,0,7);ctx.fillStyle='#FFA51F';ctx.fill();}
+      if(z>-0.15){ctx.beginPath();ctx.arc(x,y,2.4,0,7);ctx.fillStyle='#FF5A36';ctx.fill();}
     }
     /* destination port markers + names, fading with the horizon */
     ctx.font='8px IBM Plex Mono,monospace';
@@ -784,7 +848,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     }
     const [x,y,z]=project(SANTOS[0],SANTOS[1],rot,R);
     if(z>0){
-      ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle='#FFA51F';ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle='#FF5A36';ctx.fill();
       ctx.font='9px IBM Plex Mono,monospace';ctx.fillStyle='rgba(247,246,236,.9)';
       ctx.fillText('SANTOS · BR',x+8,y+3);
     }
@@ -805,6 +869,9 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     scrollTrigger:{trigger:'#load',start:'top top',end:'bottom bottom',scrub:SCRUB,invalidateOnRefresh:true}
   });
   tl.to('.load-caption',{autoAlpha:0,y:-18,duration:0.075,ease:'power2.in'},0.30);
+  /* One restrained camera move replaces several unrelated object zooms. */
+  tl.fromTo('#loadCamera',{scale:1,xPercent:0},{scale:1.055,xPercent:1.2,duration:0.24,ease:'sine.inOut'},0.34)
+    .to('#loadCamera',{scale:1,xPercent:0,duration:0.30,ease:'power1.inOut'},0.70);
   /* 1 · six crates roll in; the cutaway shows the container filling up with fruit */
   const target=21;  /* door position, base vw */
   ['#crate1','#crate2','#crate3','#crate4','#crate5','#crate6'].forEach((c,i)=>{
@@ -857,18 +924,18 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   });
   tl.fromTo('.svc-band',{yPercent:12},{yPercent:0,duration:0.065,ease:'power2.out'},0);
   tl.fromTo('#svcGhost',{x:'4vw'},{x:'-46vw',duration:1},0);
-  /* page 1 → page 2 handoff: the truck arrives still rolling, then makes SIX slow stops —
+  /* page 1 → page 2 handoff: the truck arrives still rolling, then makes four slow stops —
      one service text per stop, long enough to actually read */
-  const stops=[8,19,30,41,52,63];
+  const stops=[8,26,44,62];
   const svcs=gsap.utils.toArray('#svcStage .svc');
   tl.fromTo('#svcRig',{x:'-55vw'},{x:stops[0]+'vw',ease:'power2.out',duration:0.06},0)
     .to('#svcRig',{y:2.5,duration:0.008,ease:'power1.out'},0.058)
     .to('#svcRig',{y:0,duration:0.012,ease:'power1.inOut'},0.066);
   svcs.forEach((el,i)=>{
     /* long stops (readable), short gentle drives */
-    const stopStart=0.065+i*0.118, stopEnd=stopStart+0.09;
-    tl.fromTo(el,{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:0.022,ease:'power2.out'},stopStart+0.003)
-      .to(el,{autoAlpha:0,y:-14,duration:0.018,ease:'power2.in'},stopEnd);
+    const stopStart=0.065+i*0.17, stopEnd=stopStart+0.125;
+    tl.fromTo(el,{autoAlpha:0,y:20,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:0.028,ease:'power2.out'},stopStart+0.003)
+      .to(el,{autoAlpha:0,y:-14,clipPath:'inset(0 0% 0 100%)',duration:0.022,ease:'power2.in'},stopEnd);
     if(i<svcs.length-1){
       tl.to('#svcRig',{x:stops[i+1]+'vw',duration:0.028,ease:'power2.inOut'},stopEnd)
         .to('#svcRig',{y:2.5,duration:0.008,ease:'power1.out'},stopEnd+0.026)
@@ -877,14 +944,14 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   });
   /* same-screen morph: the band drops away, the truck drives to center, flattens into
      the top view, and turns downward — becoming the road truck */
-  tl.to('.svc-band',{yPercent:104,ease:'power1.in',duration:0.11},0.78);
-  tl.to('#svcGhost',{autoAlpha:0,duration:0.06},0.78);
-  tl.to('#svcRig',{x:'30vw',duration:0.07,ease:'power1.inOut'},0.78)
-    .to('#svcRig',{rotationX:72,scale:0.62,autoAlpha:0,ease:'power1.in',duration:0.09},0.85);
+  tl.to('.svc-band',{yPercent:104,ease:'power1.in',duration:0.11},0.77);
+  tl.to('#svcGhost',{autoAlpha:0,duration:0.06},0.77);
+  tl.to('#svcRig',{x:'30vw',duration:0.07,ease:'power1.inOut'},0.77)
+    .to('#svcRig',{rotationX:72,scale:0.62,autoAlpha:0,ease:'power1.in',duration:0.09},0.84);
   tl.fromTo('#morphTruck',
     {xPercent:-50,yPercent:-50,rotation:-90,scale:1.9,autoAlpha:0},
-    {autoAlpha:1,duration:0.035,ease:'power1.out'},0.885)
-    .to('#morphTruck',{rotation:0,scale:0.5,y:'8svh',ease:'power2.inOut',duration:0.115},0.885);
+    {autoAlpha:1,duration:0.035,ease:'power1.out'},0.875)
+    .to('#morphTruck',{rotation:0,scale:0.5,y:'8svh',ease:'power2.inOut',duration:0.125},0.875);
   /* velocity skew on the ghost word */
   const skewSet=gsap.quickSetter('#svcGhost','skewX','deg');
   ScrollTrigger.create({trigger:'#services',start:'top bottom',end:'bottom top',
@@ -913,14 +980,15 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     const yOff=mid.y*scale-innerHeight*0.42;
     /* on narrow screens the camera also follows the truck horizontally */
     const xOff=innerWidth<=760?(mid.x-600)*scale:0;
-    roadSvg.style.transform=`translate(calc(-50% - ${xOff}px),${-yOff}px)`;
+    const cameraRoll=clamp((mid.ang-90)*-0.055,-2.8,2.8);
+    roadSvg.style.transform=`translate(calc(-50% - ${xOff}px),${-yOff}px) rotate(${cameraRoll}deg)`;
   }
   place();
   gsap.set([tdCab,tdTrail],{autoAlpha:0});
   const tl=gsap.timeline({
     defaults:{ease:'none'},
     scrollTrigger:{
-      trigger:'#road',start:'top top',end:'bottom bottom',scrub:reduced?true:0.9,
+      trigger:'#road',start:'top top',end:'bottom bottom',scrub:SCRUB,
       onUpdate:s=>{
         kmh=lerp(kmh,clamp(Math.abs(s.getVelocity())*0.045,0,92),0.18);
         kmhEl.textContent=String(Math.round(kmh));
@@ -975,11 +1043,11 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   /* live water takes over */
   tl.fromTo('#oceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.06,duration:0.10},0.50)
     .to('#oceanVid',{scale:1,duration:0.40},0.60);
-  tl.to('.ocean-head',{autoAlpha:1,y:0,ease:'power2.out',duration:0.06},0.56);
+  tl.to('.ocean-head',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',ease:'power2.out',duration:0.075},0.56);
   tl.to('.callout',{autoAlpha:1,duration:0.05},0.62);
   const cards=['.sc-1','.sc-2','.sc-3','.sc-4'];
   cards.forEach((sel,i)=>{
-    tl.fromTo(sel,{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:0.06,ease:'power2.out'},0.60+i*0.055);
+    tl.fromTo(sel,{autoAlpha:0,y:16,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:0.07,ease:'power2.out'},0.60+i*0.055);
   });
   tl.fromTo('#cloudCover',{yPercent:105},{yPercent:-8,duration:0.20,ease:'power1.in'},0.80);
 }
@@ -995,7 +1063,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     {x:'-90vw',yPercent:-42,xPercent:-50,scale:1.18,rotation:4},
     {x:'2vw',yPercent:-52,xPercent:-50,scale:1.0,rotation:-1,duration:0.55,ease:'power2.out'},0)
     .to('#planeWrap',{x:'14vw',yPercent:-58,scale:0.96,rotation:-2,duration:0.45},0.55);
-  tl.from('.sky-copy',{autoAlpha:0,y:20,duration:0.16,ease:'power2.out'},0.50);
+  tl.fromTo('.sky-copy',{autoAlpha:0,y:20,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:0.16,ease:'power2.out'},0.50);
 }
 
 /* ================= FOOTER WORDMARK ================= */
