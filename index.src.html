@@ -121,6 +121,22 @@ nav.main a:hover{color:var(--paper)}
 .hero-foot .mono{font-size:10px}
 @media(max-width:760px){.hero-foot{flex-direction:column;align-items:flex-start;gap:6px}}
 
+/* ============ MISSION — what we do, before the film starts ============ */
+#mission{background:var(--paper);padding:clamp(80px,14vh,150px) clamp(20px,5vw,72px) clamp(70px,12vh,130px);position:relative;overflow:hidden}
+#mission .kicker{color:var(--mango)}
+#mission h2{font-size:clamp(38px,5.6vw,84px);max-width:16ch}
+#mission h2 em{font-style:normal;color:var(--leaf)}
+#mission .lede{margin-top:22px;max-width:58ch;font-size:15.5px;color:var(--ink-soft)}
+.mission-grid{margin-top:clamp(40px,7vh,72px);display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,36px)}
+.mstat{border-top:2px solid var(--ink);padding-top:16px}
+.mstat .v{font-stretch:125%;font-weight:900;font-size:clamp(30px,3.4vw,52px);line-height:1;font-variant-numeric:tabular-nums}
+.mstat .v span{font-size:.48em;font-weight:800}
+.mstat .l{margin-top:8px;font-size:13px;color:var(--ink-soft);max-width:22ch}
+.mission-crates{position:absolute;right:clamp(-40px,2vw,60px);top:clamp(70px,12vh,140px);display:flex;gap:18px;align-items:flex-end;pointer-events:none}
+.mission-crates img{width:clamp(90px,9vw,150px);filter:drop-shadow(0 14px 12px rgba(0,0,0,.16))}
+.mission-crates img:nth-child(2){width:clamp(110px,11vw,180px)}
+@media(max-width:960px){.mission-grid{grid-template-columns:1fr 1fr}.mission-crates{display:none}}
+
 /* ============ LOAD SCENE (photo composite) ============ */
 #journeyFilm{height:1400svh;background:var(--paper)}
 #journeyFilm .film-pin{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--paper);isolation:isolate}
@@ -200,6 +216,7 @@ nav.main a:hover{color:var(--paper)}
 #filmPlane{position:absolute;z-index:4;left:50%;top:48%;width:clamp(400px,58vw,820px);filter:drop-shadow(0 40px 34px rgba(30,60,90,.24));will-change:transform}
 #filmPlane img{display:block;width:100%;transform:rotate(90deg)}
 #filmSkyCopy{top:auto;bottom:8svh;text-align:center;left:15%;right:15%;max-width:none;opacity:0;clip-path:inset(0 100% 0 0)}
+#flipSeq{position:absolute;inset:0;width:100%;height:100%;z-index:45;opacity:0;visibility:hidden;pointer-events:none}
 #load,#services,#road,#ocean,#sky{display:none}
 @media(max-width:760px){
   #journeyFilm{height:1250svh}
@@ -514,6 +531,24 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
   </div>
 </section>
 
+<!-- ================= MISSION ================= -->
+<section id="mission" aria-label="What Brazil Fresh does">
+  <span class="kicker">Brazil Fresh · The trading house</span>
+  <h2 class="display">We buy at the farm. <em>We sell at your dock.</em></h2>
+  <p class="lede">Brazil Fresh is a produce trading house, not a carrier. We buy fruit and vegetables directly from certified Brazilian growers, take ownership of every container, run the cold chain and the paperwork ourselves, and sell wholesale to importers, distributors, and retail chains anywhere in the world — one seller, one invoice, one accountable team.</p>
+  <div class="mission-crates" aria-hidden="true">
+    <img src="{{A:crate-lime-cut}}" alt="">
+    <img src="{{A:crate-mango-cut}}" alt="">
+    <img src="{{A:crate-papaya-cut}}" alt="">
+  </div>
+  <div class="mission-grid">
+    <div class="mstat"><div class="v">8</div><div class="l">product lines, from mango to passion fruit</div></div>
+    <div class="mstat"><div class="v">4</div><div class="l">growing regions — Bahia, Ceará, RN, São Francisco Valley</div></div>
+    <div class="mstat"><div class="v">9<span>–14 days</span></div><div class="l">Santos to Europe, reefer door-to-port</div></div>
+    <div class="mstat"><div class="v">100<span>%</span></div><div class="l">GLOBALG.A.P.-certified partner growers</div></div>
+  </div>
+</section>
+
 <!-- ================= ONE CONTINUOUS JOURNEY FILM ================= -->
 <section id="journeyFilm" aria-label="The journey from farm to destination">
   <div class="film-pin">
@@ -575,6 +610,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
       <div id="filmPlane"><img src="{{A:plane-top}}" alt="Cargo plane seen from above"></div>
       <div class="film-copy" id="filmSkyCopy"><span class="mono">04 / Air · when the window is short</span><h2 class="display">From ocean altitude into the clouds</h2></div>
     </div>
+    <canvas id="flipSeq" aria-hidden="true"></canvas>
     <div id="filmClouds"></div>
   </div>
 </section>
@@ -904,6 +940,14 @@ gsap.to('#journeyProgress',{scaleX:1,ease:'none',scrollTrigger:{start:0,end:'max
   });
 })();
 
+/* ---------- mission reveal ---------- */
+gsap.from('#mission .kicker, #mission h2, #mission .lede',{y:26,autoAlpha:0,duration:.9,ease:'power3.out',stagger:.1,
+  scrollTrigger:{trigger:'#mission',start:'top 72%'}});
+gsap.from('#mission .mstat',{y:22,autoAlpha:0,duration:.7,ease:'power2.out',stagger:.08,
+  scrollTrigger:{trigger:'.mission-grid',start:'top 85%'}});
+gsap.from('.mission-crates img',{y:34,autoAlpha:0,duration:.9,ease:'power3.out',stagger:.12,
+  scrollTrigger:{trigger:'#mission',start:'top 60%'}});
+
 /* ---------- hero entrance ---------- */
 gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagger:0.08,delay:0.15});
 
@@ -1135,7 +1179,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   tl.to(['#filmSideTruck','#filmSidePayload'],{rotationX:86,duration:.16,ease:'power2.in'},3.84)
     .to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,duration:.05},3.97)
     .to('#filmGround',{autoAlpha:0,duration:.16},3.88)
-    .fromTo('#hTopRig',{autoAlpha:1,rotationX:-86,y:'-8svh'},{rotationX:0,y:0,duration:.18,ease:'power2.out'},3.97);
+    .fromTo('#hTopRig',{autoAlpha:1,rotationX:-86,y:'-8svh'},{rotationX:0,y:0,duration:.18,ease:'power2.out',immediateRender:false},3.97);
   /* streaming hold — motion without a cut */
   tl.to('#hTopRig',{y:2,duration:.10,ease:'sine.inOut'},4.10)
     .to('#hTopRig',{y:0,duration:.10,ease:'sine.inOut'},4.20);
@@ -1193,12 +1237,60 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     .to('#filmPlane',{x:'12vw',y:'-5svh',rotation:-2,scale:.92,duration:.72,ease:'none'},9.70)
     .to('#filmSkyCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},9.78);
 
+  /* rendered flip sequence (reference technique): scroll-scrubbed frames on canvas,
+     starting from a pixel-identical capture of this very page */
+  const FLIP_FRAMES={{FRAMES:truckflip}};
+  if(FLIP_FRAMES.length&&innerWidth>760&&!reduced){
+    const seqCv=$('flipSeq');
+    const seq={imgs:FLIP_FRAMES.map(u=>{const i=new Image();i.src=u;return i}),cur:-1,w:0,h:0};
+    const seqResize=()=>{const d=Math.min(2,devicePixelRatio||1),r=seqCv.getBoundingClientRect();
+      seqCv.width=r.width*d;seqCv.height=r.height*d;
+      seqCv.getContext('2d').setTransform(d,0,0,d,0,0);seq.w=r.width;seq.h=r.height;seq.cur=-1;};
+    seqResize();addEventListener('resize',seqResize);
+    const seqDraw=p2=>{
+      const n=seq.imgs.length,f=clamp(Math.round(p2*(n-1)),0,n-1);
+      if(f===seq.cur)return;
+      const img=seq.imgs[f];if(!img.complete||!img.naturalWidth)return;
+      seq.cur=f;
+      const ctx=seqCv.getContext('2d'),sc=Math.max(seq.w/img.naturalWidth,seq.h/img.naturalHeight);
+      const dw=img.naturalWidth*sc,dh=img.naturalHeight*sc;
+      ctx.clearRect(0,0,seq.w,seq.h);ctx.drawImage(img,(seq.w-dw)/2,(seq.h-dh)/2,dw,dh);
+    };
+    const sp={p:0};
+    tl.set('#flipSeq',{autoAlpha:1},3.80)
+      .to(sp,{p:1,duration:.50,ease:'none',onUpdate:()=>seqDraw(sp.p)},3.80)
+      .to('#flipSeq',{autoAlpha:0,duration:.08},4.32);
+  }
   addEventListener('resize',placeRoad);
   const filmVid=$('filmOceanVid');
   if(filmVid&&!reduced){
     ScrollTrigger.create({trigger:film,start:'55% bottom',end:'98% top',
       onEnter:()=>filmVid.play().catch(()=>{}),onEnterBack:()=>filmVid.play().catch(()=>{}),
       onLeave:()=>filmVid.pause(),onLeaveBack:()=>filmVid.pause()});
+  }
+  /* rendered flip sequence (reference technique): scroll-scrubbed frames on canvas,
+     starting from a pixel-identical capture of this very page */
+  const FLIP_FRAMES={{FRAMES:truckflip}};
+  if(FLIP_FRAMES.length&&innerWidth>760&&!reduced){
+    const seqCv=$('flipSeq');
+    const seq={imgs:FLIP_FRAMES.map(u=>{const i=new Image();i.src=u;return i}),cur:-1,w:0,h:0};
+    const seqResize=()=>{const d=Math.min(2,devicePixelRatio||1),r=seqCv.getBoundingClientRect();
+      seqCv.width=r.width*d;seqCv.height=r.height*d;
+      seqCv.getContext('2d').setTransform(d,0,0,d,0,0);seq.w=r.width;seq.h=r.height;seq.cur=-1;};
+    seqResize();addEventListener('resize',seqResize);
+    const seqDraw=p2=>{
+      const n=seq.imgs.length,f=clamp(Math.round(p2*(n-1)),0,n-1);
+      if(f===seq.cur)return;
+      const img=seq.imgs[f];if(!img.complete||!img.naturalWidth)return;
+      seq.cur=f;
+      const ctx=seqCv.getContext('2d'),sc=Math.max(seq.w/img.naturalWidth,seq.h/img.naturalHeight);
+      const dw=img.naturalWidth*sc,dh=img.naturalHeight*sc;
+      ctx.clearRect(0,0,seq.w,seq.h);ctx.drawImage(img,(seq.w-dw)/2,(seq.h-dh)/2,dw,dh);
+    };
+    const sp={p:0};
+    tl.set('#flipSeq',{autoAlpha:1},3.80)
+      .to(sp,{p:1,duration:.50,ease:'none',onUpdate:()=>seqDraw(sp.p)},3.80)
+      .to('#flipSeq',{autoAlpha:0,duration:.08},4.32);
   }
   addEventListener('resize',placeRoad);
 }
