@@ -29,8 +29,8 @@ body{background:#DDDCCB;color:var(--ink);font-family:var(--sans);font-size:16px;
   display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(12,31,18,.18);
 }
 .slide.dark{background:var(--ink);color:var(--paper)}
-.slide .num{position:absolute;top:24px;right:28px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-soft)}
-.slide.dark .num{color:#7C9581}
+.slide > .num{position:absolute;top:24px;right:28px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-soft)}
+.slide.dark > .num{color:#7C9581}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--leaf);margin-bottom:14px}
 .slide.dark .eyebrow{color:var(--mango)}
 h1{font-size:clamp(34px,5vw,64px)}
@@ -49,7 +49,7 @@ ul.clean.leafy li::before{background:var(--leaf)}
 /* stat tiles */
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .tile{border:1px solid var(--line);padding:20px 20px 16px;background:#FBFAF2}
-.tile .v{font-stretch:125%;font-weight:900;font-size:clamp(30px,3.6vw,48px);font-variant-numeric:tabular-nums;line-height:1}
+.tile .v{color:var(--ink);font-stretch:125%;font-weight:900;font-size:clamp(30px,3.6vw,48px);font-variant-numeric:tabular-nums;line-height:1}
 .tile .v span{font-size:.5em;font-weight:800}
 .tile .l{margin-top:10px;font-size:13px;color:var(--ink-soft);max-width:24ch}
 .tile.hi{background:var(--leaf-deep);border-color:var(--leaf-deep);color:var(--paper)}
@@ -318,9 +318,59 @@ tr.hi td{background:#FFF3DD;font-weight:700}
   <div class="foot"><span>Ordens de grandeza · frutas+hortícolas frescos · fontes públicas 2024–25</span><span>12</span></div>
 </section>
 
-<!-- 13 · POR QUE O BRASIL -->
+
+<!-- 13 · AVOCADO MERCADO -->
 <section class="slide dark">
   <span class="num">13</span>
+  <div class="eyebrow">Capítulo especial · A aposta avocado</div>
+  <h2 class="display">Avocado: o mercado que dobra a cada década</h2>
+  <div class="tiles">
+    <div class="tile hi"><div class="v">US$ <em>15,7 bi</em></div><div class="l">mercado global do Hass em 2025 → US$ 21,2 bi até 2030 (+6,2% a.a.)</div></div>
+    <div class="tile"><div class="v">4+<span> Mt</span></div><div class="l">exportações mundiais até 2030 (vs 3,1 Mt em 2021) — OCDE/FAO</div></div>
+    <div class="tile"><div class="v">+432<span>%</span></div><div class="l">crescimento do volume exportado pelo Brasil em 10 anos</div></div>
+    <div class="tile"><div class="v">US$ 36<span> mi</span></div><div class="l">exportados pelo Brasil em 2024 (24,6 mil t · US$ 1.471/t médio)</div></div>
+    <div class="tile"><div class="v">40–45<span> kt</span></div><div class="l">projeção de exportação da próxima safra brasileira</div></div>
+    <div class="tile"><div class="v">€ 2,2–3,5<span>/kg</span></div><div class="l">atacado do Hass na Europa — a fruta mais valiosa do nosso portfólio</div></div>
+  </div>
+  <div class="foot"><span>Abrafrutas set/2025 · Mordor Intelligence · OCDE-FAO</span><span>13</span></div>
+</section>
+
+<!-- 14 · AVOCADO VARIEDADES -->
+<section class="slide">
+  <span class="num">14</span>
+  <div class="eyebrow">Qual avocado plantar</div>
+  <h2 class="display">Hass é o jogo — o resto é mercado interno</h2>
+  <table>
+    <tr><th>Variedade</th><th>Perfil</th><th>Papel na estratégia</th></tr>
+    <tr class="hi"><td><b>Hass</b></td><td>Casca escura rugosa, polpa amanteigada — o padrão que Europa, EUA e Ásia compram (maioria absoluta do comércio mundial)</td><td><b>A aposta de plantio nas fazendas parceiras</b></td></tr>
+    <tr><td>Lamb Hass</td><td>Colheita mais tardia que o Hass</td><td>Esticar a janela de oferta</td></tr>
+    <tr><td>Maluma</td><td>Precoce e muito produtivo, aceito como "tipo Hass"</td><td>Acelerar os primeiros anos do pomar</td></tr>
+    <tr><td>Breda · Margarida · Geada</td><td>Os "abacates verdes" brasileiros, frutos grandes</td><td>Mercado interno + Argentina — não competem no avocado premium</td></tr>
+  </table>
+  <p class="small" style="margin-top:12px;max-width:76ch"><b>A janela brasileira:</b> nossa colheita de Hass se concentra entre <b>março e agosto</b> — justamente quando a oferta do hemisfério norte aperta na Europa. SP responde por 40%+ da produção nacional; MG virou potência exportadora (US$ 12,8 mi em 2025); Japão e Chile acabaram de abrir. Holanda, Argentina e Espanha já levam ~80% do que embarcamos.</p>
+  <div class="foot"><span>Abrafrutas · Sec. Agricultura SP · CEPEA</span><span>14</span></div>
+</section>
+
+<!-- 15 · AVOCADO FAZENDA -->
+<section class="slide">
+  <span class="num">15</span>
+  <div class="eyebrow">Do zero à colheita — o pomar dos parceiros</div>
+  <h2 class="display">Plantar agora, exportar em 3–4 anos</h2>
+  <table>
+    <tr><th>Fase</th><th>O que acontece</th><th class="num">Produção típica</th></tr>
+    <tr><td><b>Ano 0</b></td><td>Implantação: mudas ENXERTADAS de Hass (250–400 plantas/ha), irrigação, correção de solo. Investimento ~R$ 25–45 mil/ha com irrigação</td><td class="num">—</td></tr>
+    <tr><td><b>Ano 3</b></td><td>Primeira colheita comercial</td><td class="num">~5 t/ha</td></tr>
+    <tr><td><b>Ano 4</b></td><td>Pomar engrena — payback do investimento começa</td><td class="num">~7 t/ha</td></tr>
+    <tr><td><b>Ano 5</b></td><td>Aceleração</td><td class="num">~11 t/ha</td></tr>
+    <tr class="hi"><td><b>Ano 6–20+</b></td><td>Produção plena por décadas · custo de manutenção ~R$ 7–12 mil/ha/ano</td><td class="num"><b>~15 t/ha</b></td></tr>
+  </table>
+  <p class="small" style="margin-top:12px;max-width:78ch"><b>A conta de 20 anos:</b> estudos (Incaper/Esalq) apontam retorno acumulado <b>superior a R$ 300 mil por hectare</b>. E o timing é perfeito: enquanto a Terra Fresca gira caixa com manga, lima e melão, <b>o avocado dos nossos parceiros amadurece — e em 3–4 anos entra no portfólio como o produto de maior margem</b>.</p>
+  <div class="foot"><span>Incaper · Esalq/USP · valores ilustrativos, variam por região e tecnologia</span><span>15</span></div>
+</section>
+
+<!-- 16 · POR QUE O BRASIL -->
+<section class="slide dark">
+  <span class="num">16</span>
   <div class="eyebrow">A vantagem estrutural</div>
   <h2 class="display">Por que comprar no Brasil é bom negócio</h2>
   <div class="cols c2">
@@ -335,12 +385,12 @@ tr.hi td{background:#FFF3DD;font-weight:700}
       <li><b>642 aberturas de mercado desde 2023</b> — o vento regulatório está a favor.</li>
     </ul>
   </div>
-  <div class="foot"><span>Terra Fresca Trading</span><span>13</span></div>
+  <div class="foot"><span>Terra Fresca Trading</span><span>16</span></div>
 </section>
 
-<!-- 14 · A CONTA DE UM CONTÊINER -->
+<!-- 17 · A CONTA DE UM CONTÊINER -->
 <section class="slide">
-  <span class="num">14</span>
+  <span class="num">17</span>
   <div class="eyebrow">O modelo em números (ilustrativo)</div>
   <h2 class="display">A conta de um reefer de manga p/ Roterdã</h2>
   <table>
@@ -352,12 +402,12 @@ tr.hi td{background:#FFF3DD;font-weight:700}
     <tr class="hi"><td><b>Margem bruta por contêiner</b></td><td class="num"><b>~9.000–21.000</b></td></tr>
   </table>
   <p class="small" style="margin-top:12px">Preço de venda oscila forte com a semana e a qualidade de chegada — por isso cadeia fria e timing valem mais que qualquer desconto na compra. 2 contêineres/semana bem executados ≈ operação de <b>US$ 3–5 mi/ano</b>.</p>
-  <div class="foot"><span>Números ilustrativos para dimensionar — validar com cotações reais</span><span>14</span></div>
+  <div class="foot"><span>Números ilustrativos para dimensionar — validar com cotações reais</span><span>17</span></div>
 </section>
 
-<!-- 15 · RISCOS -->
+<!-- 18 · RISCOS -->
 <section class="slide">
-  <span class="num">15</span>
+  <span class="num">18</span>
   <div class="eyebrow">O que pode dar errado</div>
   <h2 class="display">Riscos — e como a gente se protege</h2>
   <table>
@@ -369,12 +419,12 @@ tr.hi td{background:#FFF3DD;font-weight:700}
     <tr><td>Câmbio</td><td>Travar no fechamento de cada venda (ACC/NDF)</td></tr>
     <tr><td>Calote do importador</td><td>Seguro de crédito, carta de crédito nos primeiros negócios, PACA nos EUA</td></tr>
   </table>
-  <div class="foot"><span>Terra Fresca Trading</span><span>15</span></div>
+  <div class="foot"><span>Terra Fresca Trading</span><span>18</span></div>
 </section>
 
-<!-- 16 · A TESE -->
+<!-- 19 · A TESE -->
 <section class="slide dark">
-  <span class="num">16</span>
+  <span class="num">19</span>
   <div class="eyebrow">Onde a Terra Fresca entra</div>
   <h2 class="display">A tese em três fases</h2>
   <div class="flow">
@@ -388,12 +438,12 @@ tr.hi td{background:#FFF3DD;font-weight:700}
     <li><b>O que somos:</b> trading house — compramos a fruta, somos donos do risco e da margem, entregamos no porto do cliente.</li>
     <li><b>O que NÃO somos:</b> transportadora nem broker de comissão.</li>
   </ul>
-  <div class="foot"><span>Terra Fresca Trading</span><span>16</span></div>
+  <div class="foot"><span>Terra Fresca Trading</span><span>19</span></div>
 </section>
 
-<!-- 17 · PRÓXIMOS PASSOS -->
+<!-- 20 · PRÓXIMOS PASSOS -->
 <section class="slide">
-  <span class="num">17</span>
+  <span class="num">20</span>
   <div class="eyebrow">Próximos passos</div>
   <h2 class="display">Os primeiros 90 dias</h2>
   <table>
@@ -404,12 +454,12 @@ tr.hi td{background:#FFF3DD;font-weight:700}
     <tr class="hi"><td>4</td><td><b>Primeiro contêiner com venda fechada ANTES de embarcar</b></td><td class="num">Dia ~90</td></tr>
     <tr><td>5</td><td>Rebuy: transformar o 1º cliente em contrato semanal — a máquina começa</td><td class="num">Dia 90+</td></tr>
   </table>
-  <div class="foot"><span>Terra Fresca Trading</span><span>17</span></div>
+  <div class="foot"><span>Terra Fresca Trading</span><span>20</span></div>
 </section>
 
-<!-- 18 · FECHAMENTO + FONTES -->
+<!-- 21 · FECHAMENTO + FONTES -->
 <section class="slide dark">
-  <span class="num">18</span>
+  <span class="num">21</span>
   <div style="margin:auto;max-width:860px">
     <h1 class="display" style="text-align:center">O mundo já compra fruta do Brasil.<br>Só ainda não compra da gente.</h1>
     <p class="small" style="margin-top:26px;color:#7C9581;text-align:center">FONTES · Abrafrutas e ApexBrasil (recorde 2025: US$ 1,4 bi / 1,3 Mt, destinos e ranking, jan/2026) · Casa Branca/USTR (isenção tarifária de 13/nov/2025, 238+ códigos HTS) · MAPA/GACC (protocolos China, Coreia; 642 aberturas desde 2023) · faixas de frete e transit: mercado/Drewry 2025–26 · Valores aproximados, para decisão de negócio cotar caso a caso.</p>
