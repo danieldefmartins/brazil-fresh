@@ -144,10 +144,17 @@ nav.main a:hover{color:var(--paper)}
 #filmSidePayload img{display:block;width:100%}
 #filmSidePayload::before{content:"";position:absolute;z-index:3;left:3%;right:3%;top:-5px;height:5px;background:#151817;opacity:var(--cable-alpha,0)}
 #filmSidePayload::after{content:"";position:absolute;z-index:2;left:50%;bottom:100%;width:2px;height:clamp(62px,13svh,150px);background:#151817;transform:translateX(-50%) scaleY(var(--cable-scale,.35));transform-origin:50% 100%;opacity:var(--cable-alpha,0)}
-#filmServices{z-index:8;background:var(--paper);visibility:hidden;opacity:0}
+#filmServices{z-index:8;background:var(--paper)}
 #filmServiceGhost{position:absolute;top:4svh;left:0;white-space:nowrap;font-weight:900;font-stretch:125%;font-size:clamp(110px,20vw,290px);line-height:.8;color:var(--ghost)}
 #filmServiceBand{position:absolute;left:0;right:0;bottom:0;height:56svh;background:var(--leaf-deep);color:var(--paper)}
-#filmServiceStage{position:absolute;left:clamp(20px,5vw,72px);right:52vw;bottom:9svh;height:32svh;z-index:50;color:var(--paper)}
+#filmServiceStage{position:absolute;left:clamp(20px,5vw,72px);right:clamp(20px,5vw,72px);bottom:7svh;height:34svh;z-index:50;color:var(--paper)}
+#laneDashes{position:absolute;left:-25%;right:-25%;bottom:0;height:56svh;opacity:0;will-change:transform,opacity;
+  background-image:repeating-linear-gradient(90deg,rgba(247,246,236,.5) 0 46px,transparent 46px 138px),repeating-linear-gradient(90deg,rgba(247,246,236,.5) 0 46px,transparent 46px 138px);
+  background-size:100% 4px,100% 4px;background-position:0 26%,0 72%;background-repeat:no-repeat,no-repeat}
+#hTopRig{position:absolute;left:50%;bottom:28svh;width:0;height:0;visibility:hidden;opacity:0;will-change:transform}
+#hTopRig .hinner{position:absolute;left:0;top:0;width:min(8vw,120px);transform:translate(-50%,-50%) rotate(-90deg);filter:drop-shadow(6px 0 8px rgba(0,0,0,.25))}
+#hTopRig .hinner img{display:block;width:100%}
+@media(max-width:760px){#hTopRig .hinner{width:15vw}}
 .film-service{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;visibility:hidden;opacity:0;clip-path:inset(0 100% 0 0)}
 .film-service .mono{color:var(--mango);display:block;margin-bottom:12px}
 .film-service h3{font-size:clamp(28px,4vw,58px);line-height:.95;text-transform:uppercase;max-width:12ch}
@@ -520,6 +527,8 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     <div class="film-layer" id="filmServices">
       <div id="filmServiceGhost">SERVICES&nbsp;&nbsp;SERVICES</div>
       <div id="filmServiceBand"></div>
+      <div id="laneDashes" aria-hidden="true"></div>
+      <div id="hTopRig" aria-hidden="true"><div class="hinner"><img src="{{A:ctn-top}}" alt=""><img src="{{A:cab-top}}" alt=""></div></div>
       <div id="filmServiceStage">
         <div class="film-service"><span class="mono">01 / 04</span><h3>Fresh Sourcing</h3><p>Direct from certified growers in Bahia, Ceará, and the São Francisco Valley — graded, pre-cooled, and packed at origin.</p></div>
         <div class="film-service"><span class="mono">02 / 04</span><h3>Cold Chain</h3><p>Reefer set-point and pulp temperature logged continuously from the farm gate to the port of discharge.</p></div>
@@ -533,6 +542,8 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
         <svg id="filmRoadSvg" viewBox="0 0 1200 3400" aria-hidden="true">
           <path id="filmRoadPath" d="M600,-150 L600,560 C600,760 910,760 910,980 L910,1450 C910,1660 600,1660 600,1870 L600,2470" fill="none" stroke="#191C18" stroke-width="220"/>
           <path d="M600,-150 L600,560 C600,760 910,760 910,980 L910,1450 C910,1660 600,1660 600,1870 L600,2470" fill="none" stroke="#F7F6EC" stroke-width="4" stroke-dasharray="42 52" opacity=".48"/>
+          <g id="fTrail" opacity="0"><image href="{{A:ctn-top}}" x="-23" y="-82" width="46" height="164"/></g>
+          <g id="fCab" opacity="0"><image href="{{A:cab-top}}" x="-23" y="-39" width="46" height="79"/></g>
         </svg>
       </div>
       <div id="filmTopPayload"><img src="{{A:ctn-top}}" alt="Container seen from above"></div>
@@ -1001,12 +1012,14 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   const film=$('journeyFilm'),roadSvg=$('filmRoadSvg'),roadPath=$('filmRoadPath');
   const roadLength=roadPath.getTotalLength(),roadState={p:0};
   const topPayload=$('filmTopPayload'),topCab=$('filmTopCab');
+  const fCab=$('fCab'),fTrail=$('fTrail');
   const services=gsap.utils.toArray('.film-service');
   const vw=n=>`${n}vw`;
-  const loadingTruckX=()=>innerWidth<=760?6:31;
-  const serviceStops=()=>innerWidth<=760?[24,34,44,54]:[42,50,58,66];
-  const morphX=()=>innerWidth<=760?14:26;
-  const payloadOffset=()=>innerWidth<=760?23:-2;
+  const mob=()=>innerWidth<=760;
+  const loadingTruckX=()=>mob()?6:31;
+  const serviceStops=()=>mob()?[10,22,34,46]:[30,40,50,60];
+  const centerTruckX=()=>mob()?3.5:37.5;
+  const payloadOffset=()=>mob()?23:-2;
 
   function roadPose(distance){
     const a=roadPath.getPointAtLength(clamp(distance,0,roadLength));
@@ -1014,26 +1027,30 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     return {x:a.x,y:a.y,angle:Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI};
   }
   function placeRoad(){
-    const pose=roadPose(lerp(.025,.985,roadState.p)*roadLength);
+    const d=lerp(.025,.985,roadState.p)*roadLength;
+    /* the rig is drawn INTO the road: cab and trailer each follow the path, so the
+       truck can never leave the asphalt through a curve */
+    const cab=roadPose(d+58),trail=roadPose(d-62),mid=roadPose(d);
+    fCab.setAttribute('transform',`translate(${cab.x},${cab.y}) rotate(${cab.angle+90})`);
+    fTrail.setAttribute('transform',`translate(${trail.x},${trail.y}) rotate(${trail.angle+90})`);
     const scale=roadSvg.getBoundingClientRect().width/1200;
-    /* Follow the curved path horizontally at every viewport. */
-    const xFollow=(pose.x-600)*scale;
-    const yFollow=pose.y*scale-innerHeight*.41;
-    const roll=clamp((pose.angle-90)*-.06,-3.2,3.2);
+    const xFollow=(mid.x-600)*scale;
+    const yFollow=mid.y*scale-innerHeight*.41;
+    const roll=clamp((mid.angle-90)*-.06,-3.2,3.2);
     roadSvg.style.transform=`translate(calc(-50% - ${xFollow}px),${-yFollow}px) rotate(${roll}deg)`;
-    const steering=clamp((pose.angle-90)*.32,-18,18);
-    topPayload.style.rotate=`${steering*.28}deg`;
-    topCab.style.rotate=`${steering}deg`;
   }
 
-  gsap.set('#filmSideTruck',{x:()=>vw(innerWidth<=760?-82:-58)});
+  gsap.set('#filmSideTruck',{x:()=>vw(mob()?-82:-58)});
   gsap.set('#filmSidePayload',{x:vw(29),y:0,rotation:0});
   /* crane geometry in px — spreader rest height vs payload height, any viewport */
-  const payloadH=()=>((innerWidth<=760?.47:.29)*Math.min(innerWidth,innerWidth<=760?1e9:1500))*(362/1200);
-  const stackerW=()=>innerWidth<=760?.58*innerWidth:Math.min(.36*innerWidth,540);
+  const stackerW=()=>mob()?.58*innerWidth:Math.min(.36*innerWidth,540);
   const spreadBottom=()=>stackerW()*(939/900)*.645;
-  const dropPx=()=>Math.max(20,spreadBottom()-Math.min((innerWidth<=760?.47:.29)*innerWidth,435)*(362/1200));
-  gsap.set(['#filmServices','#filmRoad','#filmOcean','#filmSky'],{autoAlpha:0});
+  const dropPx=()=>Math.max(20,spreadBottom()-Math.min((mob()?.47:.29)*innerWidth,435)*(362/1200));
+  gsap.set(['#filmRoad','#filmOcean','#filmSky'],{autoAlpha:0});
+  gsap.set('#filmRoad',{autoAlpha:1,backgroundColor:'rgba(248,248,244,0)'});
+  gsap.set('#filmRoadSvg',{autoAlpha:0});
+  gsap.set('#filmServiceBand',{yPercent:104});
+  gsap.set('#filmServiceGhost',{opacity:0});
   gsap.set([topPayload,topCab],{autoAlpha:0});
   gsap.set('#filmOceanCopy',{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'});
   gsap.set('#filmPlane',{xPercent:-50,yPercent:-50,x:'-100vw',rotation:3,scale:1.15});
@@ -1044,26 +1061,22 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     scrollTrigger:{trigger:film,start:'top top',end:'bottom bottom',scrub:SCRUB,invalidateOnRefresh:true}
   });
 
-  /* 0–0.48: six crates of fruit roll in; the cutaway shows the container filling */
+  /* ---- ORIGIN 0–1.28: crates fill the container, the crane loads the truck ---- */
   const crateStarts=[-8,-15,-22,-29,-36,-43];
   gsap.utils.toArray('.film-crate').forEach((c,i)=>{
-    tl.fromTo(c,{x:0,autoAlpha:1},{x:()=>vw((innerWidth<=760?33:31)-crateStarts[i]),ease:'power1.inOut',duration:.13},.01+i*.058)
+    tl.fromTo(c,{x:0,autoAlpha:1},{x:()=>vw((mob()?33:31)-crateStarts[i]),ease:'power1.inOut',duration:.13},.01+i*.058)
       .to(c,{autoAlpha:0,duration:.03},.12+i*.058);
     tl.to('#filmFill',{opacity:(i+1)/6*.95,duration:.03},.12+i*.058);
   });
   tl.to('#filmFill',{opacity:0,duration:.06,ease:'power1.in'},.44);
-  /* 0.50–0.60: the spreader rides down the cable and locks on */
   tl.to('#filmSpreader',{y:()=>dropPx(),duration:.10,ease:'power1.inOut'},.50)
     .to('#filmCable',{height:()=>dropPx(),duration:.10,ease:'power1.inOut'},.50);
-  /* 0.62–0.80: crane lifts — spreader, cable, and container move as one */
   tl.to('#filmSidePayload',{y:()=>-dropPx(),rotation:-1.1,duration:.18,ease:'power1.inOut'},.62)
     .to('#filmSpreader',{y:0,duration:.18,ease:'power1.inOut'},.62)
     .to('#filmCable',{height:0,duration:.18,ease:'power1.inOut'},.62)
     .to('#filmSidePayload',{rotation:.8,duration:.05,ease:'sine.inOut'},.80)
     .to('#filmSidePayload',{rotation:0,duration:.05,ease:'sine.out'},.85);
-  /* 0.62–0.92: the truck drives in forward, cab first, under the hanging load */
   tl.to('#filmSideTruck',{x:()=>vw(loadingTruckX()),duration:.30,ease:'power2.out'},.62);
-  /* 0.94–1.10: spreader lowers the container onto the chassis; suspension dips */
   tl.to('#filmSidePayload',{y:'-4.1svh',rotation:0,duration:.15,ease:'power2.in'},.94)
     .to('#filmSpreader',{y:()=>Math.max(0,dropPx()-.041*innerHeight),duration:.15,ease:'power2.in'},.94)
     .to('#filmCable',{height:()=>Math.max(0,dropPx()-.041*innerHeight),duration:.15,ease:'power2.in'},.94)
@@ -1074,74 +1087,91 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   tl.to('#filmStacker',{x:vw(-54),autoAlpha:0,duration:.5,ease:'power2.in'},1.18)
     .to('#filmOriginCopy',{autoAlpha:0,y:-24,duration:.25,ease:'power2.in'},1.15);
 
-  /* 2–4: the loaded rig crosses one continuous service backdrop. */
-  tl.to('#filmServices',{autoAlpha:1,duration:.22},1.28)
-    .to('#filmGround',{autoAlpha:0,duration:.16},1.30)
-    .to('#filmServiceGhost',{x:'-34vw',duration:2.45},1.32);
+  /* ---- JOINT 1 (no cut): the ground GROWS into the service band while the loaded
+     truck rides up with its top edge — one continuous floor ---- */
+  tl.to('#filmGround',{backgroundColor:'#14532D',duration:.26,ease:'sine.inOut'},1.30);
+  tl.to('#filmServiceBand',{yPercent:0,duration:.26,ease:'sine.inOut'},1.30)
+    .to(['#filmSideTruck','#filmSidePayload'],{y:'-40svh',duration:.26,ease:'sine.inOut'},1.30)
+    .to('#filmServiceGhost',{opacity:1,duration:.20},1.36)
+    .to('#filmServiceGhost',{x:'-34vw',duration:2.6},1.36);
+
+  /* ---- SERVICES 1.5–3.55: four slow stops on top of the band, one text each ---- */
   services.forEach((service,i)=>{
-    const at=1.38+i*.55;
-    tl.to('#filmSideTruck',{x:()=>vw(serviceStops()[i]),duration:.20,ease:'power2.inOut'},at)
-      .to('#filmSidePayload',{x:()=>vw(serviceStops()[i]+payloadOffset()),duration:.20,ease:'power2.inOut'},at)
-      .fromTo(service,{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.14,ease:'power2.out'},at+.16)
-      .to(service,{autoAlpha:0,y:-12,clipPath:'inset(0 0% 0 100%)',duration:.12,ease:'power2.in'},at+.48);
+    const at=1.56+i*.52;
+    tl.to('#filmSideTruck',{x:()=>vw(serviceStops()[i]),duration:.18,ease:'power2.inOut'},at)
+      .to('#filmSidePayload',{x:()=>vw(serviceStops()[i]+payloadOffset()),duration:.18,ease:'power2.inOut'},at)
+      .fromTo(service,{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.13,ease:'power2.out'},at+.15)
+      .to(service,{autoAlpha:0,y:-12,clipPath:'inset(0 0% 0 100%)',duration:.11,ease:'power2.in'},at+.42);
   });
 
-  /* 4–5: side elevation rotates into the same truck from above; the road is
-     already underneath before the side artwork disappears. */
-  tl.set('#filmRoad',{autoAlpha:1},3.55)
-    .fromTo('#filmRoadCamera',{rotationX:30,scale:1.22,yPercent:-3},{rotationX:0,scale:1,yPercent:0,duration:.62,ease:'power2.out'},3.55)
-    .to('#filmServiceBand',{clipPath:'inset(0 0 100% 0)',duration:.48,ease:'power2.inOut'},3.62)
-    .to('#filmServiceGhost',{autoAlpha:0,duration:.22},3.68)
-    .to('#filmSideTruck',{x:()=>vw(morphX()),y:'-32svh',scale:.84,duration:.42,ease:'power2.inOut'},3.62)
-    .to('#filmSidePayload',{x:()=>vw(morphX()+payloadOffset()),y:'-32svh',scale:.84,duration:.42,ease:'power2.inOut'},3.62)
-    .fromTo([topPayload,topCab],{autoAlpha:0,scale:1.7,rotation:-90,y:'8svh'},{autoAlpha:1,scale:1,rotation:0,y:0,duration:.42,ease:'power2.inOut'},3.76)
-    .to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,scale:.68,duration:.24,ease:'power1.in'},3.88)
-    .set('#filmOrigin',{autoAlpha:0},4.18)
-    .set('#filmServices',{autoAlpha:0},4.18);
+  /* ---- JOINT 2 (the reference move): the band IS the road. Lane dashes fade onto
+     it, the truck flips side→top IN PLACE still horizontal, the dashes stream,
+     then the whole road rotates upright into the winding top view. ---- */
+  tl.to('#filmSideTruck',{x:()=>vw(centerTruckX()),duration:.16,ease:'power2.inOut'},3.62)
+    .to('#filmSidePayload',{x:()=>vw(centerTruckX()+payloadOffset()),duration:.16,ease:'power2.inOut'},3.62);
+  tl.to('#laneDashes',{opacity:1,duration:.14},3.68)
+    .fromTo('#laneDashes',{xPercent:0},{xPercent:-26,duration:1.3},3.68);
+  tl.to(['#filmSideTruck','#filmSidePayload'],{autoAlpha:0,duration:.12},3.86)
+    .to('#filmGround',{autoAlpha:0,duration:.16},3.86)
+    .fromTo('#hTopRig',{autoAlpha:0,y:'-24svh',scale:1.06},{autoAlpha:1,y:0,scale:1,duration:.16,ease:'power1.inOut'},3.86);
+  /* streaming hold — motion without a cut */
+  tl.to('#hTopRig',{y:2,duration:.10,ease:'sine.inOut'},4.10)
+    .to('#hTopRig',{y:0,duration:.10,ease:'sine.inOut'},4.20);
+  /* rotate the road upright around the truck; the vertical winding road fades in
+     underneath at matching position while everything is still turning */
+  tl.to('#filmServiceGhost',{opacity:0,duration:.18},3.78);
+  tl.to('#filmServiceBand',{backgroundColor:'#191C18',duration:.30,ease:'power1.inOut'},4.42);
+  tl.to('#filmServices',{rotation:-90,yPercent:-31,scale:.55,transformOrigin:'50% 72%',duration:.42,ease:'power2.inOut'},4.42)
+    .to('#filmRoadSvg',{autoAlpha:1,duration:.20},4.62)
+    .to([fCab,fTrail],{autoAlpha:1,duration:.14},4.62)
+    .to('#hTopRig',{autoAlpha:0,duration:.14},4.64)
+    .to('#filmServices',{autoAlpha:0,duration:.12},4.76)
+    .to('#filmRoad',{backgroundColor:'rgba(248,248,244,1)',duration:.14},4.80);
 
-  /* 5–7: one road camera follows the cargo, including its steering angle. */
-  tl.to(roadState,{p:1,duration:2.30,onUpdate:placeRoad},4.08);
-  [['.fm-1',4.20,5.12],['.fm-2',5.25,6.13]].forEach(([sel,a,b])=>{
-    tl.fromTo(sel,{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.16,ease:'power2.out'},a)
-      .to(sel,{autoAlpha:0,y:-12,clipPath:'inset(0 0% 0 100%)',duration:.14,ease:'power2.in'},b);
+  /* ---- ROAD 4.75–6.75: one camera, truck drawn into the asphalt ---- */
+  tl.to(roadState,{p:1,duration:2.0,onUpdate:placeRoad},4.75);
+  [['.fm-1',4.98,5.66],['.fm-2',5.86,6.50]].forEach(([sel,a,b])=>{
+    tl.fromTo(sel,{autoAlpha:0,y:18,clipPath:'inset(0 100% 0 0)'},{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.15,ease:'power2.out'},a)
+      .to(sel,{autoAlpha:0,y:-12,clipPath:'inset(0 0% 0 100%)',duration:.13,ease:'power2.in'},b);
   });
 
-  /* 7–8: the port exists under the road. The road becomes transparent while
-     the same top-view container crosses the dock and locks into the ship slot. */
-  tl.set('#filmOcean',{autoAlpha:1},6.05)
-    .fromTo('#filmShip',{xPercent:-50,yPercent:-50,y:'64svh',scale:1.45},{y:'7svh',duration:.72,ease:'power2.out'},6.05)
-    .to('#filmRoadSvg',{autoAlpha:0,duration:.38,ease:'power1.in'},6.22)
-    .to('#filmRoad',{backgroundColor:'rgba(248,248,244,0)',duration:.38},6.22)
-    .to('#filmDeckTarget',{opacity:1,scale:1.08,duration:.20,ease:'power2.out'},6.28)
-    .to(topCab,{y:'58svh',autoAlpha:0,duration:.52,ease:'power2.in'},6.32)
-    .to(topPayload,{y:'22svh',x:'0vw',scale:.70,rotation:2,filter:'drop-shadow(0 0 9px rgba(255,165,31,.9))',duration:.58,ease:'power2.inOut'},6.34)
-    .to(topPayload,{y:'23svh',scale:.62,rotation:0,duration:.16,ease:'power2.in'},6.86)
-    .to(topPayload,{autoAlpha:0,duration:.06},7.00)
-    .to('#filmShipSlot',{opacity:1,duration:.06},7.00)
-    .to('#filmDeckTarget',{opacity:0,scale:.92,duration:.15,ease:'power1.in'},7.00)
-    .set('#filmRoad',{autoAlpha:0},7.08);
+  /* ---- PORT 6.45–7.5: the ocean surfaces beneath the road; the same container
+     leaves the chassis and locks into the moving ship ---- */
+  tl.set('#filmOcean',{autoAlpha:1},6.45)
+    .fromTo('#filmShip',{xPercent:-50,yPercent:-50,y:'64svh',scale:1.45},{y:'7svh',duration:.72,ease:'power2.out'},6.45)
+    .to('#filmRoadSvg',{autoAlpha:0,duration:.38,ease:'power1.in'},6.62)
+    .to('#filmRoad',{backgroundColor:'rgba(248,248,244,0)',duration:.38},6.62)
+    .to('#filmDeckTarget',{opacity:1,scale:1.08,duration:.20,ease:'power2.out'},6.68);
+  /* hand the sprites from the SVG to the screen layer at the exact same spot */
+  tl.set([fCab,fTrail],{autoAlpha:0},6.72)
+    .set([topPayload,topCab],{autoAlpha:1},6.72)
+    .to(topCab,{y:'58svh',autoAlpha:0,duration:.52,ease:'power2.in'},6.74)
+    .to(topPayload,{y:'22svh',x:'0vw',scale:.70,rotation:2,filter:'drop-shadow(0 0 9px rgba(255,165,31,.9))',duration:.58,ease:'power2.inOut'},6.76)
+    .to(topPayload,{y:'23svh',scale:.62,rotation:0,duration:.16,ease:'power2.in'},7.28)
+    .to(topPayload,{autoAlpha:0,duration:.06},7.42)
+    .to('#filmShipSlot',{opacity:1,duration:.06},7.42)
+    .to('#filmDeckTarget',{opacity:0,scale:.92,duration:.15,ease:'power1.in'},7.42)
+    .set('#filmRoad',{autoAlpha:0},7.50);
 
-  /* 8–9.5: after contact, the camera climbs straight up and the one ship
-     becomes smaller without changing direction or crossfading to a duplicate. */
-  tl.to('#filmDock',{yPercent:-120,duration:.45,ease:'power2.in'},7.06)
-    .to('#filmShip',{y:'-5svh',scale:.38,duration:1.32,ease:'power1.inOut'},7.12)
-    /* live aerial water takes over — the render crossfades into real footage */
-    .fromTo('#filmOceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.02,duration:.5,ease:'power1.inOut'},7.50)
-    .to('#filmOcean',{'--wtr':0,duration:.5,ease:'power1.inOut'},7.50)
-    .to('#filmShip',{autoAlpha:0,duration:.42,ease:'power1.inOut'},7.62)
-    .to('#filmOceanCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},7.62)
-    .to('#filmOceanCopy',{autoAlpha:0,y:-18,duration:.20,ease:'power2.in'},8.48);
+  /* ---- OCEAN 7.5–9: cast off, camera climbs, live water takes over ---- */
+  tl.to('#filmDock',{yPercent:-120,duration:.45,ease:'power2.in'},7.48)
+    .to('#filmShip',{y:'-5svh',scale:.38,duration:1.32,ease:'power1.inOut'},7.54)
+    .fromTo('#filmOceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.02,duration:.5,ease:'power1.inOut'},7.92)
+    .to('#filmOcean',{'--wtr':0,duration:.5,ease:'power1.inOut'},7.92)
+    .to('#filmShip',{autoAlpha:0,duration:.42,ease:'power1.inOut'},8.04)
+    .to('#filmOceanCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},8.04)
+    .to('#filmOceanCopy',{autoAlpha:0,y:-18,duration:.20,ease:'power2.in'},8.90);
 
-  /* 9.5–10: cloud cover is the cut. The ship vanishes only while fully masked,
-     then the plane occupies the same central flight line. */
-  tl.set('#filmSky',{autoAlpha:1},8.32)
-    .to('#filmClouds',{yPercent:-9,duration:.72,ease:'power1.inOut'},8.32)
-    .to('#filmOcean',{autoAlpha:0,duration:.42,ease:'power1.inOut'},8.76)
-    .to('#filmPlane',{x:'0vw',rotation:-1,scale:1,duration:.92,ease:'power2.out'},8.68)
-    .to('#filmClouds',{autoAlpha:0,duration:.42},9.18)
-    .to('#filmPlane',{x:'12vw',y:'-5svh',rotation:-2,scale:.92,duration:.72,ease:'none'},9.28)
-    .to('#filmSkyCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},9.36);
+  /* ---- SKY 8.75–10.1: cloud cover is the cut; the big freighter takes the line ---- */
+  tl.set('#filmSky',{autoAlpha:1},8.74)
+    .to('#filmClouds',{yPercent:-9,duration:.72,ease:'power1.inOut'},8.74)
+    .to('#filmOcean',{autoAlpha:0,duration:.42,ease:'power1.inOut'},9.18)
+    .to('#filmPlane',{x:'0vw',rotation:-1,scale:1,duration:.92,ease:'power2.out'},9.10)
+    .to('#filmClouds',{autoAlpha:0,duration:.42},9.60)
+    .to('#filmPlane',{x:'12vw',y:'-5svh',rotation:-2,scale:.92,duration:.72,ease:'none'},9.70)
+    .to('#filmSkyCopy',{autoAlpha:1,y:0,clipPath:'inset(0 0% 0 0)',duration:.30,ease:'power2.out'},9.78);
 
+  addEventListener('resize',placeRoad);
   const filmVid=$('filmOceanVid');
   if(filmVid&&!reduced){
     ScrollTrigger.create({trigger:film,start:'55% bottom',end:'98% top',
