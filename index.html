@@ -728,7 +728,15 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   }
   const deg=Math.PI/180;
   const SANTOS=[-23.9*deg,-46.3*deg];
-  const DESTS=[[51.9,4.4],[25.0,55.1],[31.2,121.5],[40.7,-74.0],[38.7,-9.1],[35.6,139.7]].map(d=>[d[0]*deg,d[1]*deg]);
+  const PORTS=[
+    {name:'ROTTERDAM',lat:51.9,lon:4.4},
+    {name:'JEBEL ALI',lat:25.0,lon:55.1},
+    {name:'SHANGHAI',lat:31.2,lon:121.5},
+    {name:'NEW YORK',lat:40.7,lon:-74.0},
+    {name:'LISBOA',lat:38.7,lon:-9.1},
+    {name:'TOKYO',lat:35.6,lon:139.7},
+  ];
+  const DESTS=PORTS.map(d=>[d.lat*deg,d.lon*deg]);
   const slerpPt=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t)];
   let heroVisible=true;
   ScrollTrigger.create({trigger:'.hero',start:'top bottom',end:'bottom top',
@@ -779,10 +787,20 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
       const [x,y,z]=project(la,lo,rot,rad);
       if(z>-0.15){ctx.beginPath();ctx.arc(x,y,2.4,0,7);ctx.fillStyle='#FFA51F';ctx.fill();}
     }
+    /* destination port markers + names, fading with the horizon */
+    ctx.font='8px IBM Plex Mono,monospace';
+    for(let i=0;i<DESTS.length;i++){
+      const [x,y,z]=project(DESTS[i][0],DESTS[i][1],rot,R);
+      if(z<=0.05)continue;
+      const a=Math.min(1,(z-0.05)*2.2);
+      ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fillStyle=`rgba(247,246,236,${0.85*a})`;ctx.fill();
+      ctx.fillStyle=`rgba(247,246,236,${0.55*a})`;
+      ctx.fillText(PORTS[i].name,x+7,y+3);
+    }
     const [x,y,z]=project(SANTOS[0],SANTOS[1],rot,R);
     if(z>0){
-      ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle='#F7F6EC';ctx.fill();
-      ctx.font='9px IBM Plex Mono,monospace';ctx.fillStyle='rgba(247,246,236,.75)';
+      ctx.beginPath();ctx.arc(x,y,3.4,0,7);ctx.fillStyle='#FFA51F';ctx.fill();
+      ctx.font='9px IBM Plex Mono,monospace';ctx.fillStyle='rgba(247,246,236,.9)';
       ctx.fillText('SANTOS · BR',x+8,y+3);
     }
   });
