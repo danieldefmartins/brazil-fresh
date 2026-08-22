@@ -92,7 +92,8 @@ nav.main a:hover{color:var(--paper)}
 
 /* ============ HERO ============ */
 .hero{position:relative;background:var(--ink);color:var(--paper);min-height:100svh;overflow:hidden}
-#globeCv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#globeCv{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y}
+#globeCv.dragging{cursor:grabbing}
 .hero-copy{
   position:relative;z-index:5;
   padding:clamp(120px,19vh,190px) clamp(18px,4vw,52px) 70px;
@@ -119,16 +120,18 @@ nav.main a:hover{color:var(--paper)}
 #load .ground{position:absolute;left:0;right:0;bottom:0;height:15svh;background:var(--road)}
 #load .ground::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#0A0E0A}
 /* one geometry, one scale factor — desktop and mobile share every position */
-#load .pin{--S:1}
-@media(max-width:760px){#load .pin{--S:1.55}.load-caption{top:11svh}}
+#load .pin{--S:1;perspective:1400px}
+@media(max-width:760px){#load .pin{--S:1.35}.load-caption{top:11svh}}
 .sprite{position:absolute;will-change:transform}
 .sprite img{width:100%;display:block}
 .flipx{transform:scaleX(-1)}
-#ctnImg{width:calc(28vw*var(--S));left:calc(15vw*var(--S));bottom:15svh;z-index:4}
-#stackerImg{width:calc(32vw*var(--S));left:calc(2vw*var(--S));bottom:15svh;z-index:6}
-#truckImg{width:calc(44vw*var(--S));left:calc(14vw*var(--S));bottom:14.6svh;z-index:3}
+#ctnImg{width:calc(28vw*var(--S));left:calc(17vw*var(--S));bottom:15svh;z-index:4}
+#ctnFill{position:absolute;inset:0;opacity:0}
+#stackerImg{width:calc(32vw*var(--S));left:calc(1vw*var(--S));bottom:15svh;z-index:6}
+#truckImg{width:calc(44vw*var(--S));left:calc(17vw*var(--S));bottom:14.6svh;z-index:3}
 .crate{width:calc(7vw*var(--S));bottom:15svh;z-index:3}
-#crate1{left:calc(-9vw*var(--S))}#crate2{left:calc(-1vw*var(--S))}#crate3{left:calc(7vw*var(--S))}
+#crate1{left:calc(-9vw*var(--S))}#crate2{left:calc(-16vw*var(--S))}#crate3{left:calc(-23vw*var(--S))}
+#crate4{left:calc(-30vw*var(--S))}#crate5{left:calc(-37vw*var(--S))}#crate6{left:calc(-44vw*var(--S))}
 
 /* ============ SERVICES ============ */
 #services .pin{background:var(--paper);display:flex;flex-direction:column}
@@ -163,28 +166,33 @@ nav.main a:hover{color:var(--paper)}
 }
 
 /* ============ ROAD ============ */
-#road .pin{background:var(--paper)}
+#road .pin{background:var(--paper);perspective:1200px}
+#roadPersp{position:absolute;inset:0;will-change:transform;transform-origin:50% 34%}
 #roadSvg{position:absolute;top:0;left:50%;width:max(100vw,900px);will-change:transform}
 .telemetry{position:absolute;top:26px;left:clamp(18px,4vw,52px);z-index:6;color:var(--ink-soft)}
 .telemetry b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
-.milestone{position:absolute;z-index:6;max-width:330px;visibility:hidden;opacity:0}
-.milestone .mono{color:var(--leaf);display:block;margin-bottom:10px}
-.milestone h3{font-stretch:120%;font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.8vw,38px);line-height:1}
-.milestone p{margin-top:10px;font-size:13px;color:var(--ink-soft);max-width:34ch}
-.ms-1{top:18svh;left:clamp(18px,5vw,70px)}
-.ms-2{top:30svh;left:clamp(18px,5vw,70px)}
+/* milestone copy lives in the open ground beside/under the road — big and readable */
+.milestone{position:absolute;z-index:6;bottom:9svh;left:clamp(18px,5vw,70px);max-width:560px;visibility:hidden;opacity:0}
+.milestone .mono{color:var(--leaf);display:block;margin-bottom:12px}
+.milestone h3{font-stretch:120%;font-weight:900;text-transform:uppercase;font-size:clamp(26px,3.6vw,52px);line-height:.98}
+.milestone p{margin-top:12px;font-size:13.5px;color:var(--ink-soft);max-width:40ch}
 .ms-2 .mono{color:var(--mango)}
-.ms-3{bottom:16svh;right:clamp(18px,5vw,70px);text-align:right}
 @media(max-width:760px){
-  .milestone{max-width:230px;background:rgba(247,246,236,.9);padding:12px 14px;border-left:3px solid var(--mango)}
-  .ms-3{text-align:left}
+  .milestone{max-width:78vw;background:rgba(247,246,236,.92);padding:14px 16px;border-left:3px solid var(--mango)}
 }
 
 /* ============ OCEAN ============ */
 #ocean .pin{background:linear-gradient(180deg,#0D3A63 0%,var(--ocean) 45%,var(--ocean-deep) 100%);color:var(--paper)}
-.oceanvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease;will-change:transform}
-#ocean .pin.vid .oceanvid{opacity:1}
-#ocean .pin.vid #shipWrap,#ocean .pin.vid .water{visibility:hidden}
+.oceanvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;will-change:transform}
+.dock{
+  position:absolute;top:0;left:0;right:0;height:14svh;z-index:5;
+  background:#2A2D2F;border-bottom:6px solid var(--mango);
+  display:flex;align-items:center;justify-content:center;will-change:transform;
+}
+.dock span{font-family:var(--mono);font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:#9FB9CE}
+.dropctn{position:absolute;left:48.4vw;top:-10svh;width:calc(4vw + 14px);z-index:6;will-change:transform;
+  filter:drop-shadow(0 10px 14px rgba(3,14,26,.5))}
+#shipWrap img.shipslot{position:absolute;left:45.5%;top:56.5%;width:6.5%;opacity:0;filter:drop-shadow(0 3px 6px rgba(3,14,26,.5))}
 .water{position:absolute;inset:-20%;opacity:.5;pointer-events:none}
 .water.w1{
   background-image:radial-gradient(3px 2px at 20% 30%,rgba(255,255,255,.35),transparent 60%),
@@ -281,15 +289,15 @@ nav.main a:hover{color:var(--paper)}
 .cf3{width:64vw;height:26vh;bottom:6%;left:14%;animation:cloudslide 95s linear infinite}
 @keyframes cloudslide{from{transform:translateX(-6vw)}to{transform:translateX(6vw)}}
 #planeWrap{
-  position:absolute;left:50%;top:50%;width:clamp(230px,26vw,360px);
+  position:absolute;left:50%;top:44%;width:clamp(380px,52vw,760px);
   transform:translate(-50%,-50%);will-change:transform;
-  filter:drop-shadow(0 34px 30px rgba(30,60,90,.22));
+  filter:drop-shadow(0 44px 38px rgba(30,60,90,.24));
 }
-#planeWrap img{width:100%;display:block}
+#planeWrap img{width:100%;display:block;transform:rotate(90deg)}
 .sky-copy{position:absolute;left:0;right:0;bottom:8svh;text-align:center;z-index:6;padding:0 18px}
 .sky-copy .mono{color:var(--ink-soft);display:block;margin-bottom:10px}
 .sky-copy h2{font-size:clamp(24px,3.6vw,50px)}
-@media(max-width:760px){#planeWrap{width:44vw}}
+@media(max-width:760px){#planeWrap{width:82vw}}
 
 /* ============ VOICES ============ */
 #voices{background:var(--paper);padding:clamp(70px,12vh,130px) clamp(18px,4vw,52px)}
@@ -403,8 +411,14 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     <img class="sprite crate" id="crate1" src="{{A:crate-mango-cut}}" alt="Crate of mangoes">
     <img class="sprite crate" id="crate2" src="{{A:crate-lime-cut}}" alt="Crate of Tahiti limes">
     <img class="sprite crate" id="crate3" src="{{A:crate-papaya-cut}}" alt="Crate of papayas">
+    <img class="sprite crate" id="crate4" src="{{A:crate-melon-cut}}" alt="Crate of yellow melons">
+    <img class="sprite crate" id="crate5" src="{{A:crate-avocado-cut}}" alt="Crate of avocados">
+    <img class="sprite crate" id="crate6" src="{{A:crate-passion-cut}}" alt="Crate of passion fruit">
     <div class="sprite" id="truckImg"><img class="flipx" src="{{A:truck-side}}" alt="Semi truck with empty container chassis"></div>
-    <div class="sprite" id="ctnImg"><img src="{{A:container-side}}" alt="White refrigerated container"></div>
+    <div class="sprite" id="ctnImg">
+      <img src="{{A:container-side}}" alt="White refrigerated container">
+      <img id="ctnFill" src="{{A:container-filled}}" alt="Container interior filled with fruit crates">
+    </div>
     <div class="sprite" id="stackerImg"><img src="{{A:stacker-tall}}" alt="Reach stacker holding the container spreader"></div>
     <div class="ground"></div>
   </div>
@@ -438,6 +452,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
 <section class="scene" id="road" style="height:420vh">
   <div class="pin">
     <div class="telemetry mono">02 / Inland — farm to port · <b><span id="kmh">0</span> km/h</b> · reefer 7.0°C</div>
+    <div id="roadPersp">
     <svg id="roadSvg" viewBox="0 0 1200 3400" aria-hidden="true">
       <path id="roadPath" d="M600,-100 L600,560 C600,740 900,740 900,920 L900,1480 C900,1660 600,1660 600,1840 L600,2450"
             fill="none" stroke="#191C18" stroke-width="150"/>
@@ -451,6 +466,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
         <image href="{{A:truck-top}}" x="-23" y="-121" width="46" height="242"/>
       </g>
     </svg>
+    </div>
     <div class="milestone ms-1">
       <span class="mono">Milestone · Quality</span>
       <h3 class="display">Reliability at every kilometer</h3>
@@ -477,6 +493,8 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
     <div class="water w2"></div>
     <div class="mist m1"></div>
     <div class="mist m2"></div>
+    <div class="dock" id="oceanDock"><span>Port of Santos · Berth 14</span></div>
+    <img class="dropctn" id="dropCtn" src="{{A:ctn-top}}" alt="">
     <div class="ocean-head">
       <span class="mono">03 / Ocean — Santos → the world</span>
       <h2 class="display">Freshness that crosses oceans</h2>
@@ -486,6 +504,7 @@ footer.site{background:var(--paper);border-top:1px solid var(--line);padding-top
         <div class="sidefoam l"></div>
         <div class="sidefoam r"></div>
         <img src="{{A:ship-top}}" alt="Container ship seen from above, loaded with Brazil Fresh produce containers">
+        <img class="shipslot" id="shipSlot" src="{{A:ctn-top}}" alt="">
         <div class="wake"></div>
       </div>
     </div>
@@ -676,8 +695,19 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   let heroVisible=true;
   ScrollTrigger.create({trigger:'.hero',start:'top bottom',end:'bottom top',
     onToggle:s=>{heroVisible=s.isActive}});
+  /* the globe is touchable — drag to spin it, with inertia */
+  let userRot=0,spinVel=0,dragging=false,lastX=0;
+  cv.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;spinVel=0;cv.classList.add('dragging');cv.setPointerCapture(e.pointerId);});
+  cv.addEventListener('pointermove',e=>{
+    if(!dragging)return;
+    const dx=e.clientX-lastX;lastX=e.clientX;
+    userRot+=dx*0.005;spinVel=dx*0.005;
+  });
+  const endDrag=()=>{dragging=false;cv.classList.remove('dragging');};
+  cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
   gsap.ticker.add(()=>{
     if(!heroVisible)return;
+    if(!dragging){userRot+=spinVel;spinVel*=0.95;}
     const t=gsap.ticker.time;
     ctx.clearRect(0,0,W,H);
     const g=ctx.createRadialGradient(CX-R*.45,CY-R*.75,R*.1,CX,CY,R*1.45);
@@ -686,7 +716,7 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     g.addColorStop(1,'rgba(0,0,0,0)');
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     ctx.beginPath();ctx.arc(CX,CY,R,0,7);ctx.strokeStyle='rgba(255,165,31,.25)';ctx.lineWidth=1.2;ctx.stroke();
-    const rot=reduced?0.6:t*0.06;
+    const rot=(reduced?0.6:t*0.06)+userRot;
     for(const p of pts){
       const [x,y,z]=project(p[0],p[1],rot,R);
       if(z<=0)continue;
@@ -725,31 +755,47 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
    truck left 12, width 44 (h 12.8, deck at 3.8); stacker left -2, width 26.
    The truck ALWAYS moves forward (cab leads, left → right). */
 {
-  const S=()=>innerWidth<=760?1.55:1;
+  const S=()=>innerWidth<=760?1.35:1;
   const vwS=n=>`${n*S()}vw`;
   gsap.set('#truckImg',{x:()=>vwS(-100)});
+  gsap.set('#stackerImg',{x:()=>vwS(-75)});
   const tl=gsap.timeline({
     defaults:{ease:'none'},
     scrollTrigger:{trigger:'#load',start:'top top',end:'bottom bottom',scrub:SCRUB,invalidateOnRefresh:true}
   });
-  /* crates roll in and enter the container */
-  const crateT=[27,19,11];
-  ['#crate1','#crate2','#crate3'].forEach((c,i)=>{
-    tl.fromTo(c,{x:0,autoAlpha:1},{x:()=>vwS(crateT[i]),ease:'power1.inOut',duration:0.24},0.02+i*0.05)
-      .to(c,{autoAlpha:0,duration:0.05},0.19+i*0.05);
+  /* 1 · six crates roll in; the cutaway shows the container filling up with fruit */
+  const target=21;  /* door position, base vw */
+  ['#crate1','#crate2','#crate3','#crate4','#crate5','#crate6'].forEach((c,i)=>{
+    const start=-9-7*i;
+    tl.fromTo(c,{x:0,autoAlpha:1},{x:()=>vwS(target-start),ease:'power1.inOut',duration:0.16},0.01+i*0.035)
+      .to(c,{autoAlpha:0,duration:0.03},0.14+i*0.035);
+    tl.to('#ctnFill',{opacity:(i+1)/6*0.95,duration:0.03},0.14+i*0.035);
   });
-  /* stacker lifts the container straight up until its top meets the spreader
-     (spreader bottom sits at 32vw·(939/900)·0.649 ≈ 21.7vw; minus container height 8.4) */
-  tl.to('#ctnImg',{y:()=>vwS(-13.3),rotation:-0.8,transformOrigin:'50% 50%',ease:'power1.inOut',duration:0.18},0.36);
-  /* truck drives in forward (cab first) and stops with the chassis under the load */
-  tl.to('#truckImg',{x:0,ease:'power2.out',duration:0.22},0.46);
-  /* container lowers onto the chassis deck; suspension dips */
-  tl.to('#ctnImg',{y:()=>vwS(-3.8),rotation:0,ease:'power2.in',duration:0.14},0.72)
-    .to('#truckImg',{y:4,duration:0.03,ease:'power1.out'},0.855)
-    .to('#truckImg',{y:0,duration:0.04,ease:'power1.inOut'},0.885);
-  /* truck + container drive off together to the right — into the services scene */
-  tl.to('#truckImg',{x:()=>vwS(95),duration:0.10},0.90)
-    .to('#ctnImg',{x:()=>vwS(95),duration:0.10},0.90);
+  /* 2 · sealed: cutaway fades, doors closed */
+  tl.to('#ctnFill',{opacity:0,duration:0.04,ease:'power1.in'},0.335);
+  /* 3 · the crane arrives AFTER the container is full — driving in with a 2D→3D pop */
+  tl.fromTo('#stackerImg',{x:()=>vwS(-75),rotationY:-16,scale:0.95,transformOrigin:'50% 90%'},
+    {x:0,rotationY:0,scale:1,ease:'power2.out',duration:0.14},0.34)
+    .to('#stackerImg',{y:2,duration:0.015,ease:'power1.out'},0.475)
+    .to('#stackerImg',{y:0,duration:0.02},0.49);
+  /* 4 · spreader engages, then the pickup — the load swings and settles naturally */
+  tl.to('#ctnImg',{y:-3,duration:0.02,ease:'power1.out'},0.50);
+  tl.to('#ctnImg',{y:()=>vwS(-13.3),rotation:-1.4,transformOrigin:'50% 0%',ease:'power1.inOut',duration:0.10},0.52)
+    .to('#ctnImg',{rotation:1.1,duration:0.045,ease:'sine.inOut'},0.62)
+    .to('#ctnImg',{rotation:-0.6,duration:0.04,ease:'sine.inOut'},0.665)
+    .to('#ctnImg',{rotation:0.3,duration:0.035,ease:'sine.inOut'},0.705)
+    .to('#ctnImg',{rotation:0,duration:0.03,ease:'sine.out'},0.74);
+  /* 5 · truck drives in forward (cab first) under the hanging load */
+  tl.to('#truckImg',{x:0,ease:'power2.out',duration:0.18},0.56);
+  /* 6 · crane lowers the container in sync with the truck creeping into position */
+  tl.to('#ctnImg',{y:()=>vwS(-3.8),ease:'power2.in',duration:0.12},0.76)
+    .to('#ctnImg',{x:()=>vwS(0.8),ease:'power1.out',duration:0.12},0.76)
+    .to('#truckImg',{x:()=>vwS(0.8),ease:'power1.out',duration:0.12},0.76)
+    .to('#truckImg',{y:4,duration:0.025,ease:'power1.out'},0.878)
+    .to('#truckImg',{y:0,duration:0.03,ease:'power1.inOut'},0.905);
+  /* 7 · loaded truck pulls away to the right — the motion carries into the next page */
+  tl.to('#truckImg',{x:()=>vwS(95),duration:0.062,ease:'power1.in'},0.938)
+    .to('#ctnImg',{x:()=>vwS(95),duration:0.062,ease:'power1.in'},0.938);
 }
 
 /* ================= SERVICES ================= */
@@ -759,8 +805,12 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     scrollTrigger:{trigger:'#services',start:'top top',end:'bottom bottom',scrub:SCRUB}
   });
   tl.fromTo('#svcGhost',{x:'4vw'},{x:'-46vw',duration:1},0);
-  tl.fromTo('#svcRig',{x:'-48vw'},{x:'115vw',duration:1},0);
-  tl.from('#svcGrid .svc',{y:22,autoAlpha:0,stagger:0.045,duration:0.12,ease:'power2.out'},0.06);
+  /* page 1 → page 2 handoff: the truck that just pulled away arrives here still rolling,
+     slows to a crawl while the services read, then accelerates out toward the road */
+  tl.fromTo('#svcRig',{x:'-55vw'},{x:'10vw',ease:'power2.out',duration:0.10},0)
+    .to('#svcRig',{x:'22vw',duration:0.62},0.10)
+    .to('#svcRig',{x:'125vw',ease:'power1.in',duration:0.16},0.72);
+  tl.from('#svcGrid .svc',{y:22,autoAlpha:0,stagger:0.045,duration:0.12,ease:'power2.out'},0.10);
   /* velocity skew on the ghost word */
   const skewSet=gsap.quickSetter('#svcGhost','skewX','deg');
   ScrollTrigger.create({trigger:'#services',start:'top bottom',end:'bottom top',
@@ -796,6 +846,9 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
       }
     }
   });
+  /* the camera tilts down from a driving angle into the flat top view */
+  tl.fromTo('#roadPersp',{rotationX:42,scale:1.5,yPercent:-5},
+    {rotationX:0,scale:1,yPercent:0,ease:'power2.out',duration:0.14},0);
   tl.to(state,{p:1,duration:1,onUpdate:place},0);
   const ms=[['.ms-1',0.06,0.30],['.ms-2',0.36,0.60],['.ms-3',0.64,0.92]];
   ms.forEach(([sel,a,b])=>{
@@ -805,27 +858,44 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
   addEventListener('resize',place);
 }
 
-/* ================= OCEAN ================= */
+/* ================= OCEAN =================
+   Seamless handoff: we are zoomed in at the berth, the truck's container
+   drops onto the ship while it is already moving, the camera zooms out,
+   and the still render crossfades into live aerial ocean footage. */
 {
-  /* live water: aerial ocean video takes over as soon as it can play */
-  const vid=$('oceanVid'),oceanPin=document.querySelector('#ocean .pin');
+  const vid=$('oceanVid');
   if(vid&&!reduced){
-    vid.addEventListener('playing',()=>oceanPin.classList.add('vid'),{once:true});
     ScrollTrigger.create({trigger:'#ocean',start:'top 130%',end:'bottom -30%',
       onEnter:()=>vid.play().catch(()=>{}),onEnterBack:()=>vid.play().catch(()=>{}),
       onLeave:()=>vid.pause(),onLeaveBack:()=>vid.pause()});
   }
+  gsap.set('.callout',{autoAlpha:0});
+  gsap.set('.ocean-head',{autoAlpha:0,y:16});
   const tl=gsap.timeline({
     defaults:{ease:'none'},
     scrollTrigger:{trigger:'#ocean',start:'top top',end:'bottom bottom',scrub:SCRUB}
   });
-  tl.fromTo('#oceanVid',{scale:1.14},{scale:1,duration:1,ease:'power1.out'},0);
-  tl.fromTo('#shipWrap',{yPercent:-38,scale:1.22},{yPercent:-62,scale:0.94,duration:1,ease:'power1.out'},0);
+  /* berth view: huge ship, already gliding */
+  tl.fromTo('#shipWrap',{yPercent:-42,scale:1.9},{yPercent:-55,scale:1.9,duration:0.30},0)
+    .to('#shipWrap',{yPercent:-60,scale:0.95,ease:'power1.inOut',duration:0.26},0.30)
+    .to('#shipWrap',{autoAlpha:0,duration:0.08},0.54);
+  /* the container drops from the dock onto the moving deck */
+  tl.fromTo('#dropCtn',{top:'-10svh',scale:1,rotation:7,autoAlpha:1},
+    {top:'35svh',scale:0.52,rotation:0,ease:'power1.in',duration:0.19},0.03)
+    .to('#dropCtn',{autoAlpha:0,duration:0.02},0.225)
+    .to('#shipSlot',{opacity:1,duration:0.02},0.225);
+  /* cast off: the dock slides away */
+  tl.to('#oceanDock',{yPercent:-130,ease:'power1.in',duration:0.20},0.28);
+  /* live water takes over */
+  tl.fromTo('#oceanVid',{opacity:0,scale:1.12},{opacity:1,scale:1.06,duration:0.10},0.50)
+    .to('#oceanVid',{scale:1,duration:0.40},0.60);
+  tl.to('.ocean-head',{autoAlpha:1,y:0,ease:'power2.out',duration:0.06},0.56);
+  tl.to('.callout',{autoAlpha:1,duration:0.05},0.62);
   const cards=['.sc-1','.sc-2','.sc-3','.sc-4'];
   cards.forEach((sel,i)=>{
-    tl.fromTo(sel,{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:0.07,ease:'power2.out'},0.14+i*0.09);
+    tl.fromTo(sel,{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:0.06,ease:'power2.out'},0.60+i*0.055);
   });
-  tl.fromTo('#cloudCover',{yPercent:105},{yPercent:-8,duration:0.22,ease:'power1.in'},0.78);
+  tl.fromTo('#cloudCover',{yPercent:105},{yPercent:-8,duration:0.20,ease:'power1.in'},0.80);
 }
 
 /* ================= SKY ================= */
@@ -834,10 +904,12 @@ gsap.from('.hero-copy > *',{y:26,autoAlpha:0,duration:1,ease:'power3.out',stagge
     defaults:{ease:'none'},
     scrollTrigger:{trigger:'#sky',start:'top top',end:'bottom bottom',scrub:SCRUB}
   });
+  /* the big freighter sweeps in from the left over the cloud deck */
   tl.fromTo('#planeWrap',
-    {yPercent:22,xPercent:-50,scale:0.62,rotation:-7},
-    {yPercent:-68,xPercent:-50,scale:1.04,rotation:2,duration:1,ease:'power1.inOut'},0);
-  tl.from('.sky-copy',{autoAlpha:0,y:20,duration:0.18,ease:'power2.out'},0.55);
+    {x:'-90vw',yPercent:-42,xPercent:-50,scale:1.18,rotation:4},
+    {x:'2vw',yPercent:-52,xPercent:-50,scale:1.0,rotation:-1,duration:0.55,ease:'power2.out'},0)
+    .to('#planeWrap',{x:'14vw',yPercent:-58,scale:0.96,rotation:-2,duration:0.45},0.55);
+  tl.from('.sky-copy',{autoAlpha:0,y:20,duration:0.16,ease:'power2.out'},0.50);
 }
 
 /* ================= FOOTER WORDMARK ================= */
