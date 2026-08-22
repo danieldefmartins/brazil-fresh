@@ -8,6 +8,12 @@ import base64, pathlib, re
 root = pathlib.Path(__file__).parent
 src = (root / "index.src.html").read_text()
 
+# The source keeps the previous scene implementation as a readable reference,
+# but production ships only the continuous master-film version. Strip legacy
+# markup before asset inlining so duplicate video/image data is never emitted.
+src = re.sub(r"<!--LEGACY_HTML_START-->.*?<!--LEGACY_HTML_END-->", "", src, flags=re.S)
+src = re.sub(r"/\*LEGACY_JS_START\*/.*?/\*LEGACY_JS_END\*/", "", src, flags=re.S)
+
 def inline_js(m):
     p = root / m.group(1)
     return "<script>\n" + p.read_text() + "\n</script>"
